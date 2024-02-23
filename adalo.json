@@ -1,0 +1,12 @@
+{
+  "displayName": "CustomComponents",
+  "components": [
+    {
+      "name": "Iframe",
+      "manifest": "./src/components/Iframe/manifest.json"
+    }
+  ],
+  "author": "",
+  "description": "",
+  "logo": "./example-logo.png"
+}

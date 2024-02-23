@@ -1,0 +1,31 @@
+{
+  "displayName": "Iframe",
+  "defaultWidth": 300,
+  "defaultHeight": 300,
+  "resizeX": true,
+  "resizeY": true,
+  "components": "./index.js",
+  "icon": "./example-thumbnail.png",
+  "props": [
+    {
+      "name": "startUrl",
+      "displayName": "Initial URL",
+      "type": "text"
+    },
+    {
+      "name": "endUrl",
+      "displayName": "Trigger action when URL start with ...",
+      "type": "text"
+    },
+    {
+      "name": "action",
+      "displayName": "Action when final URL is navigated",
+      "type": "action",
+      "arguments": [
+        {
+          "type": "text",
+          "displayName": "Navigated URL"
+        }]
+    }
+  ]
+}
