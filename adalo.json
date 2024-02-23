@@ -4,6 +4,10 @@
     {
       "name": "Iframe",
       "manifest": "./src/components/Iframe/manifest.json"
+    },
+    {
+      "name": "ContextualMenu",
+      "manifest": "./src/components/ContextualMenu/manifest.json"
     }
   ],
   "author": "",

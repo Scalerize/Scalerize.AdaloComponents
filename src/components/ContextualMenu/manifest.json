@@ -1,0 +1,181 @@
+{
+  "displayName": "ContextualMenu",
+  "defaultWidth": 40,
+  "defaultHeight": 40,
+  "resizeX": false,
+  "resizeY": false,
+  "components": "./index.js",
+  "icon": "./example-thumbnail.png",
+  "props": [],
+  "childComponents": [
+    {
+      "name": "firstMenuItem",
+      "displayName": "First menu item",
+      "props": [
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "name": "icon",
+          "displayName": "Icon",
+          "type": "icon",
+          "default": "edit"
+        },
+        {
+          "name": "text",
+          "displayName": "Text",
+          "type": "text",
+          "default": "Edit"
+        },
+        {
+          "name": "action",
+          "displayName": "Action",
+          "type": "action",
+          "arguments": []
+        }
+      ]
+    },{
+      "name": "secondMenuItem",
+      "displayName": "Second menu item",
+      "props": [
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "name": "icon",
+          "displayName": "Icon",
+          "type": "icon",
+          "default": "delete"
+        },
+        {
+          "name": "text",
+          "displayName": "Text",
+          "type": "text",
+          "default": "Delete"
+        },
+        {
+          "name": "action",
+          "displayName": "Action",
+          "type": "action",
+          "arguments": []
+        }
+      ]
+    },{
+      "name": "thirdMenuItem",
+      "displayName": "Third menu item",
+      "props": [
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "name": "icon",
+          "displayName": "Icon",
+          "type": "icon",
+          "default": "arrow-back"
+        },
+        {
+          "name": "text",
+          "displayName": "Text",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "name": "action",
+          "displayName": "Action",
+          "type": "action",
+          "arguments": []
+        }
+      ]
+    },{
+      "name": "fourthMenuItem",
+      "displayName": "Fourth menu item",
+      "props": [
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "name": "icon",
+          "displayName": "Icon",
+          "type": "icon",
+          "default": "arrow-back"
+        },
+        {
+          "name": "text",
+          "displayName": "Text",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "name": "action",
+          "displayName": "Action",
+          "type": "action",
+          "arguments": []
+        }
+      ]
+    },{
+      "name": "fifthMenuItem",
+      "displayName": "Fifth menu item",
+      "props": [
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "name": "icon",
+          "displayName": "Icon",
+          "type": "icon",
+          "default": "arrow-back"
+        },
+        {
+          "name": "text",
+          "displayName": "Text",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "name": "action",
+          "displayName": "Action",
+          "type": "action",
+          "arguments": []
+        }
+      ]
+    },{
+      "name": "sixthMenuItem",
+      "displayName": "Sixth menu item",
+      "props": [
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "name": "icon",
+          "displayName": "Icon",
+          "type": "icon",
+          "default": "arrow-back"
+        },
+        {
+          "name": "text",
+          "displayName": "Text",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "name": "action",
+          "displayName": "Action",
+          "type": "action",
+          "arguments": []
+        }
+      ]
+    } 
+  ]
+}
