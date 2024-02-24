@@ -27,9 +27,8 @@ const Cell = ({type, value}) => {
     const isEmail = (email) => {
         if (typeof (email) !== 'string') {
             return false;
-        }
-        const regEmail = new RegExp('^[0-9a-z._-]+@{1}[0-9a-z.-]{2,}[.]{1}[a-z]{2,5}$', 'i');
-        return regEmail.test(email);
+        } 
+        return /^[+0-9a-z._-]+@{1}[0-9a-z.-]{2,}[.]{1}[a-z]{2,5}$/gm.test(email);
     }
 
     if (type === 'date') {
@@ -96,7 +95,8 @@ const Table = (props) => {
                 ? propertiesDict[x.field]
                 : x.field,
             headerName: x.headerName || '',
-            width: x.width,
+            width: x.width === 0 ? undefined : x.width,
+            flex: x.width === 0 ? 1 : undefined,
             editable: false,
             renderCell: ({value}) => <Cell type={propertiesTypesDict?.[x.field]} value={value}></Cell>
         })), 'field')

@@ -39,7 +39,8 @@
           "name": "width",
           "displayName": "Width",
           "type": "number",
-          "default": 200
+          "default": 200,
+          "helpText": "To divide the space equally between all columns, put 0"
         }
       ]
     },
