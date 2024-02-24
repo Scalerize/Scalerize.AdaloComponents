@@ -75,7 +75,7 @@ const ContextualMenu = (props) => {
                     if (!!x.icon && !Icon) {
                         report({
                             'component': 'contextual-menu',
-                            'missing-icon': x.icon
+                            'missing-icon': `Missing icon mapping : ${x.icon}`
                         });
                     }
 

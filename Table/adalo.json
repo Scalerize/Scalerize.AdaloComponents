@@ -1,5 +1,5 @@
 {
-  "displayName": "Librairie composants",
+  "displayName": "DataGrid component",
   "components": [ 
     {
       "name": "Table",

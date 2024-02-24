@@ -1,5 +1,5 @@
 {
-  "displayName": "Table",
+  "displayName": "DataGrid",
   "defaultWidth": 600,
   "defaultHeight": 400,
   "resizeX": true,
@@ -10,54 +10,13 @@
     {
       "name": "columns",
       "displayName": "Columns",
-      "type": "list"
+      "type": "list",
+      "helpText": "A collection representing the list of columns to display. The collection must have two columns: one for the text of the displayed header and another for the name of a column from the Adalo table entered in the 'rows' field.\n\n"
     },
     {
       "name": "rows",
       "displayName": "Rows",
       "type": "list"
-    },
-    {
-      "name": "tableHeight",
-      "displayName": "Table Height",
-      "type": "text",
-      "default": "auto",
-      "control": {
-        "type": "menu",
-        "options": [
-          {
-            "value": "auto",
-            "label": "Auto"
-          },
-          {
-            "value": "manual",
-            "label": "Component Height"
-          }
-        ]
-      }
-    },
-    {
-      "name": "density",
-      "displayName": "Density",
-      "type": "text",
-      "default": "standard",
-      "control": {
-        "type": "menu",
-        "options": [
-          {
-            "value": "compact",
-            "label": "Compact"
-          },
-          {
-            "value": "standard",
-            "label": "Standard"
-          },
-          {
-            "value": "confortable",
-            "label": "Confortable"
-          }
-        ]
-      }
     }
   ],
   "childComponents": [
@@ -81,6 +40,103 @@
           "displayName": "Width",
           "type": "number",
           "default": 200
+        }
+      ]
+    },
+    {
+      "name": "Style",
+      "props": [
+        {
+          "name": "borderColor",
+          "displayName": "Border Color",
+          "type": "color",
+          "default": "rgba(224, 224, 224, 1)"
+        },
+        {
+          "name": "borderThickness",
+          "displayName": "Border Thickness",
+          "type": "number",
+          "control": "slider",
+          "default": 1
+        },
+        {
+          "name": "backgroundColor",
+          "displayName": "Background Color",
+          "type": "color",
+          "default": "rgba(0, 0, 0, 0)"
+        },
+        {
+          "name": "foregroundColor",
+          "displayName": "Text Color",
+          "type": "color",
+          "default": "rgba(0, 0, 0, 0.87)"
+        },
+        {
+          "name": "borderType",
+          "displayName": "Border Type",
+          "type": "text",
+          "default": "rows",
+          "control": {
+            "type": "menu",
+            "options": [
+              {
+                "value": "rows",
+                "label": "Rows"
+              },
+              {
+                "value": "rows-and-cols",
+                "label": "Rows and columns"
+              }
+            ]
+          }
+        },
+        {
+          "name": "stripped",
+          "displayName": "Stripped",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "name": "tableHeight",
+          "displayName": "Table Height",
+          "type": "text",
+          "default": "auto",
+          "control": {
+            "type": "menu",
+            "options": [
+              {
+                "value": "auto",
+                "label": "Auto"
+              },
+              {
+                "value": "manual",
+                "label": "Component Height"
+              }
+            ]
+          }
+        },
+        {
+          "name": "density",
+          "displayName": "Density",
+          "type": "text",
+          "default": "standard",
+          "control": {
+            "type": "menu",
+            "options": [
+              {
+                "value": "compact",
+                "label": "Compact"
+              },
+              {
+                "value": "standard",
+                "label": "Standard"
+              },
+              {
+                "value": "confortable",
+                "label": "Confortable"
+              }
+            ]
+          }
         }
       ]
     }
