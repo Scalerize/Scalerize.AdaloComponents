@@ -22,11 +22,9 @@ const Table = (props) => {
                 .then(x => { 
                         let dataSourceId = rowsMeta.datasourceId;
                         let tableId = rowsMeta.tableId;
-                        let tableStructure = x.datasources[dataSourceId].tables[tableId].fields;
-                        log(tableStructure);
+                        let tableStructure = x.datasources[dataSourceId].tables[tableId].fields; 
                         let entries = Object.keys(tableStructure)
-                            .map(x => [tableStructure[x].name, x]);
-                        log(entries);
+                            .map(x => [tableStructure[x].name, x]); 
                         setPropertiesDict(Object.fromEntries(entries));
                     }
                 );
