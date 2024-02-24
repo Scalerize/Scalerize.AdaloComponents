@@ -1,10 +1,6 @@
 {
   "displayName": "Librairie composants",
-  "components": [
-    {
-      "name": "ContextualMenu",
-      "manifest": "./src/components/ContextualMenu/manifest.json"
-    },
+  "components": [ 
     {
       "name": "Table",
       "manifest": "./src/components/Table/manifest.json"

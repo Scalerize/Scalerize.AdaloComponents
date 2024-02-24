@@ -1,13 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import {DataGrid} from '@mui/x-data-grid';
-import {log} from '../../utils'
+import {log} from "../../utils";
 
-const divStyle = {
-    width: '100%',
-    height: '100%'
-}
-const Table = (props) => {
-    let rowsMeta = props?.rows?.length > 0 ? props.rows[0]._meta : null;
+const Table = (props) => { 
+    let propsRows = props?.rows || [];
+    let propsCoumns = props?.columns || [];
+    let rowsMeta = propsRows?.length > 0 ? propsRows[0]._meta : null;
 
     const [propertiesDict, setPropertiesDict] = useState(undefined);
     useEffect(
@@ -16,34 +14,49 @@ const Table = (props) => {
                 return;
             }
             const appId = props.appId;
-            const url = `https://cdn.adalo.com/apps/${appId}/clients/runner`; 
-            fetch(url)
+            fetch(`https://cdn.adalo.com/apps/${appId}/clients/runner`)
                 .then(x => x.json())
-                .then(x => { 
+                .then(x => {
                         let dataSourceId = rowsMeta.datasourceId;
                         let tableId = rowsMeta.tableId;
-                        let tableStructure = x.datasources[dataSourceId].tables[tableId].fields; 
-                        let entries = Object.keys(tableStructure)
-                            .map(x => [tableStructure[x].name, x]); 
-                        setPropertiesDict(Object.fromEntries(entries));
+                        let tableStructure = x.datasources[dataSourceId].tables[tableId].fields;
+                        let nameMapping = Object.keys(tableStructure)
+                            .map(x => [tableStructure[x].name, x]);
+                        setPropertiesDict(Object.fromEntries(nameMapping));
                     }
                 );
         }
     )
 
-    const columns = props?.columns
+    const columns = propsCoumns
+        ?.map(x => x['Column Header'])
         ?.map(x => ({
             field: propertiesDict
-                ? propertiesDict[x['Column Header'].field]
-                : x['Column Header'].field,
-            headerName: x['Column Header'].headerName,
-            width: x['Column Header'].width,
+                ? propertiesDict[x.field]
+                : x.field,
+            headerName: x.headerName,
+            width: x.width,
             editable: false
         })) || [];
 
-    const rows = props.rows?.map(x => x._meta.record) || [];
+    const rows = propsRows?.map(x => x._meta.record) || [];
 
-    return (<DataGrid sx={divStyle} columns={columns} rows={rows}></DataGrid>);
+    const componentProperties = {
+        columns,
+        rows,
+        disableColumnMenu: true,
+        density: props.density || 'standard',
+        sx: {width: '100%'}
+    };
+
+    if (props.height === 'manual') {
+        // Component height is fetch from component props
+        componentProperties.sx.height = `${props._height}px`;
+    } else if (props.height === 'auto') {
+        componentProperties.autoHeight = true;
+    }
+ 
+    return (<DataGrid {...componentProperties}></DataGrid>);
 
 };
 

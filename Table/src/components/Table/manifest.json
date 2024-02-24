@@ -16,6 +16,48 @@
       "name": "rows",
       "displayName": "Rows",
       "type": "list"
+    },
+    {
+      "name": "height",
+      "displayName": "Height",
+      "type": "text",
+      "default": "auto",
+      "control": {
+        "type": "menu",
+        "options": [
+          {
+            "value": "auto",
+            "label": "Auto"
+          },
+          {
+            "value": "manual",
+            "label": "Component Height"
+          }
+        ]
+      }
+    },
+    {
+      "name": "density",
+      "displayName": "Density",
+      "type": "text",
+      "default": "standard",
+      "control": {
+        "type": "menu",
+        "options": [
+          {
+            "value": "compact",
+            "label": "Compact"
+          },
+          {
+            "value": "standard",
+            "label": "Standard"
+          },
+          {
+            "value": "confortable",
+            "label": "Confortable"
+          }
+        ]
+      }
     }
   ],
   "childComponents": [

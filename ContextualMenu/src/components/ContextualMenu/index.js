@@ -6,7 +6,6 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import * as DynamicIcon from "@mui/icons-material";
-import {beaconUrl} from "../../constants";
 import Divider from '@mui/material/Divider'
 import {report} from "../../utils";
 

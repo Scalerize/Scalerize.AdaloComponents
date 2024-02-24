@@ -1,0 +1,12 @@
+{
+  "displayName": "Librairie composants",
+  "components": [
+    {
+      "name": "ContextualMenu",
+      "manifest": "./src/components/ContextualMenu/manifest.json"
+    }
+  ],
+  "author": "Scalerize",
+  "description": "Des composants faits pour vous simplifier la vie !",
+  "logo": "./example-logo.png"
+}
