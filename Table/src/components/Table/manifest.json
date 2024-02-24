@@ -56,7 +56,11 @@
           "name": "borderThickness",
           "displayName": "Border Thickness",
           "type": "number",
-          "control": "slider",
+          "control": {
+            "type": "slider",
+            "min": 0,
+            "max": 10
+          },
           "default": 1
         },
         {

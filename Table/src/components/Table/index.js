@@ -2,15 +2,52 @@ import React, {useState, useEffect} from 'react';
 import {DataGrid} from '@mui/x-data-grid';
 import {log, report} from "../../utils";
 import * as _ from 'lodash';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
+import dayjs from 'dayjs'
 
+const Cell = ({type, value}) => {
+    if (value == null) {
+        return <span></span>;
+    }
+    
+    const style = {
+        display: 'flex',
+        'justify-content': 'center',
+        'align-items': 'center',
+        width: '100%'
+    }
+    const getAdaloUrlFromValue = (value) => {
+        return `https://adalo-uploads.imgix.net/${value.url}?auto=compress&h=30`;
+    }
+
+    if (type === 'date') {
+        return <span>{dayjs(Date.parse(value)).format('DD/MM/YYYY')}</span>
+    } else if (type === 'dateOnly') {
+        return <span>{dayjs(Date.parse(value)).format('DD/MM/YYYY hh:mm:ss')}</span>
+    }  else if (type === 'image') {
+        return <div style={style}><img height="24" alt={value.filename} src={getAdaloUrlFromValue(value)}></img></div>;
+    } else if (type === 'file') {
+        return <a href={getAdaloUrlFromValue(value)} target='_blank'>{value.filename}</a>;
+    } else if (type === 'boolean') {
+        return <div style={style}>{value
+            ? <CheckIcon></CheckIcon>
+            : <CloseIcon></CloseIcon>
+        }</div>
+    } else {
+        return <span>{value}</span>
+    }
+}
 const Table = (props) => {
 
     const propsRows = props?.rows || [];
-    const propsCoumns = props?.columns || [];
+    const propsColumns = props?.columns || [];
     const appId = props?.appId;
     const rowsMeta = propsRows?.length > 0 ? propsRows[0]._meta : null;
 
     const [propertiesDict, setPropertiesDict] = useState(undefined);
+    const [propertiesTypesDict, setPropertiesTypesDict] = useState(undefined);
+
     useEffect(() => {
             if (!rowsMeta || !!propertiesDict || !appId) {
                 return;
@@ -29,6 +66,9 @@ const Table = (props) => {
                     let nameMapping = Object.keys(tableStructure)
                         .map(x => [tableStructure[x].name, x]);
                     setPropertiesDict(Object.fromEntries(nameMapping));
+                    let typeMapping = Object.keys(tableStructure)
+                        .map(x => [tableStructure[x].name, tableStructure[x].type]);
+                    setPropertiesTypesDict(Object.fromEntries(typeMapping));
                 })
                 .catch(x => report({
                     'component': 'table',
@@ -37,7 +77,7 @@ const Table = (props) => {
         }
     )
 
-    const columns = _.uniqBy(propsCoumns
+    const columns = _.uniqBy(propsColumns
         ?.map(x => x['Column Header'])
         ?.map(x => ({
             field: propertiesDict
@@ -45,7 +85,8 @@ const Table = (props) => {
                 : x.field,
             headerName: x.headerName || '',
             width: x.width,
-            editable: false
+            editable: false,
+            renderCell: ({value}) => <Cell type={propertiesTypesDict?.[x.field]} value={value}></Cell>
         })), 'field')
         ?.filter(x => !!x.field) || [];
 
@@ -101,9 +142,12 @@ const Table = (props) => {
             borderRight: style.borderThickness,
             borderColor: style.borderColor,
         }
-        componentProperties.sx["& .MuiDataGrid-cell"] = {
+        componentProperties.sx["& .MuiDataGrid-cell:not(:last-child)"] = {
             borderRight: style.borderThickness,
             borderColor: style.borderColor,
+        }
+        componentProperties.sx["& .MuiDataGrid-cell:last-child"] = {
+            borderRight: 0
         }
     }
     componentProperties.sx['& .MuiDataGrid-columnHeaders'] = {
@@ -129,9 +173,10 @@ const Table = (props) => {
         width: componentProperties.sx.width,
         height: componentProperties.sx.height
     };
-
-    let grid = <DataGrid {...componentProperties}></DataGrid>;
-    return <div style={wrapperStyle}>{grid}</div>;
+ 
+    return <div style={wrapperStyle}>
+        <DataGrid {...componentProperties}></DataGrid>
+    </div>;
 
 };
 
