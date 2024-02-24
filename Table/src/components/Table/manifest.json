@@ -18,8 +18,8 @@
       "type": "list"
     },
     {
-      "name": "height",
-      "displayName": "Height",
+      "name": "tableHeight",
+      "displayName": "Table Height",
       "type": "text",
       "default": "auto",
       "control": {
