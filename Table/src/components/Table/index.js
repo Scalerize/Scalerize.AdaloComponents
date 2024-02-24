@@ -93,7 +93,7 @@ const Table = (props) => {
     };
     componentProperties.sx['& .MuiDataGrid-footerContainer'] = {
         border: 0,
-        borderTop: style.borderThickness,
+        borderTop: 0,
         borderColor: style.borderColor
     };
     if (style.borderType === 'rows-and-cols') {

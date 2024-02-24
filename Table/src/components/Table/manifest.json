@@ -130,10 +130,6 @@
               {
                 "value": "standard",
                 "label": "Standard"
-              },
-              {
-                "value": "confortable",
-                "label": "Confortable"
               }
             ]
           }
