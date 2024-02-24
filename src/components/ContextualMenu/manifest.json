@@ -30,6 +30,12 @@
           "default": "Edit"
         },
         {
+          "name": "hasDivider",
+          "displayName": "Separator",
+          "type": "boolean",
+          "default": false
+        },
+        {
           "name": "action",
           "displayName": "Action",
           "type": "action",
@@ -56,6 +62,12 @@
           "displayName": "Text",
           "type": "text",
           "default": "Delete"
+        },
+        {
+          "name": "hasDivider",
+          "displayName": "Separator",
+          "type": "boolean",
+          "default": false
         },
         {
           "name": "action",
@@ -86,6 +98,12 @@
           "default": ""
         },
         {
+          "name": "hasDivider",
+          "displayName": "Separator",
+          "type": "boolean",
+          "default": false
+        },
+        {
           "name": "action",
           "displayName": "Action",
           "type": "action",
@@ -112,6 +130,12 @@
           "displayName": "Text",
           "type": "text",
           "default": ""
+        },
+        {
+          "name": "hasDivider",
+          "displayName": "Separator",
+          "type": "boolean",
+          "default": false
         },
         {
           "name": "action",
@@ -142,6 +166,12 @@
           "default": ""
         },
         {
+          "name": "hasDivider",
+          "displayName": "Separator",
+          "type": "boolean",
+          "default": false
+        },
+        {
           "name": "action",
           "displayName": "Action",
           "type": "action",
@@ -168,6 +198,12 @@
           "displayName": "Text",
           "type": "text",
           "default": ""
+        },
+        {
+          "name": "hasDivider",
+          "displayName": "Separator",
+          "type": "boolean",
+          "default": false
         },
         {
           "name": "action",

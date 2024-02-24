@@ -1,3 +1,2 @@
-// Named export must match component name in package.json
-export { default as Iframe } from './src/components/Iframe'
 export { default as ContextualMenu } from './src/components/ContextualMenu'
+export { default as Table } from './src/components/Table'

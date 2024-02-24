@@ -1,0 +1,10 @@
+{
+  "displayName": "ContextualMenu",
+  "defaultWidth": 600,
+  "defaultHeight": 400,
+  "resizeX": true,
+  "resizeY": true,
+  "components": "./index.js",
+  "icon": "./example-thumbnail.png",
+  "props": []
+}

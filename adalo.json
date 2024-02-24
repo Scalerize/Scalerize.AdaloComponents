@@ -1,16 +1,16 @@
 {
-  "displayName": "CustomComponents",
+  "displayName": "Librairie composants",
   "components": [
-    {
-      "name": "Iframe",
-      "manifest": "./src/components/Iframe/manifest.json"
-    },
     {
       "name": "ContextualMenu",
       "manifest": "./src/components/ContextualMenu/manifest.json"
+    },
+    {
+      "name": "Table",
+      "manifest": "./src/components/Table/manifest.json"
     }
   ],
-  "author": "",
-  "description": "",
+  "author": "Scalerize",
+  "description": "Des composants faits pour vous simplifier la vie !",
   "logo": "./example-logo.png"
 }

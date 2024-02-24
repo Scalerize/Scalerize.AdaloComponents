@@ -6,6 +6,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import * as DynamicIcon from "@mui/icons-material";
+import {beaconUrl} from "../../constants";
+import Divider from '@mui/material/Divider'
 
 const divStyle = {
     width: '100%',
@@ -34,7 +36,16 @@ const ContextualMenu = (props) => {
     }
 
     const fixIconNames = (str) => {
-        return str.split(/[-_]/gm).map(upperFirst).join('');
+        let baseIconName = str.split(/[-_]/gm).map(upperFirst).join('');
+        let map = {
+            'AddCall': 'AddIcCall',
+            '360': 'ThreeSixty',
+            '5G': 'FiveG',
+            '3dRotation': 'ThreeDRotation',
+            '13mp': 'ThirteenMp',
+            //TODO : Add all Mp variants + all icons starting with numbers
+        };
+        return map[baseIconName] || baseIconName;
     }
 
     return (
@@ -56,21 +67,34 @@ const ContextualMenu = (props) => {
                 MenuListProps={{
                     'aria-labelledby': 'basic-button',
                 }}
-            >{menuItems.map(x => {
+            >{menuItems.flatMap(x => {
+                console.log(x);
                     const Icon = !!x.icon
                         ? DynamicIcon[fixIconNames(x.icon)]
                         : undefined;
-                    
-                    return (
-                        <MenuItem onClick={() => handleClose(x.action)}>
-                            {Icon
-                                ? (<ListItemIcon>
-                                    <Icon fontSize="small"/>
-                                </ListItemIcon>)
-                                : ''}
-                            <ListItemText>{x.text}</ListItemText>
-                        </MenuItem>
-                    );
+
+                    if (!!x.icon && !Icon && navigator?.sendBeacon && typeof (navigator.sendBeacon) === 'function') {
+                        navigator.sendBeacon(beaconUrl,
+                            new URLSearchParams({
+                                'component': 'contextual-menu',
+                                'missing-icon': x.icon
+                            }))
+                    }
+
+                let elements = [
+                    <MenuItem onClick={() => handleClose(x.action)}>
+                        {Icon
+                            ? (<ListItemIcon>
+                                <Icon fontSize="small"/>
+                            </ListItemIcon>)
+                            : ''}
+                        <ListItemText>{x.text}</ListItemText>
+                    </MenuItem>
+                ];
+                    if(x.hasDivider){
+                        elements.push(<Divider></Divider>)
+                    }
+                    return elements;
                 }
             )}
             </Menu>
