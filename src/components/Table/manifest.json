@@ -1,10 +1,46 @@
 {
-  "displayName": "ContextualMenu",
+  "displayName": "Table",
   "defaultWidth": 600,
   "defaultHeight": 400,
   "resizeX": true,
   "resizeY": true,
   "components": "./index.js",
   "icon": "./example-thumbnail.png",
-  "props": []
+  "props": [
+    {
+      "name": "columns",
+      "displayName": "Columns",
+      "type": "list"
+    },
+    {
+      "name": "rows",
+      "displayName": "Rows",
+      "type": "list"
+    }
+  ],
+  "childComponents": [
+    {
+      "name": "Column Header",
+      "role": "listItem",
+      "reference": "columns",
+      "props": [
+        {
+          "name": "field",
+          "displayName": "Field",
+          "type": "text"
+        },
+        {
+          "name": "headerName",
+          "displayName": "Header Name Field",
+          "type": "text"
+        },
+        {
+          "name": "width",
+          "displayName": "Width",
+          "type": "number",
+          "default": 150
+        }
+      ]
+    }
+  ]
 }

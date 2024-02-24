@@ -8,6 +8,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import * as DynamicIcon from "@mui/icons-material";
 import {beaconUrl} from "../../constants";
 import Divider from '@mui/material/Divider'
+import {report} from "../../utils";
 
 const divStyle = {
     width: '100%',
@@ -68,30 +69,28 @@ const ContextualMenu = (props) => {
                     'aria-labelledby': 'basic-button',
                 }}
             >{menuItems.flatMap(x => {
-                console.log(x);
                     const Icon = !!x.icon
                         ? DynamicIcon[fixIconNames(x.icon)]
                         : undefined;
 
-                    if (!!x.icon && !Icon && navigator?.sendBeacon && typeof (navigator.sendBeacon) === 'function') {
-                        navigator.sendBeacon(beaconUrl,
-                            new URLSearchParams({
-                                'component': 'contextual-menu',
-                                'missing-icon': x.icon
-                            }))
+                    if (!!x.icon && !Icon) {
+                        report({
+                            'component': 'contextual-menu',
+                            'missing-icon': x.icon
+                        });
                     }
 
-                let elements = [
-                    <MenuItem onClick={() => handleClose(x.action)}>
-                        {Icon
-                            ? (<ListItemIcon>
-                                <Icon fontSize="small"/>
-                            </ListItemIcon>)
-                            : ''}
-                        <ListItemText>{x.text}</ListItemText>
-                    </MenuItem>
-                ];
-                    if(x.hasDivider){
+                    let elements = [
+                        <MenuItem onClick={() => handleClose(x.action)}>
+                            {Icon
+                                ? (<ListItemIcon>
+                                    <Icon fontSize="small"/>
+                                </ListItemIcon>)
+                                : ''}
+                            <ListItemText>{x.text}</ListItemText>
+                        </MenuItem>
+                    ];
+                    if (x.hasDivider) {
                         elements.push(<Divider></Divider>)
                     }
                     return elements;
