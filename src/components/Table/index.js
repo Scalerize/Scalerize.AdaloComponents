@@ -36,10 +36,10 @@ const Table = (props) => {
     const columns = props?.columns
         ?.map(x => ({
             field: propertiesDict
-                ? propertiesDict[x.column.field]
-                : x.column.field,
-            headerName: x.column.headerName,
-            width: x.width,
+                ? propertiesDict[x['Column Header'].field]
+                : x['Column Header'].field,
+            headerName: x['Column Header'].headerName,
+            width: x['Column Header'].width,
             editable: false
         })) || [];
 

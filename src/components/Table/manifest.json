@@ -38,7 +38,7 @@
           "name": "width",
           "displayName": "Width",
           "type": "number",
-          "default": 150
+          "default": 200
         }
       ]
     }
