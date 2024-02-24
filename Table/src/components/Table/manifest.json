@@ -71,6 +71,12 @@
           "default": "rgba(0, 0, 0, 0)"
         },
         {
+          "name": "headerBackgroundColor",
+          "displayName": "Header Background Color",
+          "type": "color",
+          "default": "rgba(0, 0, 0, 0)"
+        },
+        {
           "name": "foregroundColor",
           "displayName": "Text Color",
           "type": "color",

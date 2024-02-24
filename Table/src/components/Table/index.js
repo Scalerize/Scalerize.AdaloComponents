@@ -170,6 +170,7 @@ const Table = (props) => {
     componentProperties.sx['& .MuiDataGrid-columnHeaders'] = {
         borderBottom: style.borderThickness,
         borderColor: style.borderColor,
+        bgcolor:  style.headerBackgroundColor
     }
     componentProperties.sx["& .MuiDataGrid-row"] = {
         borderBottom: style.borderThickness,
