@@ -7,25 +7,36 @@ import CloseIcon from '@mui/icons-material/Close';
 import dayjs from 'dayjs'
 
 const Cell = ({type, value}) => {
-    if (value == null) {
-        return <span></span>;
-    }
-    
     const style = {
         display: 'flex',
         'justify-content': 'center',
         'align-items': 'center',
         width: '100%'
+    };
+
+    if (value == null) {
+        let conditionalStyle = ['image', 'boolean'].includes(type) ? style : {};
+        return <div style={conditionalStyle}>
+            <span>{'-'}</span>
+        </div>;
     }
     const getAdaloUrlFromValue = (value) => {
         return `https://adalo-uploads.imgix.net/${value.url}?auto=compress&h=30`;
+    }
+
+    const isEmail = (email) => {
+        if (typeof (email) !== 'string') {
+            return false;
+        }
+        const regEmail = new RegExp('^[0-9a-z._-]+@{1}[0-9a-z.-]{2,}[.]{1}[a-z]{2,5}$', 'i');
+        return regEmail.test(email);
     }
 
     if (type === 'date') {
         return <span>{dayjs(Date.parse(value)).format('DD/MM/YYYY')}</span>
     } else if (type === 'dateOnly') {
         return <span>{dayjs(Date.parse(value)).format('DD/MM/YYYY hh:mm:ss')}</span>
-    }  else if (type === 'image') {
+    } else if (type === 'image') {
         return <div style={style}><img height="24" alt={value.filename} src={getAdaloUrlFromValue(value)}></img></div>;
     } else if (type === 'file') {
         return <a href={getAdaloUrlFromValue(value)} target='_blank'>{value.filename}</a>;
@@ -34,12 +45,13 @@ const Cell = ({type, value}) => {
             ? <CheckIcon></CheckIcon>
             : <CloseIcon></CloseIcon>
         }</div>
+    } else if (isEmail(value)) {
+        return <a href={`mailto:${value}`} target='_blank'>{value}</a>;
     } else {
         return <span>{value}</span>
     }
 }
 const Table = (props) => {
-
     const propsRows = props?.rows || [];
     const propsColumns = props?.columns || [];
     const appId = props?.appId;
@@ -99,6 +111,7 @@ const Table = (props) => {
         columns,
         rows,
         disableColumnMenu: true,
+        disableColumnResize: true,
         disableRowSelectionOnClick: true,
         density: style.density || 'standard',
         getRowClassName: style.stripped
@@ -137,6 +150,10 @@ const Table = (props) => {
         borderTop: 0,
         borderColor: style.borderColor
     };
+    componentProperties.sx["& .MuiDataGrid-cell *"] = {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis'
+    }
     if (style.borderType === 'rows-and-cols') {
         componentProperties.sx['& .MuiDataGrid-columnHeader'] = {
             borderRight: style.borderThickness,
@@ -173,7 +190,7 @@ const Table = (props) => {
         width: componentProperties.sx.width,
         height: componentProperties.sx.height
     };
- 
+
     return <div style={wrapperStyle}>
         <DataGrid {...componentProperties}></DataGrid>
     </div>;

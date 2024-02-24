@@ -1,12 +1,12 @@
 {
   "displayName": "DataGrid component",
+  "author": "Frank LIBOLT",
+  "description": "Des composants faits pour vous simplifier la vie !",
   "components": [ 
     {
       "name": "Table",
       "manifest": "./src/components/Table/manifest.json"
     }
   ],
-  "author": "Scalerize",
-  "description": "Des composants faits pour vous simplifier la vie !",
-  "logo": "./example-logo.png"
+  "logo": "./logo.png"
 }
