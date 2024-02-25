@@ -1,9 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import {DataGrid} from '@mui/x-data-grid';
-import {log, report} from "../../utils"; 
+import {log, report} from "../../utils";
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import dayjs from 'dayjs' 
+import dayjs from 'dayjs'
 
 const Cell = ({type, value}) => {
     const style = {
@@ -26,7 +26,7 @@ const Cell = ({type, value}) => {
     const isEmail = (email) => {
         if (typeof (email) !== 'string') {
             return false;
-        } 
+        }
         return /^[+0-9a-z._-]+@{1}[0-9a-z.-]{2,}[.]{1}[a-z]{2,5}$/gm.test(email);
     }
 
@@ -49,7 +49,8 @@ const Cell = ({type, value}) => {
         return <span>{value}</span>
     }
 }
-const Table = (props) => {log(props);
+const Table = (props) => {
+    log(props);
     const propsRows = props?.rows || [];
     const propsColumns = props?.columns || [];
     const appId = props?.appId;
@@ -103,12 +104,12 @@ const Table = (props) => {log(props);
             editable: false,
             renderCell: ({value}) => <Cell type={propertiesTypesDict?.[x.field]} value={value}></Cell>
         }))
-        ?.reduce((acc, next) =>{
-            if(!acc.some(x =>x.field === next.field)) {
+        ?.reduce((acc, next) => {
+            if (!acc.some(x => x.field === next.field)) {
                 acc.push(next);
             }
             return acc;
-        }, [] )
+        }, [])
         ?.filter(x => !!x.field) || [];
 
     const rows = propsRows?.map(x => x?._meta?.record)
@@ -179,7 +180,7 @@ const Table = (props) => {log(props);
     componentProperties.sx['& .MuiDataGrid-columnHeaders'] = {
         borderBottom: style.borderThickness,
         borderColor: style.borderColor,
-        bgcolor:  style.headerBackgroundColor
+        bgcolor: style.headerBackgroundColor
     }
     componentProperties.sx["& .MuiDataGrid-row"] = {
         borderBottom: style.borderThickness,
