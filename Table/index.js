@@ -1,1 +1,1 @@
-export { default as Table } from './src/components/Table'
+export { default as DataGrid } from './src/components/Table'

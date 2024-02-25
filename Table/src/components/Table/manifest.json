@@ -5,7 +5,7 @@
   "resizeX": true,
   "resizeY": true,
   "components": "./index.js",
-  "icon": "./example-thumbnail.png",
+  "icon": "./thumbnail.png",
   "props": [
     {
       "name": "columns",
@@ -28,11 +28,12 @@
         {
           "name": "field",
           "displayName": "Field",
-          "type": "text"
+          "type": "text",
+          "helpText": "Name of the column of the \"rows\" collection to display"
         },
         {
           "name": "headerName",
-          "displayName": "Header Name",
+          "displayName": "Displayed Field Name",
           "type": "text"
         },
         {
@@ -92,11 +93,11 @@
             "options": [
               {
                 "value": "rows",
-                "label": "Rows"
+                "label": "Horizontal"
               },
               {
                 "value": "rows-and-cols",
-                "label": "Rows and columns"
+                "label": "Horizontal and vertical"
               }
             ]
           }
