@@ -1,1 +1,1 @@
-export { default as ContextualMenu } from './src/components/ContextualMenu'
+export { default as ContextMenu } from './src/components/ContextualMenu'

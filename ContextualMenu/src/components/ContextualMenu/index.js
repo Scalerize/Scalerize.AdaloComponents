@@ -13,7 +13,7 @@ const divStyle = {
     width: '100%',
     height: '100%'
 }
-const ContextualMenu = (props) => {
+const ContextMenu = (props) => {
     const menuItems = Object.keys(props)
         .filter(x => x.endsWith('MenuItem'))
         .map(x => props[x])
@@ -56,6 +56,7 @@ const ContextualMenu = (props) => {
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
+                sx={{color: props.color}}
             >
                 <MoreVertIcon onClick={handleClick}></MoreVertIcon>
             </IconButton>
@@ -102,4 +103,4 @@ const ContextualMenu = (props) => {
 
 };
 
-export default ContextualMenu;
+export default ContextMenu;

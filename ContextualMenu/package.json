@@ -1,9 +1,9 @@
 {
-  "name": "customcomponents",
+  "name": "context-menu",
   "description": "",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "ISC",
+  "license": "MIT",
   "author": "",
   "scripts": {
     "start": "adalo dev",

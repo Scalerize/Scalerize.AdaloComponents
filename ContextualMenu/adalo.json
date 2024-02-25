@@ -1,12 +1,15 @@
 {
-  "displayName": "Librairie composants",
+  "displayName": "Context Menu",
+  "author": "Frank LIBOLT",
+  "description": "A simple and configurable Context Menu component. Possibility of configuring up to 6 personalized actions with label, icon and separator.",
+  "price": 15,
+  "demoAppURL": "https://previewer.adalo.com/d51df6a9-57ae-41b7-ad5d-502e0035a7c2",
+  "supportURL": "https://franklibolt.net/?ad=feedback",
+  "logo": "./logo.png",
   "components": [
     {
-      "name": "ContextualMenu",
+      "name": "ContextMenu",
       "manifest": "./src/components/ContextualMenu/manifest.json"
     }
-  ],
-  "author": "Scalerize",
-  "description": "Des composants faits pour vous simplifier la vie !",
-  "logo": "./example-logo.png"
+  ]
 }

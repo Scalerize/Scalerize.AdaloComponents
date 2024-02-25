@@ -5,8 +5,15 @@
   "resizeX": false,
   "resizeY": false,
   "components": "./index.js",
-  "icon": "./example-thumbnail.png",
-  "props": [],
+  "icon": "./thumbnail.png",
+  "props": [
+    {
+      "name": "color",
+      "displayName": "Dots icon toggle",
+      "type": "color",
+      "default": "rgba(0, 0, 0, 0.54)"
+    }
+  ],
   "childComponents": [
     {
       "name": "firstMenuItem",
@@ -42,7 +49,8 @@
           "arguments": []
         }
       ]
-    },{
+    },
+    {
       "name": "secondMenuItem",
       "displayName": "Second menu item",
       "props": [
@@ -76,7 +84,8 @@
           "arguments": []
         }
       ]
-    },{
+    },
+    {
       "name": "thirdMenuItem",
       "displayName": "Third menu item",
       "props": [
@@ -110,7 +119,8 @@
           "arguments": []
         }
       ]
-    },{
+    },
+    {
       "name": "fourthMenuItem",
       "displayName": "Fourth menu item",
       "props": [
@@ -144,7 +154,8 @@
           "arguments": []
         }
       ]
-    },{
+    },
+    {
       "name": "fifthMenuItem",
       "displayName": "Fifth menu item",
       "props": [
@@ -178,7 +189,8 @@
           "arguments": []
         }
       ]
-    },{
+    },
+    {
       "name": "sixthMenuItem",
       "displayName": "Sixth menu item",
       "props": [
@@ -212,6 +224,6 @@
           "arguments": []
         }
       ]
-    } 
+    }
   ]
 }
