@@ -1,10 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import {DataGrid} from '@mui/x-data-grid';
-import {log, report} from "../../utils";
-import * as _ from 'lodash';
+import {log, report} from "../../utils"; 
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import dayjs from 'dayjs'
+import dayjs from 'dayjs' 
 
 const Cell = ({type, value}) => {
     const style = {
@@ -94,7 +93,7 @@ const Table = (props) => {log(props);
             : x.field;
     }
 
-    const columns = _.uniqBy(propsColumns
+    const columns = propsColumns
         ?.map(x => x['Column Definition'])
         ?.map(x => ({
             field: getField(x),
@@ -103,7 +102,13 @@ const Table = (props) => {log(props);
             flex: x.width === 0 ? 1 : undefined,
             editable: false,
             renderCell: ({value}) => <Cell type={propertiesTypesDict?.[x.field]} value={value}></Cell>
-        })), 'field')
+        }))
+        ?.reduce((acc, next) =>{
+            if(!acc.some(x =>x.field === next.field)) {
+                acc.push(next);
+            }
+            return acc;
+        }, [] )
         ?.filter(x => !!x.field) || [];
 
     const rows = propsRows?.map(x => x?._meta?.record)

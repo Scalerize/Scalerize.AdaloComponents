@@ -17,8 +17,7 @@
     "@mui/material": "^5.15.10",
     "@mui/system": "^5.15.9",
     "@mui/x-data-grid": "^6.19.5",
-    "dayjs": "^1.11.10",
-    "lodash": "^4.17.21"
+    "dayjs": "^1.11.10"
   },
   "devDependencies": {
     "@adalo/cli": "^0.0.59",
