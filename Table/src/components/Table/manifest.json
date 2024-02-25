@@ -11,7 +11,7 @@
       "name": "columns",
       "displayName": "Columns",
       "type": "list",
-      "helpText": "A collection representing the list of columns to display. The collection must have two columns: one for the text of the displayed header and another for the name of a column from the Adalo table entered in the 'rows' field.\n\n"
+      "helpText": "A collection representing the list of columns to display. Please configure the \"Column Definition\" section to make the table work.\n\n"
     },
     {
       "name": "rows",
@@ -21,7 +21,7 @@
   ],
   "childComponents": [
     {
-      "name": "Column Header",
+      "name": "Column Definition",
       "role": "listItem",
       "reference": "columns",
       "props": [
@@ -32,7 +32,7 @@
         },
         {
           "name": "headerName",
-          "displayName": "Header Name Field",
+          "displayName": "Header Name",
           "type": "text"
         },
         {

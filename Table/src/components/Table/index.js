@@ -50,7 +50,7 @@ const Cell = ({type, value}) => {
         return <span>{value}</span>
     }
 }
-const Table = (props) => {
+const Table = (props) => {log(props);
     const propsRows = props?.rows || [];
     const propsColumns = props?.columns || [];
     const appId = props?.appId;
@@ -88,13 +88,17 @@ const Table = (props) => {
         }
     )
 
+    function getField(x) {
+        return propertiesDict && x.field
+            ? propertiesDict[x.field]
+            : x.field;
+    }
+
     const columns = _.uniqBy(propsColumns
-        ?.map(x => x['Column Header'])
+        ?.map(x => x['Column Definition'])
         ?.map(x => ({
-            field: propertiesDict
-                ? propertiesDict[x.field]
-                : x.field,
-            headerName: x.headerName || '',
+            field: getField(x),
+            headerName: x.headerName || getField(x),
             width: x.width === 0 ? undefined : x.width,
             flex: x.width === 0 ? 1 : undefined,
             editable: false,
@@ -157,7 +161,7 @@ const Table = (props) => {
     if (style.borderType === 'rows-and-cols') {
         componentProperties.sx['& .MuiDataGrid-columnHeader'] = {
             borderRight: style.borderThickness,
-            borderColor: style.borderColor,
+            borderColor: style.borderColor
         }
         componentProperties.sx["& .MuiDataGrid-cell:not(:last-child)"] = {
             borderRight: style.borderThickness,
@@ -183,6 +187,9 @@ const Table = (props) => {
         color: `${style.foregroundColor} !important`
     }
 
+    componentProperties.sx['& .MuiDataGrid-columnHeader:focus'] = {
+        outline: 'none',
+    }
     componentProperties.sx['& .MuiDataGrid-cell:focus'] = {
         outline: 'none',
     }
