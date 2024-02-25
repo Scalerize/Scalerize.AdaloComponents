@@ -9,7 +9,7 @@
   "props": [
     {
       "name": "color",
-      "displayName": "Dots icon toggle",
+      "displayName": "Main icon color",
       "type": "color",
       "default": "rgba(0, 0, 0, 0.54)"
     }
