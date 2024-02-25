@@ -20,7 +20,7 @@
     "dayjs": "^1.11.10"
   },
   "devDependencies": {
-    "@adalo/cli": "^0.0.59",
+    "@adalo/cli": "^0.0.60",
     "react": "^18.2.0",
     "react-art": "^18.2.0",
     "react-dom": "^18.2.0",
