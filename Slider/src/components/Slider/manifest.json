@@ -35,7 +35,7 @@
   "childComponents": [
     {
       "name": "Sparkline",
-      "props": [ 
+      "props": [
         {
           "name": "subdivisions",
           "displayName": "Number of subdivisions",
@@ -56,14 +56,11 @@
         {
           "name": "thickness",
           "type": "number",
-          "default": 0,
-          "enabled": {
-            "hasRing": true
-          },
+          "default": 1,
           "control": {
             "type": "slider",
             "min": 1,
-            "max": 8
+            "max": 9
           }
         }
       ]
@@ -80,14 +77,11 @@
         {
           "name": "thickness",
           "type": "number",
-          "default": 0,
-          "enabled": {
-            "hasRing": true
-          },
+          "default": 5,
           "control": {
             "type": "slider",
             "min": 1,
-            "max": 8
+            "max": 9
           }
         }
       ]
@@ -105,6 +99,7 @@
           "name": "diameter",
           "displayName": "Diameter",
           "type": "number",
+          "default": 15,
           "control": {
             "type": "slider",
             "min": 4,
@@ -121,7 +116,7 @@
           "name": "ringColor",
           "displayName": "Ring Color",
           "type": "color",
-          "default": "#00000000",
+          "default": "#000000",
           "enabled": {
             "hasRing": true
           }
@@ -140,6 +135,16 @@
           }
         },
         {
+          "name": "shadow",
+          "type": "number",
+          "default": 0,
+          "control": {
+            "type": "slider",
+            "min": 0,
+            "max": 10
+          }
+        },
+        {
           "name": "hasGrip",
           "displayName": "Has Drag Handle",
           "type": "boolean",
@@ -151,39 +156,28 @@
       "name": "Value Label",
       "props": [
         {
-          "name": "type",
-          "displayName": "Type",
-          "type": "text",
-          "default": "onDrag",
-          "control": {
-            "type": "menu",
-            "options": [
-              {
-                "label": "Permanent",
-                "value": "permanent"
-              },
-              {
-                "label": "Only when dragging thumbs",
-                "value": "onDrag"
-              },
-              {
-                "label": "Invisible",
-                "value": "invisible"
-              }
-            ]
-          }
+          "name": "showLabel",
+          "displayName": "Show label",
+          "type": "boolean",
+          "default": true
         },
         {
           "name": "color",
           "displayName": "Color",
           "type": "color",
-          "default": "#000000"
+          "default": "#000000",
+          "enabled": {
+            "showLabel": true
+          }
         },
         {
           "name": "textColor",
           "displayName": "Text Color",
           "type": "color",
-          "default": "#ffffff"
+          "default": "#ffffff",
+          "enabled": {
+            "showLabel": true
+          }
         }
       ]
     }
