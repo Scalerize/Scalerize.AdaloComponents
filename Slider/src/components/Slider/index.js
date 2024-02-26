@@ -36,44 +36,42 @@ const thumb = (hasGrip, color) => (props) => {
 
 const SparklineSlider = (props) => {
     let collection = props.barChartCollection?.map(x => x?.barChartValueSelector);
+
     let [minValue, maxValue] = [
         min([min(collection), props.rangeStart.initial]),
         max([max(collection), props.rangeEnd.initial])
     ];
-    
-    const computeHeightArray = (props) => {
+    const computeDimensionAndColor = (props) => {
         let initial = [...Array(props.Sparkline.subdivisions).keys()];
-        log(props); 
+
+        const distance = (maxValue - minValue) / props.Sparkline.subdivisions;
+
         if (!collection || !collection.some(x => x !== undefined)) {
             return defaultRandomBarChartCollection.slice(0, props.Sparkline.subdivisions);
         }
 
         const filteredCollection = collection.filter(x => x >= minValue && x <= maxValue);
 
-        const distance = (maxValue - minValue) / props.Sparkline.subdivisions
-        // TODO: handle negative collection value
+        let colorArray = initial
+            .map(x => x * distance - minValue)
+            .map(x => x >= props.rangeStart.value && x <= props.rangeEnd.value
+                ? props.Track.color
+                : props.Rail.color);
+
         let heightArray = initial
+            .map(y => y - minValue)
             .map(x => filteredCollection.filter(y =>
                 (y >= x * distance && y < (x + 1) * distance && x < props.Sparkline.subdivisions - 1 ||
                     y >= x * distance && x === props.Sparkline.subdivisions - 1)
             ).length);
+
         const maxHeight = max(heightArray);
         if (maxHeight !== 0) {
             heightArray = heightArray.map(x => `${x / maxHeight * 100}%`);
         }
-        return heightArray;
-    }
 
-    let getBar = ([idx, height]) => {
-        const width = props._width / props.Sparkline.subdivisions;
-        const offset = idx * width;
-        const minOffset = props.rangeStart.value / 100 * props._width;
-        const maxOffset = props.rangeEnd.value / 100 * props._width;
-        const backgroundColor = offset >= minOffset && width + offset <= maxOffset
-            ? props.Track.color
-            : props.Rail.color;
-        return <div style={{...style.bar, backgroundColor, height}}></div>
-    };
+        return [colorArray, heightArray];
+    }
 
     const onChange = (e) => {
         props.rangeStart.onChange(e.target.value[0]);
@@ -99,7 +97,6 @@ const SparklineSlider = (props) => {
         bar: {
             height: '100%',
             flex: 1,
-
         },
         slider: {
             width: '100%',
@@ -154,10 +151,13 @@ const SparklineSlider = (props) => {
             },
         }
     }
-
     return <div style={style.wrapper}>
         <div style={style.sparkline}>
-            {zip([...Array(props.Sparkline.subdivisions).keys()], computeHeightArray(props)).map(getBar)}
+            {
+                zip(...computeDimensionAndColor(props)).map(([backgroundColor, height]) => { 
+                    return <div style={{...style.bar, backgroundColor, height}}></div>
+                })
+            }
         </div>
         <Slider sx={style.slider} onChange={onChange}
                 valueLabelDisplay={props.valueLabel.enabled ? 'on' : 'off'}
