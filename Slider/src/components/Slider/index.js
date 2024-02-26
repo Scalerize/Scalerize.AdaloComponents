@@ -53,16 +53,15 @@ const SparklineSlider = (props) => {
         const filteredCollection = collection.filter(x => x >= minValue && x <= maxValue);
 
         let colorArray = initial
-            .map(x => x * distance - minValue)
+            .map(x => x * distance + minValue)
             .map(x => x >= props.rangeStart.value && x <= props.rangeEnd.value
                 ? props.Track.color
                 : props.Rail.color);
-
+        
         let heightArray = initial
-            .map(y => y - minValue)
             .map(x => filteredCollection.filter(y =>
-                (y >= x * distance && y < (x + 1) * distance && x < props.Sparkline.subdivisions - 1 ||
-                    y >= x * distance && x === props.Sparkline.subdivisions - 1)
+                (y >= minValue + x * distance && y < minValue + (x + 1) * distance && x < props.Sparkline.subdivisions - 1 ||
+                    y >= minValue + x * distance && x === props.Sparkline.subdivisions - 1)
             ).length);
 
         const maxHeight = max(heightArray);
@@ -154,7 +153,7 @@ const SparklineSlider = (props) => {
     return <div style={style.wrapper}>
         <div style={style.sparkline}>
             {
-                zip(...computeDimensionAndColor(props)).map(([backgroundColor, height]) => { 
+                zip(...computeDimensionAndColor(props)).map(([backgroundColor, height]) => {
                     return <div style={{...style.bar, backgroundColor, height}}></div>
                 })
             }
