@@ -18,9 +18,32 @@
       "displayName": "Max Value",
       "type": "number",
       "role": "formValue"
+    },
+    {
+      "name": "barChartCollection",
+      "displayName": "Bar Chart Collection",
+      "type": "list"
+    },
+    {
+      "name": "barChartValueSelector",
+      "displayName": "Collection Item Value Selector",
+      "type": "number",
+      "role": "listItem",
+      "reference": "barChartCollection"
     }
   ],
   "childComponents": [
+    {
+      "name": "Sparkline",
+      "props": [ 
+        {
+          "name": "subdivisions",
+          "displayName": "Number of subdivisions",
+          "type": "number",
+          "default": 20
+        }
+      ]
+    },
     {
       "name": "Rail",
       "props": [
@@ -131,6 +154,7 @@
           "name": "type",
           "displayName": "Type",
           "type": "text",
+          "default": "onDrag",
           "control": {
             "type": "menu",
             "options": [
