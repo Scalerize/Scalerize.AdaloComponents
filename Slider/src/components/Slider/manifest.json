@@ -25,6 +25,13 @@
       "name": "barChartCollection",
       "displayName": "Collection",
       "type": "list"
+    },
+    {
+      "name": "barChartValueSelector",
+      "displayName": "Collection Item Value Selector",
+      "type": "number",
+      "role": "listItem",
+      "reference": "barChartCollection"
     }
   ],
   "childComponents": [
@@ -141,13 +148,6 @@
     {
       "name": "Sparkline",
       "props": [
-        {
-          "name": "barChartValueSelector",
-          "displayName": "Collection Item Value Selector",
-          "type": "number",
-          "role": "listItem",
-          "reference": "barChartCollection"
-        }, 
         {
           "name": "subdivisions",
           "displayName": "Number of subdivisions",

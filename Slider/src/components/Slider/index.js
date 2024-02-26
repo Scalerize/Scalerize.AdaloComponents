@@ -4,7 +4,7 @@ import min from 'lodash/min';
 import max from 'lodash/max';
 import zip from 'lodash/zip';
 
-const defaultRandomBarChartCollection = [...Array(100).keys()].map(x => ({barChartValueSelector: Math.random() * 100}));
+const defaultRandomBarChartCollection = [...Array(100).keys()].map(() => 100);
 
 const thumb = (hasGrip, color) => (props) => {
     const {children, ...other} = props;
@@ -35,25 +35,25 @@ const thumb = (hasGrip, color) => (props) => {
 };
 
 const SparklineSlider = (props) => {
+    let collection = props.barChartCollection?.map(x => x?.barChartValueSelector);
+    let [minValue, maxValue] = [
+        min([min(collection), props.rangeStart.initial]),
+        max([max(collection), props.rangeEnd.initial])
+    ];
+    
     const computeHeightArray = (props) => {
         let initial = [...Array(props.Sparkline.subdivisions).keys()];
-
-        if (!props.barChartCollection || !props.barChartCollection
-            .some(x => x.barChartValueSelector !== undefined)) {
-            props.barChartCollection = defaultRandomBarChartCollection
+        log(props); 
+        if (!collection || !collection.some(x => x !== undefined)) {
+            return defaultRandomBarChartCollection.slice(0, props.Sparkline.subdivisions);
         }
 
-        let collection = props.barChartCollection.map(x => x.barChartValueSelector);
-        let [minValue, maxValue] = [
-            min([min(collection), props.rangeStart.initial]),
-            max([max(collection), props.rangeEnd.initial])
-        ];
-        const barChartValueSelectorArray = collection
-            .filter(x => x >= minValue && x <= maxValue);
+        const filteredCollection = collection.filter(x => x >= minValue && x <= maxValue);
 
         const distance = (maxValue - minValue) / props.Sparkline.subdivisions
+        // TODO: handle negative collection value
         let heightArray = initial
-            .map(x => barChartValueSelectorArray.filter(y =>
+            .map(x => filteredCollection.filter(y =>
                 (y >= x * distance && y < (x + 1) * distance && x < props.Sparkline.subdivisions - 1 ||
                     y >= x * distance && x === props.Sparkline.subdivisions - 1)
             ).length);
@@ -106,7 +106,7 @@ const SparklineSlider = (props) => {
             marginTop: '-15px',
             '& .MuiSlider-thumb': {
                 height: `${props.Thumb.diameter}px`,
-                width: `${props.Thumb.diameter}px`, 
+                width: `${props.Thumb.diameter}px`,
                 backgroundColor: `${props.Thumb.color}`,
                 outlineColor: `${props.Thumb.color}`,
                 color: `${props.Thumb.color}`,
@@ -164,7 +164,7 @@ const SparklineSlider = (props) => {
                 key={`${props.rangeStart.initial}-${props.rangeStart.initial}`}
                 defaultValue={[props.rangeStart.initial, props.rangeEnd.initial]}
                 slots={{thumb: thumb(props.Thumb.hasGrip, props.Thumb.ringColor)}}
-                disableSwap></Slider>
+                min={minValue} max={maxValue} disableSwap></Slider>
     </div>
 };
 
