@@ -102,8 +102,8 @@
           "default": 15,
           "control": {
             "type": "slider",
-            "min": 4,
-            "max": 15
+            "min": 5,
+            "max": 25
           }
         },
         {
@@ -123,6 +123,7 @@
         },
         {
           "name": "ringThickness",
+          "displayName": "Ring Thickness",
           "type": "number",
           "default": 0,
           "enabled": {
@@ -136,6 +137,7 @@
         },
         {
           "name": "shadow",
+          "displayName": "Shadow",
           "type": "number",
           "default": 0,
           "control": {

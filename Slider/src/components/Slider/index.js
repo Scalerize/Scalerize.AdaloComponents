@@ -7,12 +7,12 @@ import max from 'lodash/max';
 import zip from 'lodash/zip';
 import {Tooltip} from "@mui/material";
 
-const thumb = (hasGrip) => (props) => {
+const thumb = (hasGrip, color) => (props) => {
     const {children, ...other} = props;
     const style = {
         height: 9,
         width: 1,
-        backgroundColor: 'currentColor',
+        backgroundColor: color,
         marginLeft: 1,
         marginRight: 1,
     };
@@ -150,7 +150,7 @@ const SparklineSlider = (props) => {
                 backgroundColor: `${props.Thumb.color}`,
                 outlineColor: `${props.Thumb.color}`,
                 color: `${props.Thumb.color}`,
-                border: `${(props.Thumb.hasRing ? props.Thumb.ringThickness : 0)} solid ${props.Thumb.ringColor}`,
+                border: `${(props.Thumb.hasRing ? props.Thumb.ringThickness : 0)}px solid ${props.Thumb.ringColor}`,
                 '&:focus, &:hover, &.Mui-active, &.Mui-focusVisible': {
                     boxShadow: `0px 0px 0px 8px ${props.Thumb.color}28`
                 },
@@ -177,7 +177,8 @@ const SparklineSlider = (props) => {
                 width: 32,
                 height: 32,
                 borderRadius: '50% 50% 50% 0',
-                backgroundColor: props.Thumb.color,
+                backgroundColor: props['Value Label'].color,
+                color: props['Value Label'].textColor,
                 transformOrigin: 'bottom left',
                 transform: 'translate(50%, 20%) rotate(135deg) scale(1)',
                 '&::before': {display: 'none'},
@@ -199,7 +200,7 @@ const SparklineSlider = (props) => {
                 valueLabelDisplay={props['Value Label'].showLabel ? 'on': 'off'}
                 defaultValue={[props.minValue.initial, props.maxValue.initial]}
                 slots={{
-                    thumb: thumb(props.Thumb.hasGrip)
+                    thumb: thumb(props.Thumb.hasGrip, props.Thumb.ringColor)
                 }}
                 disableSwap></Slider>
     </div>
