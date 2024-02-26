@@ -31,58 +31,6 @@ const thumb = (hasGrip, color) => (props) => {
 };
 
 const SparklineSlider = (props) => {
-    log(props);
-    /*
-    // https://previewer.adalo.com/d51df6a9-57ae-41b7-ad5d-502e0035a7c2?target=9lr3djha2tmqlobqcbmh7yx34&params=%7B%7D
-      {
-        "minValue": {},
-        "maxValue": {},
-        "Sparkline": {
-            "color": "#878787",
-            "subdivisions": 20
-        },
-        "Rail": {
-            "color": "#e6e6e6",
-            "thickness": 0
-        },
-        "Track": {
-            "color": "#000000",
-            "thickness": 0
-        },
-        "Thumb": {
-            "color": "#000000",
-            "hasRing": false,
-            "ringColor": "#00000000",
-            "ringThickness": 0,
-            "hasGrip": false
-        },
-        "Value Label": {
-            "type": "onDrag",
-            "color": "#000000",
-            "textColor": "#ffffff"
-        },
-        "appId": "d51df6a9-57ae-41b7-ad5d-502e0035a7c2",
-        "active": true,
-        "authToken": null,
-        "topScreen": true,
-        "_fonts": {
-            "body": "inherit",
-            "heading": "Libre Baskerville"
-        },
-        "_height": 200,
-        "_width": 584,
-        "isResponsiveComponent": true,
-        "isPreviewer": true,
-        "_deviceType": "tablet",
-        "_screenHeight": 645.4,
-        "_screenWidth": 767.2,
-        "_layoutGuides": {
-            "top": 0,
-            "bottom": 0
-        }
-    }
-    
-     */
     const computeHeightArray = (props) => {
         let initial = [...Array(props.Sparkline.subdivisions).keys()];
         if (!props.barChartCollection) {
