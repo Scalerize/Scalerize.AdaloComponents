@@ -8,16 +8,160 @@
   "icon": "./thumbnail.png",
   "props": [
     {
-      "name": "activeColor",
-      "displayName": "Active Color",
-      "type": "color",
-      "default": "#000000"
+      "name": "minValue",
+      "displayName": "Min Value",
+      "type": "number",
+      "role": "formValue"
     },
     {
-      "name": "exteriorColor",
-      "displayName": "Exterior Color",
-      "type": "color",
-      "default": "#e6e6e6"
+      "name": "maxValue",
+      "displayName": "Max Value",
+      "type": "number",
+      "role": "formValue"
+    }
+  ],
+  "childComponents": [
+    {
+      "name": "Rail",
+      "props": [
+        {
+          "name": "color",
+          "displayName": "Rail Color",
+          "type": "color",
+          "default": "#e6e6e6"
+        },
+        {
+          "name": "thickness",
+          "type": "number",
+          "default": 0,
+          "enabled": {
+            "hasRing": true
+          },
+          "control": {
+            "type": "slider",
+            "min": 1,
+            "max": 8
+          }
+        }
+      ]
+    },
+    {
+      "name": "Track",
+      "props": [
+        {
+          "name": "color",
+          "displayName": "Track Color",
+          "type": "color",
+          "default": "#000000"
+        },
+        {
+          "name": "thickness",
+          "type": "number",
+          "default": 0,
+          "enabled": {
+            "hasRing": true
+          },
+          "control": {
+            "type": "slider",
+            "min": 1,
+            "max": 8
+          }
+        }
+      ]
+    },
+    {
+      "name": "Thumb",
+      "props": [
+        {
+          "name": "color",
+          "displayName": "Color",
+          "type": "color",
+          "default": "#000000"
+        },
+        {
+          "name": "diameter",
+          "displayName": "Diameter",
+          "type": "number",
+          "control": {
+            "type": "slider",
+            "min": 4,
+            "max": 15
+          }
+        },
+        {
+          "name": "hasRing",
+          "displayName": "Ring",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "name": "ringColor",
+          "displayName": "Ring Color",
+          "type": "color",
+          "default": "#00000000",
+          "enabled": {
+            "hasRing": true
+          }
+        },
+        {
+          "name": "ringThickness",
+          "type": "number",
+          "default": 0,
+          "enabled": {
+            "hasRing": true
+          },
+          "control": {
+            "type": "slider",
+            "min": 0,
+            "max": 8
+          }
+        },
+        {
+          "name": "hasGrip",
+          "displayName": "Has Drag Handle",
+          "type": "boolean",
+          "default": false
+        }
+      ]
+    },
+    {
+      "name": "Value Label",
+      "props": [
+        {
+          "name": "type",
+          "displayName": "Type",
+          "type": "text",
+          "control": {
+            "type": "menu",
+            "options": [
+              {
+                "label": "Permanent",
+                "value": "permanent"
+              },
+              {
+                "label": "Only when dragging thumbs",
+                "value": "onDrag"
+              },
+              {
+                "label": "Invisible",
+                "value": "invisible"
+              }
+            ]
+          }
+        },
+        {
+          "name": "color",
+          "displayName": "Color",
+          "type": "color",
+          "default": "#000000"
+        },
+        {
+          "name": "textColor",
+          "displayName": "Text Color",
+          "type": "color",
+          "default": "#ffffff"
+        }
+      ]
     }
   ]
 }
