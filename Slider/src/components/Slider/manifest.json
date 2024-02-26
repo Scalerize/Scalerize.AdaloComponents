@@ -8,42 +8,26 @@
   "icon": "./thumbnail.png",
   "props": [
     {
-      "name": "minValue",
-      "displayName": "Min Value",
+      "name": "rangeStart",
+      "displayName": "Range start default value",
       "type": "number",
+      "default": 0,
       "role": "formValue"
     },
     {
-      "name": "maxValue",
-      "displayName": "Max Value",
+      "name": "rangeEnd",
+      "displayName": "Range end default value",
       "type": "number",
-      "role": "formValue"
+      "role": "formValue",
+      "default": 100
     },
     {
       "name": "barChartCollection",
-      "displayName": "Bar Chart Collection",
+      "displayName": "Collection",
       "type": "list"
-    },
-    {
-      "name": "barChartValueSelector",
-      "displayName": "Collection Item Value Selector",
-      "type": "number",
-      "role": "listItem",
-      "reference": "barChartCollection"
     }
   ],
   "childComponents": [
-    {
-      "name": "Sparkline",
-      "props": [
-        {
-          "name": "subdivisions",
-          "displayName": "Number of subdivisions",
-          "type": "number",
-          "default": 20
-        }
-      ]
-    },
     {
       "name": "Rail",
       "props": [
@@ -56,7 +40,7 @@
         {
           "name": "thickness",
           "type": "number",
-          "default": 1,
+          "default": 3,
           "control": {
             "type": "slider",
             "min": 1,
@@ -72,16 +56,16 @@
           "name": "color",
           "displayName": "Track Color",
           "type": "color",
-          "default": "#000000"
+          "default": "@primary"
         },
         {
           "name": "thickness",
           "type": "number",
-          "default": 5,
+          "default": 3,
           "control": {
             "type": "slider",
             "min": 1,
-            "max": 9
+            "max": 10
           }
         }
       ]
@@ -93,17 +77,17 @@
           "name": "color",
           "displayName": "Color",
           "type": "color",
-          "default": "#000000"
+          "default": "#ffffff"
         },
         {
           "name": "diameter",
           "displayName": "Diameter",
           "type": "number",
-          "default": 15,
+          "default": 20,
           "control": {
             "type": "slider",
             "min": 5,
-            "max": 25
+            "max": 40
           }
         },
         {
@@ -132,14 +116,14 @@
           "control": {
             "type": "slider",
             "min": 0,
-            "max": 8
+            "max": 20
           }
         },
         {
           "name": "shadow",
           "displayName": "Shadow",
           "type": "number",
-          "default": 0,
+          "default": 3,
           "control": {
             "type": "slider",
             "min": 0,
@@ -155,11 +139,29 @@
       ]
     },
     {
-      "name": "Value Label",
+      "name": "Sparkline",
       "props": [
         {
-          "name": "showLabel",
-          "displayName": "Show label",
+          "name": "barChartValueSelector",
+          "displayName": "Collection Item Value Selector",
+          "type": "number",
+          "role": "listItem",
+          "reference": "barChartCollection"
+        }, 
+        {
+          "name": "subdivisions",
+          "displayName": "Number of subdivisions",
+          "type": "number",
+          "default": 20
+        }
+      ]
+    },
+    {
+      "name": "valueLabel",
+      "displayName": "Value Label",
+      "props": [
+        {
+          "name": "enabled",
           "type": "boolean",
           "default": true
         },
@@ -167,7 +169,7 @@
           "name": "color",
           "displayName": "Color",
           "type": "color",
-          "default": "#000000",
+          "default": "@primary",
           "enabled": {
             "showLabel": true
           }

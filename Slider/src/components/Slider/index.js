@@ -1,30 +1,34 @@
-import {log, report} from "../../../../Shared/utils";
+import {log} from "../../../../Shared/utils";
 import Slider, {SliderThumb} from '@mui/material/Slider'
-import Stack from '@mui/material/Stack'
-import {useState} from "react";
 import min from 'lodash/min';
 import max from 'lodash/max';
 import zip from 'lodash/zip';
-import {Tooltip} from "@mui/material";
+
+const defaultRandomBarChartCollection = [...Array(100).keys()].map(x => ({barChartValueSelector: Math.random() * 100}));
 
 const thumb = (hasGrip, color) => (props) => {
     const {children, ...other} = props;
     const style = {
-        height: 9,
-        width: 1,
-        backgroundColor: color,
-        marginLeft: 1,
-        marginRight: 1,
+        div: {
+            display: 'flex',
+            flexDirection: 'row',
+            gap: 2
+        },
+        gripItem: {
+            height: 9,
+            width: 1.5,
+            backgroundColor: color
+        }
     };
     return (
         <SliderThumb {...other}>
             {children}
             {hasGrip
-                ? <>
-                    <span style={style}/>
-                    <span style={style}/>
-                    <span style={style}/>
-                </>
+                ? <div style={style.div}>
+                    <div style={style.gripItem}/>
+                    <div style={style.gripItem}/>
+                    <div style={style.gripItem}/>
+                </div>
                 : <></>}
         </SliderThumb>
     );
@@ -33,17 +37,24 @@ const thumb = (hasGrip, color) => (props) => {
 const SparklineSlider = (props) => {
     const computeHeightArray = (props) => {
         let initial = [...Array(props.Sparkline.subdivisions).keys()];
-        if (!props.barChartCollection) {
-            return initial.map(x => 0);
+
+        if (!props.barChartCollection || !props.barChartCollection
+            .some(x => x.barChartValueSelector !== undefined)) {
+            props.barChartCollection = defaultRandomBarChartCollection
         }
-        const barChartValueSelectorArray = props.barChartCollection
-            .map(x => x.barChartValueSelector);
-        const [minValue, maxValue] = [min(barChartValueSelectorArray), max(barChartValueSelectorArray)];
+
+        let collection = props.barChartCollection.map(x => x.barChartValueSelector);
+        let [minValue, maxValue] = [
+            min([min(collection), props.rangeStart.initial]),
+            max([max(collection), props.rangeEnd.initial])
+        ];
+        const barChartValueSelectorArray = collection
+            .filter(x => x >= minValue && x <= maxValue);
 
         const distance = (maxValue - minValue) / props.Sparkline.subdivisions
         let heightArray = initial
             .map(x => barChartValueSelectorArray.filter(y =>
-                (y >= x * distance && y < (x + 1) * distance && x < props.Sparkline.subdivisions ||
+                (y >= x * distance && y < (x + 1) * distance && x < props.Sparkline.subdivisions - 1 ||
                     y >= x * distance && x === props.Sparkline.subdivisions - 1)
             ).length);
         const maxHeight = max(heightArray);
@@ -56,8 +67,8 @@ const SparklineSlider = (props) => {
     let getBar = ([idx, height]) => {
         const width = props._width / props.Sparkline.subdivisions;
         const offset = idx * width;
-        const minOffset = props.minValue.value / 100 * props._width;
-        const maxOffset = props.maxValue.value / 100 * props._width;
+        const minOffset = props.rangeStart.value / 100 * props._width;
+        const maxOffset = props.rangeEnd.value / 100 * props._width;
         const backgroundColor = offset >= minOffset && width + offset <= maxOffset
             ? props.Track.color
             : props.Rail.color;
@@ -65,8 +76,8 @@ const SparklineSlider = (props) => {
     };
 
     const onChange = (e) => {
-        props.minValue.onChange(e.target.value[0]);
-        props.maxValue.onChange(e.target.value[1]);
+        props.rangeStart.onChange(e.target.value[0]);
+        props.rangeEnd.onChange(e.target.value[1]);
     }
 
     const style = {
@@ -74,7 +85,8 @@ const SparklineSlider = (props) => {
             width: '100%',
             height: `${props._height}px`,
             display: 'flex',
-            'flex-direction': 'column'
+            'flex-direction': 'column',
+            paddingBottom: props.valueLabel.enabled ? '45px' : 0
         },
         sparkline: {
             height: '100%',
@@ -94,7 +106,7 @@ const SparklineSlider = (props) => {
             marginTop: '-15px',
             '& .MuiSlider-thumb': {
                 height: `${props.Thumb.diameter}px`,
-                width: `${props.Thumb.diameter}px`,
+                width: `${props.Thumb.diameter}px`, 
                 backgroundColor: `${props.Thumb.color}`,
                 outlineColor: `${props.Thumb.color}`,
                 color: `${props.Thumb.color}`,
@@ -103,7 +115,7 @@ const SparklineSlider = (props) => {
                     boxShadow: `0px 0px 0px 8px ${props.Thumb.color}28`
                 },
                 '&::before': {
-                    boxShadow: `1px 1px ${props.Thumb.shadow}px rgba(0,0,0,0.2)`
+                    boxShadow: `${props.Thumb.shadow}px ${props.Thumb.shadow}px ${props.Thumb.shadow}px rgba(0,0,0,0.2)`
                 }
             },
             '& .MuiSlider-track': {
@@ -122,14 +134,17 @@ const SparklineSlider = (props) => {
                 fontSize: 12,
                 background: 'unset',
                 padding: 0,
+                top: 0,
                 width: 32,
                 height: 32,
                 borderRadius: '50% 50% 50% 0',
-                backgroundColor: props['Value Label'].color,
-                color: props['Value Label'].textColor,
+                backgroundColor: props.valueLabel.color,
+                color: props.valueLabel.textColor,
                 transformOrigin: 'bottom left',
-                transform: 'translate(50%, 20%) rotate(135deg) scale(1)',
-                '&::before': {display: 'none'},
+                transform: 'translate(50%, 0%) rotate(135deg) scale(1)',
+                '&::before': {
+                    display: 'none'
+                },
                 '&.MuiSlider-valueLabelOpen': {
                     transform: 'translate(50%, 20%) rotate(135deg) scale(1)',
                 },
@@ -145,11 +160,10 @@ const SparklineSlider = (props) => {
             {zip([...Array(props.Sparkline.subdivisions).keys()], computeHeightArray(props)).map(getBar)}
         </div>
         <Slider sx={style.slider} onChange={onChange}
-                valueLabelDisplay={props['Value Label'].showLabel ? 'on': 'off'}
-                defaultValue={[props.minValue.initial, props.maxValue.initial]}
-                slots={{
-                    thumb: thumb(props.Thumb.hasGrip, props.Thumb.ringColor)
-                }}
+                valueLabelDisplay={props.valueLabel.enabled ? 'on' : 'off'}
+                key={`${props.rangeStart.initial}-${props.rangeStart.initial}`}
+                defaultValue={[props.rangeStart.initial, props.rangeEnd.initial]}
+                slots={{thumb: thumb(props.Thumb.hasGrip, props.Thumb.ringColor)}}
                 disableSwap></Slider>
     </div>
 };
