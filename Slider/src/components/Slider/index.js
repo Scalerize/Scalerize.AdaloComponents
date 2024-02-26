@@ -94,7 +94,7 @@ const SparklineSlider = (props) => {
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'end',
-            gap: '2px'
+            gap: '1px'
         },
         bar: {
             height: '100%',
