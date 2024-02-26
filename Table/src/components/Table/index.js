@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
 import {DataGrid} from '@mui/x-data-grid';
-import {log, report} from "../../utils";
+import {log, report} from "../../../../Shared/utils";
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import dayjs from 'dayjs'

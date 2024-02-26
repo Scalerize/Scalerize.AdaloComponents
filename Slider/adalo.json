@@ -1,0 +1,15 @@
+{
+  "displayName": "Slider",
+  "author": "Frank LIBOLT",
+  "description": "",
+  "price": 25,
+  "demoAppURL": "https://previewer.adalo.com/d51df6a9-57ae-41b7-ad5d-502e0035a7c2",
+  "supportURL": "https://franklibolt.net/?ad=feedback",
+  "logo": "./logo.png",
+  "components": [
+    {
+      "name": "Slider",
+      "manifest": "./src/components/Slider/manifest.json"
+    }
+  ]
+}

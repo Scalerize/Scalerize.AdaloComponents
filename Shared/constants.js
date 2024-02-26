@@ -3,4 +3,4 @@ export const environments = {
     develop: 'develop',
     production: 'production',
 }
-export const environment = environments.production;
+export const environment = environments.develop;

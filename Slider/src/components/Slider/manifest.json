@@ -1,0 +1,23 @@
+{
+  "displayName": "Slider",
+  "defaultWidth": 600,
+  "defaultHeight": 200,
+  "resizeX": true,
+  "resizeY": true,
+  "components": "./index.js",
+  "icon": "./thumbnail.png",
+  "props": [
+    {
+      "name": "activeColor",
+      "displayName": "Active Color",
+      "type": "color",
+      "default": "#000000"
+    },
+    {
+      "name": "exteriorColor",
+      "displayName": "Exterior Color",
+      "type": "color",
+      "default": "#e6e6e6"
+    }
+  ]
+}
