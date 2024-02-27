@@ -1,8 +1,8 @@
-import {log} from "../../../../Shared/utils";
 import Slider, {SliderThumb} from '@mui/material/Slider'
 import min from 'lodash/min';
 import max from 'lodash/max';
 import zip from 'lodash/zip';
+import {View} from 'react-native';
 
 const defaultRandomBarChartCollection = [...Array(100).keys()].map(() => 100);
 
@@ -24,11 +24,11 @@ const thumb = (hasGrip, color) => (props) => {
         <SliderThumb {...other}>
             {children}
             {hasGrip
-                ? <div style={style.div}>
-                    <div style={style.gripItem}/>
-                    <div style={style.gripItem}/>
-                    <div style={style.gripItem}/>
-                </div>
+                ? <View style={style.div}>
+                    <View style={style.gripItem}/>
+                    <View style={style.gripItem}/>
+                    <View style={style.gripItem}/>
+                </View>
                 : <></>}
         </SliderThumb>
     );
@@ -57,7 +57,7 @@ const SparklineSlider = (props) => {
             .map(x => x >= props.rangeStart.value && x <= props.rangeEnd.value
                 ? props.Track.color
                 : props.Rail.color);
-        
+
         let heightArray = initial
             .map(x => filteredCollection.filter(y =>
                 (y >= minValue + x * distance && y < minValue + (x + 1) * distance && x < props.Sparkline.subdivisions - 1 ||
@@ -150,21 +150,21 @@ const SparklineSlider = (props) => {
             },
         }
     }
-    return <div style={style.wrapper}>
-        <div style={style.sparkline}>
+    return <View style={style.wrapper}>
+        <View style={style.sparkline}>
             {
                 zip(...computeDimensionAndColor(props)).map(([backgroundColor, height]) => {
-                    return <div style={{...style.bar, backgroundColor, height}}></div>
+                    return <View style={{...style.bar, backgroundColor, height}}></View>
                 })
             }
-        </div>
+        </View>
         <Slider sx={style.slider} onChange={onChange}
                 valueLabelDisplay={props.valueLabel.enabled ? 'on' : 'off'}
                 key={`${props.rangeStart.initial}-${props.rangeStart.initial}`}
                 defaultValue={[props.rangeStart.initial, props.rangeEnd.initial]}
                 slots={{thumb: thumb(props.Thumb.hasGrip, props.Thumb.ringColor)}}
                 min={minValue} max={maxValue} disableSwap></Slider>
-    </div>
+    </View>
 };
 
 export default SparklineSlider;

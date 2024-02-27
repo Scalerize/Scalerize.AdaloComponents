@@ -6,8 +6,9 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import * as DynamicIcon from "@mui/icons-material";
-import Divider from '@mui/material/Divider' 
+import Divider from '@mui/material/Divider'
 import {report} from "../../../../Shared/utils";
+import {View, StyleSheet} from 'react-native';
 
 const divStyle = {
     width: '100%',
@@ -49,7 +50,7 @@ const ContextMenu = (props) => {
     }
 
     return (
-        <div style={divStyle}>
+        <View style={divStyle}>
             <IconButton
                 id="basic-button"
                 aria-controls={open ? 'basic-menu' : undefined}
@@ -97,7 +98,7 @@ const ContextMenu = (props) => {
                 }
             )}
             </Menu>
-        </div>
+        </View>
 
     );
 

@@ -4,20 +4,18 @@ import {log, report} from "../../../../Shared/utils";
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import dayjs from 'dayjs'
+import {Text, View, Linking, Image} from 'react-native';
 
 const Cell = ({type, value}) => {
     const style = {
-        display: 'flex',
-        'justify-content': 'center',
-        'align-items': 'center',
-        width: '100%'
+        display: 'flex', 'justify-content': 'center', 'align-items': 'center', width: '100%'
     };
 
     if (value == null) {
         let conditionalStyle = ['image', 'boolean'].includes(type) ? style : {};
-        return <div style={conditionalStyle}>
-            <span>{'-'}</span>
-        </div>;
+        return <View style={conditionalStyle}>
+            <Text>-</Text>
+        </View>;
     }
     const getAdaloUrlFromValue = (value) => {
         return `https://adalo-uploads.imgix.net/${value.url}?auto=compress&h=30`;
@@ -31,22 +29,21 @@ const Cell = ({type, value}) => {
     }
 
     if (type === 'date') {
-        return <span>{dayjs(Date.parse(value)).format('DD/MM/YYYY')}</span>
+        return <Text>{dayjs(Date.parse(value)).format('DD/MM/YYYY')}</Text>
     } else if (type === 'dateOnly') {
-        return <span>{dayjs(Date.parse(value)).format('DD/MM/YYYY hh:mm:ss')}</span>
+        return <Text>{dayjs(Date.parse(value)).format('DD/MM/YYYY hh:mm:ss')}</Text>
     } else if (type === 'image') {
-        return <div style={style}><img height="24" alt={value.filename} src={getAdaloUrlFromValue(value)}></img></div>;
+        return <View style={style}>
+            <Image height="24" alt={value.filename}
+                   source={{uri: getAdaloUrlFromValue(value)}}></Image></View>;
     } else if (type === 'file') {
-        return <a href={getAdaloUrlFromValue(value)} target='_blank'>{value.filename}</a>;
+        return <Text onPress={() => Linking.openURL(getAdaloUrlFromValue(value))}>{value.filename}</Text>;
     } else if (type === 'boolean') {
-        return <div style={style}>{value
-            ? <CheckIcon></CheckIcon>
-            : <CloseIcon></CloseIcon>
-        }</div>
+        return <View style={style}>{value ? <CheckIcon></CheckIcon> : <CloseIcon></CloseIcon>}</View>
     } else if (isEmail(value)) {
-        return <a href={`mailto:${value}`} target='_blank'>{value}</a>;
+        return <Text onPress={() => Linking.openURL(`mailto:${value}`)}>{value}</Text>;
     } else {
-        return <span>{value}</span>
+        return <Text>{value}</Text>
     }
 }
 const Table = (props) => {
@@ -60,38 +57,34 @@ const Table = (props) => {
     const [propertiesTypesDict, setPropertiesTypesDict] = useState(undefined);
 
     useEffect(() => {
-            if (!rowsMeta || !!propertiesDict || !appId) {
-                return;
-            }
-            const response = fetch(`https://cdn.adalo.com/apps/${appId}/clients/runner`)
-                .then(x => {
-                    if (response.ok) {
-                        throw new Error(`${response.status} ${response.statusText}`);
-                    }
-                    return x;
-                })
-                .then(x => x.json())
-                .then(json => {
-                    const {datasourceId, tableId} = rowsMeta;
-                    let tableStructure = json.datasources[datasourceId].tables[tableId].fields;
-                    let nameMapping = Object.keys(tableStructure)
-                        .map(x => [tableStructure[x].name, x]);
-                    setPropertiesDict(Object.fromEntries(nameMapping));
-                    let typeMapping = Object.keys(tableStructure)
-                        .map(x => [tableStructure[x].name, tableStructure[x].type]);
-                    setPropertiesTypesDict(Object.fromEntries(typeMapping));
-                })
-                .catch(x => report({
-                    'component': 'table',
-                    'missing-icon': `Error fetching runner: ${x.message}`
-                }));
+        if (!rowsMeta || !!propertiesDict || !appId) {
+            return;
         }
-    )
+        const response = fetch(`https://cdn.adalo.com/apps/${appId}/clients/runner`)
+            .then(x => {
+                if (response.ok) {
+                    throw new Error(`${response.status} ${response.statusText}`);
+                }
+                return x;
+            })
+            .then(x => x.json())
+            .then(json => {
+                const {datasourceId, tableId} = rowsMeta;
+                let tableStructure = json.datasources[datasourceId].tables[tableId].fields;
+                let nameMapping = Object.keys(tableStructure)
+                    .map(x => [tableStructure[x].name, x]);
+                setPropertiesDict(Object.fromEntries(nameMapping));
+                let typeMapping = Object.keys(tableStructure)
+                    .map(x => [tableStructure[x].name, tableStructure[x].type]);
+                setPropertiesTypesDict(Object.fromEntries(typeMapping));
+            })
+            .catch(x => report({
+                'component': 'table', 'missing-icon': `Error fetching runner: ${x.message}`
+            }));
+    })
 
     function getField(x) {
-        return propertiesDict && x.field
-            ? propertiesDict[x.field]
-            : x.field;
+        return propertiesDict && x.field ? propertiesDict[x.field] : x.field;
     }
 
     const columns = propsColumns
@@ -124,17 +117,9 @@ const Table = (props) => {
         disableColumnResize: true,
         disableRowSelectionOnClick: true,
         density: style.density || 'standard',
-        getRowClassName: style.stripped
-            ? (x) =>
-                x.indexRelativeToCurrentPage % 2 === 0
-                    ? 'even'
-                    : 'odd'
-            : undefined,
+        getRowClassName: style.stripped ? (x) => x.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd' : undefined,
         sx: {
-            width: '100%',
-            color: style.foregroundColor,
-            bgcolor: style.backgroundColor,
-            '& .even': {
+            width: '100%', color: style.foregroundColor, bgcolor: style.backgroundColor, '& .even': {
                 bgcolor: 'rgba(0, 0, 0, 0.05)'
             },
         }
@@ -156,36 +141,27 @@ const Table = (props) => {
         border: 0
     };
     componentProperties.sx['& .MuiDataGrid-footerContainer'] = {
-        border: 0,
-        borderTop: 0,
-        borderColor: style.borderColor
+        border: 0, borderTop: 0, borderColor: style.borderColor
     };
     componentProperties.sx["& .MuiDataGrid-cell *"] = {
-        overflow: 'hidden',
-        textOverflow: 'ellipsis'
+        overflow: 'hidden', textOverflow: 'ellipsis'
     }
     if (style.borderType === 'rows-and-cols') {
         componentProperties.sx['& .MuiDataGrid-columnHeader'] = {
-            borderRight: style.borderThickness,
-            borderColor: style.borderColor
+            borderRight: style.borderThickness, borderColor: style.borderColor
         }
         componentProperties.sx["& .MuiDataGrid-cell:not(:last-child)"] = {
-            borderRight: style.borderThickness,
-            borderColor: style.borderColor,
+            borderRight: style.borderThickness, borderColor: style.borderColor,
         }
         componentProperties.sx["& .MuiDataGrid-cell:last-child"] = {
             borderRight: 0
         }
     }
     componentProperties.sx['& .MuiDataGrid-columnHeaders'] = {
-        borderBottom: style.borderThickness,
-        borderColor: style.borderColor,
-        bgcolor: style.headerBackgroundColor
+        borderBottom: style.borderThickness, borderColor: style.borderColor, bgcolor: style.headerBackgroundColor
     }
     componentProperties.sx["& .MuiDataGrid-row"] = {
-        borderBottom: style.borderThickness,
-        borderColor: style.borderColor,
-        borderTop: 0
+        borderBottom: style.borderThickness, borderColor: style.borderColor, borderTop: 0
     }
 
     // Configure foregroud color
@@ -201,13 +177,12 @@ const Table = (props) => {
     }
 
     let wrapperStyle = {
-        width: componentProperties.sx.width,
-        height: componentProperties.sx.height
+        width: componentProperties.sx.width, height: componentProperties.sx.height
     };
 
-    return <div style={wrapperStyle}>
+    return <View style={wrapperStyle}>
         <DataGrid {...componentProperties}></DataGrid>
-    </div>;
+    </View>;
 
 };
 

@@ -1,5 +1,5 @@
 {
-  "displayName": "Slider",
+  "displayName": "Range Slider",
   "defaultWidth": 600,
   "defaultHeight": 200,
   "resizeX": true,
