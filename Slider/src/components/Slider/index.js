@@ -10,7 +10,7 @@ const defaultRandomBarChartCollection = [...Array(100).keys()].map(() => 100);
 
 class Thumb extends React.Component {
     constructor(props) {
-        super(props);
+        super(props); 
         this.state = {
             rangeStart: this.props.rangeStart,
             rangeEnd: this.props.rangeEnd
@@ -39,24 +39,31 @@ class Thumb extends React.Component {
                 }),
             onPanResponderRelease: () => {
                 this.pan.extractOffset();
+                this.updatePanClampedAnimation();
             }
         });
     }
 
     componentDidUpdate(prevProps) {
         if (prevProps.maxValue !== this.props.maxValue || prevProps.parentWidth !== this.props.parentWidth) {
-            let {offsetRangeStart, offsetRangeEnd, isMin} = this.getOffsets();
-            this.pan.setValue({x: isMin ? offsetRangeStart : offsetRangeEnd, y: 0})
+            this.updatePanXValue();
+            this.updatePanClampedAnimation();
         }
     }
 
+    updatePanXValue() {
+        let {offsetRangeStart, offsetRangeEnd, isMin} = this.getOffsets();
+        this.pan.setValue({x: isMin ? offsetRangeStart : offsetRangeEnd, y: 0});
+    }
+
     updatePanClampedAnimation() {
-        let range = this.getRange(this.props.parentWidth);
+        let range = this.getRange(this.props.parentWidth); 
+        // TODO: does not update interpolation when release thumb
         this.panX = this.pan.x.interpolate({
             inputRange: range,
             outputRange: range,
             extrapolate: 'clamp'
-        })
+        });        
     }
 
     getOffsets() {
@@ -188,11 +195,8 @@ const SparklineSlider = (props) => {
     }
 
     const onLayout = (event) => {
-        log(event)
         const {width} = event.nativeEvent.layout;
-        if (width) {
-            setRailWidth(width);
-        }
+        setRailWidth(width);
     }
     const styles2 = StyleSheet.create({
         wrapper: {
@@ -262,7 +266,7 @@ const SparklineSlider = (props) => {
         maxValue,
         parentWidth: railWidth
     };
-    
+
     return <View style={styles2.wrapper}>
         <View style={styles2.sparkline}>
             {
