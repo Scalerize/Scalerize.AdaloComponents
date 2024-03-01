@@ -12,19 +12,18 @@ class Thumb extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            parentWidth: 0
+            rangeStart: this.props.rangeStart,
+            rangeEnd: this.props.rangeEnd
         };
     }
 
     componentDidMount() {
-        const initialTranslate = -this.props.diameter / 2;
-        const initialValue = this.props.thumbType === 'min' ? this.props.rangeStart : this.props.rangeEnd;
-        let translateX = initialValue / this.props.maxValue * this.state.parentWidth;
-
+        let {offsetRangeStart, offsetRangeEnd, isMin} = this.getOffsets();
         this.pan = new Animated.ValueXY({
-            x: translateX + initialTranslate,
-            y: initialTranslate
+            x: isMin ? offsetRangeStart : offsetRangeEnd,
+            y: 0
         });
+        this.updatePanClampedAnimation();
 
 
         this.panResponder = PanResponder.create({
@@ -33,7 +32,9 @@ class Thumb extends React.Component {
                 {
                     useNativeDriver: true,
                     listener: (event, gesture) => {
-                        this.props.onValueChange((this.pan.x._offset + gesture.dx) / this.state.parentWidth * this.props.maxValue);
+                        let newValue = this.mapDimensionToValue(this.pan.x['_offset'] + gesture.dx);
+                        let clampedValue = this.clamp(newValue, [this.props.minValue, this.props.maxValue]);
+                        this.props.onValueChange(clampedValue);
                     }
                 }),
             onPanResponderRelease: () => {
@@ -42,17 +43,65 @@ class Thumb extends React.Component {
         });
     }
 
-    onLayout(event) {
-        const {width} = event.nativeEvent.layout;
-        this.setState({parentWidth: width});
+    componentDidUpdate(prevProps) {
+        if (prevProps.maxValue !== this.props.maxValue || prevProps.parentWidth !== this.props.parentWidth) {
+            let {offsetRangeStart, offsetRangeEnd, isMin} = this.getOffsets();
+            this.pan.setValue({x: isMin ? offsetRangeStart : offsetRangeEnd, y: 0})
+        }
+    }
+
+    updatePanClampedAnimation() {
+        let range = this.getRange(this.props.parentWidth);
+        this.panX = this.pan.x.interpolate({
+            inputRange: range,
+            outputRange: range,
+            extrapolate: 'clamp'
+        })
+    }
+
+    getOffsets() {
+        let isMin = this.props.thumbType === 'min';
+        let offsetRangeStart = this.mapValueToDimention(this.state.rangeStart);
+        let offsetRangeEnd = this.mapValueToDimention(this.state.rangeEnd);
+        return {offsetRangeStart, offsetRangeEnd, isMin};
+    }
+
+    mapValueToDimention(value) {
+        return this.props.parentWidth * value / this.props.maxValue;
+    }
+
+    mapDimensionToValue(value) {
+        return value / this.props.parentWidth * this.props.maxValue;
+    }
+
+    getRange(parentWidth) {
+        const {offsetRangeStart, offsetRangeEnd, isMin} = this.getOffsets();
+        return isMin
+            ? [0, offsetRangeEnd]
+            : [offsetRangeStart, parentWidth];
+    }
+
+    clamp(val, [min, max]) {
+        return Math.max(min, Math.min(val, max));
     }
 
     render() {
-        const initialTranslate = -this.props.diameter / 2;
-        const initialValue = this.props.thumbType === 'min' ? this.props.rangeStart : this.props.rangeEnd;
-        let translateX = initialValue / this.props.maxValue * this.state.parentWidth;
-        let range = [initialTranslate - translateX, this.state.parentWidth + initialTranslate - translateX];
         const innerStyle = StyleSheet.create({
+            wrapper: {
+                transform: [
+                    {translateX: -this.props.diameter / 2},
+                    {translateY: -this.props.diameter / 2}
+                ]
+            },
+            thumb: {
+                transform: this.pan
+                    ? [
+                        {translateX: this.panX},
+                        {translateY: 0}
+                    ]
+                    : []
+
+            },
             div: {
                 display: 'flex',
                 flexDirection: 'row',
@@ -65,21 +114,9 @@ class Thumb extends React.Component {
             }
         });
 
-        return (<View
-                onLayout={this.onLayout.bind(this)}>
-                {this.pan && this.panResponder && this.state.parentWidth > 0
-                    ? <Animated.View style={[this.props.style, {
-                        transform: [{
-                            translateX: this.pan.x.interpolate({
-                                inputRange: range,
-                                outputRange: range,
-                                extrapolate: 'clamp'
-                            })
-                        },
-                            {
-                                translateY: this.pan.y
-                            }]
-                    }]}
+        return (<View style={innerStyle.wrapper}>
+                {this.pan && this.panResponder && this.props.parentWidth > 0
+                    ? <Animated.View style={[this.props.style, innerStyle.thumb]}
                                      {...this.panResponder.panHandlers}>
                         {this.props.children}
                         {this.props.hasGrip
@@ -108,6 +145,7 @@ const SparklineSlider = (props) => {
         rangeStart: props.rangeStart.initial,
         rangeEnd: props.rangeEnd.initial
     })
+    const [railWidth, setRailWidth] = useState(0);
     const computeDimensionAndColor = (props) => {
         let initial = [...Array(props.Sparkline.subdivisions).keys()];
 
@@ -141,19 +179,28 @@ const SparklineSlider = (props) => {
 
     const onStartChange = (e) => {
         props.rangeStart.onChange(e);
+        setValue(s => ({...s, rangeStart: e}))
     }
 
     const onEndChange = (e) => {
         props.rangeEnd.onChange(e);
+        setValue(s => ({...s, rangeEnd: e}))
     }
 
-    const style = {
+    const onLayout = (event) => {
+        log(event)
+        const {width} = event.nativeEvent.layout;
+        if (width) {
+            setRailWidth(width);
+        }
+    }
+    const styles2 = StyleSheet.create({
         wrapper: {
             width: '100%',
             height: `${props._height}px`,
             display: 'flex',
             'flex-direction': 'column',
-            paddingBottom: props.valueLabel.enabled ? '45px' : 0
+            paddingBottom: props.valueLabel.enabled ? 45 : 0
         },
         sparkline: {
             height: '100%',
@@ -168,61 +215,7 @@ const SparklineSlider = (props) => {
             flex: 1,
         },
         slider: {
-            width: '100%',
-            marginTop: '-15px',
-            '& .MuiSlider-thumb': {
-                height: `${props.Thumb.diameter}px`,
-                width: `${props.Thumb.diameter}px`,
-                backgroundColor: `${props.Thumb.color}`,
-                outlineColor: `${props.Thumb.color}`,
-                color: `${props.Thumb.color}`,
-                border: `${(props.Thumb.hasRing ? props.Thumb.ringThickness : 0)}px solid ${props.Thumb.ringColor}`,
-                '&:focus, &:hover, &.Mui-active, &.Mui-focusVisible': {
-                    boxShadow: `0px 0px 0px 8px ${props.Thumb.color}28`
-                },
-                '&::before': {
-                    boxShadow: `${props.Thumb.shadow}px ${props.Thumb.shadow}px ${props.Thumb.shadow}px rgba(0,0,0,0.2)`
-                }
-            },
-            '& .MuiSlider-track': {
-                border: 'none',
-                backgroundColor: props.Track.color,
-                height: `${props.Track.thickness}px`,
-            },
-            '& .MuiSlider-rail': {
-                opacity: 1,
-                backgroundColor: props.Rail.color,
-                height: `${props.Rail.thickness}px`,
-            },
-
-            '& .MuiSlider-valueLabel': {
-                lineHeight: 1.2,
-                fontSize: 12,
-                background: 'unset',
-                padding: 0,
-                top: 0,
-                width: 32,
-                height: 32,
-                borderRadius: '50% 50% 50% 0',
-                backgroundColor: props.valueLabel.color,
-                color: props.valueLabel.textColor,
-                transformOrigin: 'bottom left',
-                transform: 'translate(50%, 0%) rotate(135deg) scale(1)',
-                '&::before': {
-                    display: 'none'
-                },
-                '&.MuiSlider-valueLabelOpen': {
-                    transform: 'translate(50%, 20%) rotate(135deg) scale(1)',
-                },
-                '& > *': {
-                    transform: 'rotate(-135deg)',
-                },
-            },
-        }
-    }
-
-    const styles2 = StyleSheet.create({
-        container: {
+            marginTop: -15,
             position: 'relative',
             paddingTop: 13,
             paddingBottom: 13,
@@ -255,17 +248,7 @@ const SparklineSlider = (props) => {
             border: `${(props.Thumb.hasRing ? props.Thumb.ringThickness : 0)}px solid ${props.Thumb.ringColor}`,
             boxShadow: `${props.Thumb.shadow}px ${props.Thumb.shadow}px ${props.Thumb.shadow}px rgba(0,0,0,0.2)`,
             borderRadius: '50%',
-            cursor: 'pointer',
-            transform: [
-                {translateX: -props.Thumb.diameter / 2},
-                {translateY: -props.Thumb.diameter / 2},
-            ],
-        },
-        thumbLeft: {
-            left: `${value.rangeStart / maxValue * 100}%`,
-        },
-        thumbRight: {
-            left: `${value.rangeEnd / maxValue * 100}%`,
+            cursor: 'pointer'
         }
     });
 
@@ -273,27 +256,32 @@ const SparklineSlider = (props) => {
         hasGrip: props.Thumb.hasGrip,
         gripColor: props.Thumb.ringColor,
         diameter: props.Thumb.diameter,
+        style: styles2.thumb,
         ...value,
         minValue,
-        maxValue
+        maxValue,
+        parentWidth: railWidth
     };
-
-    return <View style={style.wrapper}>
-        <View style={style.sparkline}>
+    
+    return <View style={styles2.wrapper}>
+        <View style={styles2.sparkline}>
             {
                 zip(...computeDimensionAndColor(props)).map(([backgroundColor, height]) => {
-                    return <View style={{...style.bar, backgroundColor, height}}></View>
+                    return <View style={{...styles2.bar, backgroundColor, height}}></View>
                 })
             }
         </View>
-        <View style={styles2.container}>
-            <View style={styles2.railWrapper}>
+        <View style={styles2.slider}>
+            <View style={styles2.railWrapper}
+                  onLayout={onLayout}>
                 <View style={styles2.rail}></View>
                 <View style={styles2.track}></View>
-                <Thumb {...thumbBaseProperties} thumbType="min" onValueChange={onStartChange}
-                       style={{...styles2.thumb, ...styles2.thumbLeft}}></Thumb>
-                <Thumb {...thumbBaseProperties} thumbType="max" onValueChange={onEndChange}
-                       style={{...styles2.thumb, ...styles2.thumbRight}}></Thumb>
+                {railWidth
+                    ? <>
+                        <Thumb {...thumbBaseProperties} thumbType="min" onValueChange={onStartChange}></Thumb>
+                        <Thumb {...thumbBaseProperties} thumbType="max" onValueChange={onEndChange}></Thumb>
+                    </>
+                    : <></>}
             </View>
         </View>
     </View>
