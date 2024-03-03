@@ -14,45 +14,74 @@ class Thumb extends React.Component {
         this.state = {
             rangeStart: this.props.rangeStart,
             rangeEnd: this.props.rangeEnd,
-            offset: 0
+            ...this.getRange(),
+            offset: 0,
+            previousOffset: 0
         };
     }
-    
+
+    getRange() {
+        return {
+            minValue: this.isMinimumThumb() ?
+                0 
+                : this.mapValueToDimention(this.props.rangeStart),
+            maxValue: this.isMinimumThumb() 
+                ? this.mapValueToDimention(this.props.rangeEnd) 
+                : this.props.parentWidth,
+        };
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.rangeStart !== this.props.rangeStart && this.isMinimumThumb() ||
+            prevProps.rangeEnd !== this.props.rangeEnd && !this.isMinimumThumb() ||
+            prevProps.maxValue !== this.props.maxValue ||
+            prevProps.parentWidth !== this.props.parentWidth) {
+            let newValue = this.isMinimumThumb() ? this.props.rangeStart : this.props.rangeEnd;
+            let offset = this.mapValueToDimention(newValue);
+            this.setState(s => ({...s, offset}))
+        }
+
+        if (prevProps.rangeStart !== this.props.rangeStart && !this.isMinimumThumb() ||
+            prevProps.rangeEnd !== this.props.rangeEnd && this.isMinimumThumb() ||
+            prevProps.maxValue !== this.props.maxValue ||
+            prevProps.parentWidth !== this.props.parentWidth) {
+            this.setState(s => ({...s, ...this.getRange()}))
+        }
+    }
+
     componentDidMount() {
         let {offsetRangeStart, offsetRangeEnd, isMin} = this.getOffsets();
         let initialX = isMin ? offsetRangeStart : offsetRangeEnd;
-        this.pan = new Animated.ValueXY({
-            x: initialX,
-            y: 0
-        });
         this.setState(s => ({...s, offset: initialX}))
 
         this.panResponder = PanResponder.create({
             onStartShouldSetPanResponder: () => true,
-            onPanResponderMove: Animated.event([null, {dx: this.pan.x}],
+            onPanResponderMove: Animated.event([null, {}],
                 {
                     useNativeDriver: true,
                     listener: (event, gesture) => {
-                        let pixelNewValue = this.pan.x['_offset'] + gesture.dx;
-                        let range = this.getRange(this.props.parentWidth)
-                        let clampedPixelValue = this.clamp(pixelNewValue, range);
-                        log({pixelNewValue, range, clampedPixelValue})
-                        this.setState(s => ({...s, offset: clampedPixelValue}))
+                        let pixelNewValue = this.state.offset + gesture.dx - this.state.previousOffset;
+                        let clampedPixelValue = this.clamp(pixelNewValue, [this.state.minValue, this.state.maxValue]);
+                        this.setState(s => ({...s, offset: clampedPixelValue, previousOffset: gesture.dx}))
                         let newValue = this.mapDimensionToValue(clampedPixelValue);
                         this.props.onValueChange(newValue);
                     }
                 }),
             onPanResponderRelease: () => {
-                this.pan.extractOffset();
+                this.setState(s => ({...s, previousOffset: 0}));
             }
         });
     }
 
     getOffsets() {
-        let isMin = this.props.thumbType === 'min';
+        let isMin = this.isMinimumThumb();
         let offsetRangeStart = this.mapValueToDimention(this.state.rangeStart);
         let offsetRangeEnd = this.mapValueToDimention(this.state.rangeEnd);
         return {offsetRangeStart, offsetRangeEnd, isMin};
+    }
+
+    isMinimumThumb() {
+        return this.props.thumbType === 'min';
     }
 
     mapValueToDimention(value) {
@@ -61,13 +90,6 @@ class Thumb extends React.Component {
 
     mapDimensionToValue(value) {
         return value / this.props.parentWidth * this.props.maxValue;
-    }
-
-    getRange(parentWidth) {
-        const {offsetRangeStart, offsetRangeEnd, isMin} = this.getOffsets();
-        return isMin
-            ? [0, parentWidth]
-            : [offsetRangeStart, parentWidth];
     }
 
     clamp(val, [min, max]) {
