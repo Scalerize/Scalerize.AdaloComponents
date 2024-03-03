@@ -23,10 +23,10 @@ class Thumb extends React.Component {
     getRange() {
         return {
             minValue: this.isMinimumThumb() ?
-                0 
+                0
                 : this.mapValueToDimention(this.props.rangeStart),
-            maxValue: this.isMinimumThumb() 
-                ? this.mapValueToDimention(this.props.rangeEnd) 
+            maxValue: this.isMinimumThumb()
+                ? this.mapValueToDimention(this.props.rangeEnd)
                 : this.props.parentWidth,
         };
     }
@@ -107,8 +107,10 @@ class Thumb extends React.Component {
             thumb: {
                 transform: [
                     {translateX: this.state.offset}
-                ]
-
+                ],
+                display: 'flex',
+                alignItems: "center",
+                justifyContent: 'center'
             },
             div: {
                 display: 'flex',
@@ -134,6 +136,7 @@ class Thumb extends React.Component {
                                 <View style={innerStyle.gripItem}/>
                             </View>
                             : <></>}
+                        {/* TODO: Value labels */ }
                     </Animated.View>
                     : <></>}
             </View>
@@ -199,6 +202,7 @@ const SparklineSlider = (props) => {
         const {width} = event.nativeEvent.layout;
         setRailWidth(width);
     }
+    let maxSliderHeight = max([props.Track.thickness, props.Rail.thickness, props.Thumb.diameter]);
     const styles2 = StyleSheet.create({
         wrapper: {
             width: '100%',
@@ -220,24 +224,23 @@ const SparklineSlider = (props) => {
             flex: 1,
         },
         slider: {
-            marginTop: -15,
-            position: 'relative',
-            paddingTop: 13,
-            paddingBottom: 13,
-            paddingLeft: 0,
-            paddingRight: 0
+            marginTop: - maxSliderHeight / 2,
+            position: 'relative'
         },
         railWrapper: {
-            position: 'relative'
+            position: 'relative',
+            height: maxSliderHeight
         },
         rail: {
             position: 'absolute',
+            top: Math.max((maxSliderHeight - props.Rail.thickness) / 2, 0),
             width: '100%',
             backgroundColor: props.Rail.color,
             height: `${props.Rail.thickness}px`,
         },
         track: {
             position: 'absolute',
+            top: Math.max((maxSliderHeight - props.Track.thickness) / 2, 0),
             backgroundColor: props.Track.color,
             height: `${props.Track.thickness}px`,
             left: `${value.rangeStart / maxValue * 100}%`,
@@ -245,6 +248,7 @@ const SparklineSlider = (props) => {
         },
         thumb: {
             position: "absolute",
+            marginTop: maxSliderHeight / 2,
             height: `${props.Thumb.diameter}px`,
             width: `${props.Thumb.diameter}px`,
             backgroundColor: `${props.Thumb.color}`,

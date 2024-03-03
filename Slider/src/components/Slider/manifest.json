@@ -107,7 +107,7 @@
           "name": "ringColor",
           "displayName": "Ring Color",
           "type": "color",
-          "default": "#000000",
+          "default": "@primary",
           "enabled": {
             "hasRing": true
           }
