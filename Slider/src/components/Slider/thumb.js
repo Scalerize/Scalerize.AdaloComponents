@@ -105,14 +105,16 @@ export class Thumb extends React.Component {
             },
             valueLabelWrapper: {
                 color: this.props.labelTextColor,
+                pointerEvents: 'none',
                 position: "absolute",
                 width: valueLabelDiameter,
                 height: valueLabelDiameter,
                 backgroundColor: this.props.labelColor,
                 textAlign: 'center',
+                transformOrigin: 'top left',
                 transform: [
-                    {translateX: this.state.offset + (this.props.diameter - valueLabelDiameter) / 2},
-                    {translateY: this.props.diameter * 2},
+                    {translateX: this.state.offset + this.props.diameter / 2},
+                    {translateY: this.props.diameter * 1.5 + 10},
                     {rotateZ: '45deg'}
                 ],
                 display: "flex",
