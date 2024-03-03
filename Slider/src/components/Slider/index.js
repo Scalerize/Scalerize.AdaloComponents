@@ -10,21 +10,22 @@ const defaultRandomBarChartCollection = [...Array(100).keys()].map(() => 100);
 
 class Thumb extends React.Component {
     constructor(props) {
-        super(props); 
+        super(props);
         this.state = {
             rangeStart: this.props.rangeStart,
-            rangeEnd: this.props.rangeEnd
+            rangeEnd: this.props.rangeEnd,
+            offset: 0
         };
     }
-
+    
     componentDidMount() {
         let {offsetRangeStart, offsetRangeEnd, isMin} = this.getOffsets();
+        let initialX = isMin ? offsetRangeStart : offsetRangeEnd;
         this.pan = new Animated.ValueXY({
-            x: isMin ? offsetRangeStart : offsetRangeEnd,
+            x: initialX,
             y: 0
         });
-        this.updatePanClampedAnimation();
-
+        this.setState(s => ({...s, offset: initialX}))
 
         this.panResponder = PanResponder.create({
             onStartShouldSetPanResponder: () => true,
@@ -32,38 +33,19 @@ class Thumb extends React.Component {
                 {
                     useNativeDriver: true,
                     listener: (event, gesture) => {
-                        let newValue = this.mapDimensionToValue(this.pan.x['_offset'] + gesture.dx);
-                        let clampedValue = this.clamp(newValue, [this.props.minValue, this.props.maxValue]);
-                        this.props.onValueChange(clampedValue);
+                        let pixelNewValue = this.pan.x['_offset'] + gesture.dx;
+                        let range = this.getRange(this.props.parentWidth)
+                        let clampedPixelValue = this.clamp(pixelNewValue, range);
+                        log({pixelNewValue, range, clampedPixelValue})
+                        this.setState(s => ({...s, offset: clampedPixelValue}))
+                        let newValue = this.mapDimensionToValue(clampedPixelValue);
+                        this.props.onValueChange(newValue);
                     }
                 }),
             onPanResponderRelease: () => {
                 this.pan.extractOffset();
-                this.updatePanClampedAnimation();
             }
         });
-    }
-
-    componentDidUpdate(prevProps) {
-        if (prevProps.maxValue !== this.props.maxValue || prevProps.parentWidth !== this.props.parentWidth) {
-            this.updatePanXValue();
-            this.updatePanClampedAnimation();
-        }
-    }
-
-    updatePanXValue() {
-        let {offsetRangeStart, offsetRangeEnd, isMin} = this.getOffsets();
-        this.pan.setValue({x: isMin ? offsetRangeStart : offsetRangeEnd, y: 0});
-    }
-
-    updatePanClampedAnimation() {
-        let range = this.getRange(this.props.parentWidth); 
-        // TODO: does not update interpolation when release thumb
-        this.panX = this.pan.x.interpolate({
-            inputRange: range,
-            outputRange: range,
-            extrapolate: 'clamp'
-        });        
     }
 
     getOffsets() {
@@ -84,7 +66,7 @@ class Thumb extends React.Component {
     getRange(parentWidth) {
         const {offsetRangeStart, offsetRangeEnd, isMin} = this.getOffsets();
         return isMin
-            ? [0, offsetRangeEnd]
+            ? [0, parentWidth]
             : [offsetRangeStart, parentWidth];
     }
 
@@ -101,12 +83,9 @@ class Thumb extends React.Component {
                 ]
             },
             thumb: {
-                transform: this.pan
-                    ? [
-                        {translateX: this.panX},
-                        {translateY: 0}
-                    ]
-                    : []
+                transform: [
+                    {translateX: this.state.offset}
+                ]
 
             },
             div: {
@@ -122,7 +101,7 @@ class Thumb extends React.Component {
         });
 
         return (<View style={innerStyle.wrapper}>
-                {this.pan && this.panResponder && this.props.parentWidth > 0
+                {this.panResponder && this.props.parentWidth > 0
                     ? <Animated.View style={[this.props.style, innerStyle.thumb]}
                                      {...this.panResponder.panHandlers}>
                         {this.props.children}
