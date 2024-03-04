@@ -32,43 +32,40 @@ const ContextMenu = (props) => {
         }
     });
 
-    return (<>
-            {Platform.OS === 'web'
-                ? <style type="text/css">{`
+    return <PaperProvider settings={{icon: props => <MaterialIcons {...props} />}}>
+        {Platform.OS === 'web'
+            ? <style type="text/css">{`
                     @font-face {
                       font-family: 'MaterialIcons';
                       src: url(${materialIconPath}) format('truetype');
                     }
                   `}</style>
-                : null}
-            <PaperProvider settings={{icon: props => <MaterialIcons {...props} />}}>
-                <View style={style.div}>
-                    <Menu
-                        visible={open}
-                        onDismiss={handleClose}
-                        anchor={<IconButton onPress={handleClick} icon="more-vert" iconColor={props.color}/>}
-                        anchorPosition="bottom"
-                    >
-                        {menuItems.flatMap(x => {
-                                var props = {
-                                    leadingIcon: x.icon || undefined,
-                                    title: x.text || undefined
-                                };
-                                // TODO: bad positioning of elements
-                                let elements = [
-                                    <Menu.Item onClick={() => handleClose(x.action)} {...props}/>
-                                ];
-                                if (x.hasDivider) {
-                                    elements.push(<Divider/>)
-                                }
-                                return elements;
-                            }
-                        )}
-                    </Menu>
-                </View>
-            </PaperProvider>
-        </>
-    );
+            : null}
+        <View style={style.div}>
+            <Menu
+                visible={open}
+                onDismiss={handleClose}
+                anchor={<IconButton onPress={handleClick} icon="more-vert" iconColor={props.color}/>}
+                anchorPosition="bottom"
+            >
+                {menuItems.flatMap(x => {
+                        var props = {
+                            leadingIcon: x.icon || undefined,
+                            title: x.text || undefined
+                        };
+                        // TODO: bad positioning of elements + use material 2 instead of 3
+                        let elements = [
+                            <Menu.Item onClick={() => handleClose(x.action)} {...props}/>
+                        ];
+                        if (x.hasDivider) {
+                            elements.push(<Divider/>)
+                        }
+                        return elements;
+                    }
+                )}
+            </Menu>
+        </View>
+    </PaperProvider>;
 
 };
 
