@@ -34,14 +34,13 @@ const ContextMenu = (props) => {
 
     return (<>
             {Platform.OS === 'web'
-                ? (
-                    <style type="text/css">{`
-        @font-face {
-          font-family: 'MaterialIcons';
-          src: url(${materialIconPath}) format('truetype');
-        }
-      `}</style>
-                ) : null}
+                ? <style type="text/css">{`
+                    @font-face {
+                      font-family: 'MaterialIcons';
+                      src: url(${materialIconPath}) format('truetype');
+                    }
+                  `}</style>
+                : null}
             <PaperProvider settings={{icon: props => <MaterialIcons {...props} />}}>
                 <View style={style.div}>
                     <Menu
