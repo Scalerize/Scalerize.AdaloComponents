@@ -8,6 +8,7 @@ import {Thumb} from "./thumb";
 const defaultRandomBarChartCollection = [...Array(100).keys()].map(() => 100);
 
 const SparklineSlider = (props) => {
+    // TODO: generate random data if props.editor = true
     let collection = props.barChartCollection?.map(x => x?.barChartValueSelector);
 
     let [minValue, maxValue] = [
