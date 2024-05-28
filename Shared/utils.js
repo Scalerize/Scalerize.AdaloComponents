@@ -10,7 +10,7 @@ export const report = (values) => {
     if (environment === environments.production) {
         try {
             if (navigator?.sendBeacon && typeof (navigator.sendBeacon) === 'function') {
-                navigator.sendBeacon(beaconUrl, new URLSearchParams(values))
+                navigator.sendBeacon(beaconUrl, JSON.stringify(values))
             }
         } catch {
             // Do nothing

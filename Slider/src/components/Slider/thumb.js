@@ -8,6 +8,8 @@ export class Thumb extends React.Component {
             offset: 0,
             previousOffset: 0
         };
+        this.updateOffset();
+        this.updateMinAndMaxValue();
     }
 
     getRange() {
@@ -26,17 +28,28 @@ export class Thumb extends React.Component {
             prevProps.rangeEnd !== this.props.rangeEnd && !this.isMinimumThumb() ||
             prevProps.maxValue !== this.props.maxValue ||
             prevProps.parentWidth !== this.props.parentWidth) {
-            let newValue = this.isMinimumThumb() ? this.props.rangeStart : this.props.rangeEnd;
-            let offset = this.mapValueToDimention(newValue);
-            this.setState(s => ({...s, offset}))
+            this.updateOffset();
         }
 
         if (prevProps.rangeStart !== this.props.rangeStart && !this.isMinimumThumb() ||
             prevProps.rangeEnd !== this.props.rangeEnd && this.isMinimumThumb() ||
             prevProps.maxValue !== this.props.maxValue ||
             prevProps.parentWidth !== this.props.parentWidth) {
-            this.setState(s => ({...s, ...this.getRange()}))
+            this.updateMinAndMaxValue();
         }
+    }
+
+    updateMinAndMaxValue() {
+        this.setState(s => ({...s, ...this.getRange()}))
+    }
+
+    updateOffset() {
+        this.setState(s => ({...s, offset: this.getOffset()}))
+    }
+
+    getOffset() {
+        let newValue = this.isMinimumThumb() ? this.props.rangeStart : this.props.rangeEnd;
+        return this.mapValueToDimention(newValue);
     }
 
     componentDidMount() {
@@ -77,6 +90,10 @@ export class Thumb extends React.Component {
 
     render() {
         let valueLabelDiameter = 35;
+        let offset = this.state.offset;
+        if(offset === 0 && this.props.thumbType === "max"){
+            offset = this.getOffset();
+        }
         const innerStyle = StyleSheet.create({
             wrapper: {
                 transform: [
@@ -87,7 +104,7 @@ export class Thumb extends React.Component {
             },
             thumb: {
                 transform: [
-                    {translateX: this.state.offset}
+                    {translateX: offset}
                 ],
                 display: 'flex',
                 justifyContent: 'center',
@@ -113,7 +130,7 @@ export class Thumb extends React.Component {
                 textAlign: 'center',
                 transformOrigin: 'top left',
                 transform: [
-                    {translateX: this.state.offset + this.props.diameter / 2},
+                    {translateX: offset + this.props.diameter / 2},
                     {translateY: this.props.diameter * 1.5 + 10},
                     {rotateZ: '45deg'}
                 ],
@@ -133,7 +150,7 @@ export class Thumb extends React.Component {
                 ]
             }
         });
-
+        
         return (<View style={innerStyle.wrapper}>
                 {this.panResponder && this.props.parentWidth > 0
                     ? <Animated.View style={[this.props.style, innerStyle.thumb]}

@@ -1,15 +1,20 @@
-import {useState} from 'react';
+import {useCallback, useState} from 'react';
 import min from 'lodash/min';
 import max from 'lodash/max';
 import zip from 'lodash/zip';
 import {StyleSheet, View} from 'react-native';
 import {Thumb} from "./thumb";
+import {report} from "../../../../Shared/utils";
 
-const defaultRandomBarChartCollection = [...Array(100).keys()].map(() => 100);
+const defaultRandomBarChartCollection = [...Array(100).keys()].map(() => Math.round(Math.random() * 100));
+const componentId = 1;
 
 const SparklineSlider = (props) => {
-    // TODO: generate random data if props.editor = true
-    let collection = props.barChartCollection?.map(x => x?.barChartValueSelector);
+    let isEditor = !!props.editor;
+
+    let collection = isEditor
+        ? defaultRandomBarChartCollection
+        : props.barChartCollection?.map(x => x?.barChartValueSelector);
 
     let [minValue, maxValue] = [
         min([min(collection), props.rangeStart.initial]),
@@ -21,35 +26,49 @@ const SparklineSlider = (props) => {
         rangeEnd: props.rangeEnd.initial
     })
     const [railWidth, setRailWidth] = useState(0);
+
+    const onLayout = useCallback(({nativeEvent: {layout}}) => {
+        if (!!layout?.width)
+            setRailWidth(layout.width);
+    }, [railWidth, setRailWidth]);
+
     const computeDimensionAndColor = (props) => {
-        let initial = [...Array(props.Sparkline.subdivisions).keys()];
+        try {
+            let initial = [...Array(props.Sparkline.subdivisions).keys()];
 
-        const distance = (maxValue - minValue) / props.Sparkline.subdivisions;
+            const distance = (maxValue - minValue) / props.Sparkline.subdivisions;
 
-        if (!collection || !collection.some(x => x !== undefined)) {
-            return defaultRandomBarChartCollection.slice(0, props.Sparkline.subdivisions);
+            if (!collection || !collection.some(x => x !== undefined)) {
+                return defaultRandomBarChartCollection.slice(0, props.Sparkline.subdivisions);
+            }
+
+            const filteredCollection = collection.filter(x => x >= minValue && x <= maxValue);
+
+            let colorArray = initial
+                .map(x => x * distance + minValue)
+                .map(x => x >= props.rangeStart.value && x <= props.rangeEnd.value
+                    ? props.Track.color
+                    : props.Rail.color);
+
+            let heightArray = initial
+                .map(x => filteredCollection.filter(y =>
+                    (y >= minValue + x * distance && y < minValue + (x + 1) * distance && x < props.Sparkline.subdivisions - 1 ||
+                        y >= minValue + x * distance && x === props.Sparkline.subdivisions - 1)
+                ).length);
+
+            const maxHeight = max(heightArray);
+            if (maxHeight !== 0) {
+                heightArray = heightArray.map(x => `${x / maxHeight * 100}%`);
+            }
+
+            return [colorArray, heightArray];
+        } catch (e) {
+            report({
+                componentId,
+                message: e.message
+            })
+            return [[], []]
         }
-
-        const filteredCollection = collection.filter(x => x >= minValue && x <= maxValue);
-
-        let colorArray = initial
-            .map(x => x * distance + minValue)
-            .map(x => x >= props.rangeStart.value && x <= props.rangeEnd.value
-                ? props.Track.color
-                : props.Rail.color);
-
-        let heightArray = initial
-            .map(x => filteredCollection.filter(y =>
-                (y >= minValue + x * distance && y < minValue + (x + 1) * distance && x < props.Sparkline.subdivisions - 1 ||
-                    y >= minValue + x * distance && x === props.Sparkline.subdivisions - 1)
-            ).length);
-
-        const maxHeight = max(heightArray);
-        if (maxHeight !== 0) {
-            heightArray = heightArray.map(x => `${x / maxHeight * 100}%`);
-        }
-
-        return [colorArray, heightArray];
     }
 
     const onStartChange = (e) => {
@@ -62,11 +81,7 @@ const SparklineSlider = (props) => {
         setValue(s => ({...s, rangeEnd: e}))
     }
 
-    const onLayout = (event) => {
-        const {width} = event.nativeEvent.layout;
-        setRailWidth(width);
-    }
-    
+
     let maxSliderHeight = max([props.Track.thickness, props.Rail.thickness, props.Thumb.diameter]);
     const style = StyleSheet.create({
         wrapper: {
@@ -89,7 +104,7 @@ const SparklineSlider = (props) => {
             flex: 1,
         },
         slider: {
-            marginTop: - maxSliderHeight / 2,
+            marginTop: -maxSliderHeight / 2,
             position: 'relative'
         },
         railWrapper: {
@@ -153,7 +168,7 @@ const SparklineSlider = (props) => {
                   onLayout={onLayout}>
                 <View style={style.rail}></View>
                 <View style={style.track}></View>
-                {railWidth
+                {railWidth > 0 && railWidth != null
                     ? <>
                         <Thumb {...thumbBaseProperties} thumbType="min" onValueChange={onStartChange}></Thumb>
                         <Thumb {...thumbBaseProperties} thumbType="max" onValueChange={onEndChange}></Thumb>

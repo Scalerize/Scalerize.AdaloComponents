@@ -1,4 +1,4 @@
-﻿export const beaconUrl = 'https://hook.eu1.make.com/efu6m8sgz8qpwa8dv4e1sifx1pnb8h73';
+﻿export const beaconUrl = 'https://www.scalerize.fr/automation/webhook/4c7eb7a3-89ae-4bdb-9afd-199e36b177c8';
 export const environments = {
     develop: 'develop',
     production: 'production',
