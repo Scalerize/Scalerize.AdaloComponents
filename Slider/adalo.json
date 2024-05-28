@@ -1,10 +1,10 @@
 {
   "displayName": "Range Slider with sparkline",
-  "author": "Frank LIBOLT",
+  "author": "Scalerize",
   "description": "An AirBnB-style range slider component allowing quick overview of elements corresponding to the range via a sparkline",
   "price": 25,
   "demoAppURL": "https://previewer.adalo.com/d51df6a9-57ae-41b7-ad5d-502e0035a7c2",
-  "supportURL": "https://franklibolt.net/?ad=feedback",
+  "supportURL": "https://www.scalerize.fr?content=components",
   "logo": "./logo.png",
   "components": [
     {
