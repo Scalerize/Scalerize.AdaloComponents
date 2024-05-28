@@ -14,7 +14,7 @@
     "react-native-paper": "^5.12.3"
   },
   "devDependencies": {
-    "@adalo/cli": "^0.0.60",
+    "@adalo/cli": "^0.0.67",
     "react": "^16.14.0",
     "react-art": "^16.13.1",
     "react-dom": "^16.14.0",

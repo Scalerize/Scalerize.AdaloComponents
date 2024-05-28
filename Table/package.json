@@ -15,11 +15,11 @@
     "dayjs": "^1.11.10"
   },
   "devDependencies": {
-    "@adalo/cli": "^0.0.60",
+    "@adalo/cli": "^0.0.67",
     "react": "^16.14.0",
     "react-art": "^16.13.1",
     "react-dom": "^16.14.0",
     "react-native-web": "^0.9.13",
-    "react-native": "^0.73.5"
+    "react-native": "^0.74.1"
   }
 }
