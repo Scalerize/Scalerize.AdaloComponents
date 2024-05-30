@@ -1,1 +1,1 @@
-export { default as Slider } from './src/components/Slider'
+export { default as Paypal } from './src/components/Paypal'

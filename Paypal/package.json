@@ -1,7 +1,7 @@
 {
-  "name": "range-slider-component",
+  "name": "paypal-component",
   "description": "",
-  "version": "1.0.2",
+  "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "author": "",
@@ -11,7 +11,8 @@
     "publish": "adalo publish"
   },
   "dependencies": {
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "react-native-paypal": "^4.1.0"
   },
   "devDependencies": {
     "@adalo/cli": "^0.0.67",

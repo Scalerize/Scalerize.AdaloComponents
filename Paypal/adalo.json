@@ -1,15 +1,15 @@
 {
-  "displayName": "Range Slider with sparkline",
+  "displayName": "Paypal",
   "author": "Scalerize",
-  "description": "An AirBnB-style range slider component allowing quick overview of elements corresponding to the range via a sparkline",
+  "description": "A component to integrate Paypal in your Adalo app",
   "price": 25,
   "demoAppURL": "https://previewer.adalo.com/d51df6a9-57ae-41b7-ad5d-502e0035a7c2",
   "supportURL": "https://www.scalerize.fr?content=components",
   "logo": "./logo.png",
   "components": [
     {
-      "name": "Slider",
-      "manifest": "./src/components/Slider/manifest.json"
+      "name": "Paypal",
+      "manifest": "./src/components/Paypal/manifest.json"
     }
   ]
 }
