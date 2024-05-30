@@ -1,7 +1,7 @@
 {
-  "name": "context-menu",
+  "name": "range-slider-component",
   "description": "",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "main": "index.js",
   "license": "MIT",
   "author": "",
@@ -11,13 +11,13 @@
     "publish": "adalo publish"
   },
   "dependencies": {
-    "react-native-paper": "^5.12.3"
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@adalo/cli": "^0.0.67",
     "react": "^16.14.0",
     "react-art": "^16.13.1",
     "react-dom": "^16.14.0",
-    "react-native-web": "^0.8.11"
+    "react-native-web": "^0.9.13"
   }
 }

@@ -1,0 +1,192 @@
+{
+  "displayName": "Range Slider",
+  "defaultWidth": 600,
+  "defaultHeight": 200,
+  "resizeX": true,
+  "resizeY": true,
+  "components": "./index.js",
+  "icon": "./thumbnail.png",
+  "props": [
+    {
+      "name": "rangeStart",
+      "displayName": "Range start default value",
+      "type": "number",
+      "default": 0,
+      "role": "formValue"
+    },
+    {
+      "name": "rangeEnd",
+      "displayName": "Range end default value",
+      "type": "number",
+      "role": "formValue",
+      "default": 100
+    },
+    {
+      "name": "barChartCollection",
+      "displayName": "Collection",
+      "type": "list"
+    },
+    {
+      "name": "barChartValueSelector",
+      "displayName": "Collection Item Value Selector",
+      "type": "number",
+      "role": "listItem",
+      "reference": "barChartCollection"
+    }
+  ],
+  "childComponents": [
+    {
+      "name": "Rail",
+      "props": [
+        {
+          "name": "color",
+          "displayName": "Rail Color",
+          "type": "color",
+          "default": "#e6e6e6"
+        },
+        {
+          "name": "thickness",
+          "type": "number",
+          "default": 3,
+          "control": {
+            "type": "slider",
+            "min": 1,
+            "max": 9
+          }
+        }
+      ]
+    },
+    {
+      "name": "Track",
+      "props": [
+        {
+          "name": "color",
+          "displayName": "Track Color",
+          "type": "color",
+          "default": "@primary"
+        },
+        {
+          "name": "thickness",
+          "type": "number",
+          "default": 3,
+          "control": {
+            "type": "slider",
+            "min": 1,
+            "max": 10
+          }
+        }
+      ]
+    },
+    {
+      "name": "Thumb",
+      "props": [
+        {
+          "name": "color",
+          "displayName": "Color",
+          "type": "color",
+          "default": "#ffffff"
+        },
+        {
+          "name": "diameter",
+          "displayName": "Diameter",
+          "type": "number",
+          "default": 20,
+          "control": {
+            "type": "slider",
+            "min": 5,
+            "max": 40
+          }
+        },
+        {
+          "name": "hasRing",
+          "displayName": "Ring",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "name": "ringColor",
+          "displayName": "Ring Color",
+          "type": "color",
+          "default": "@primary",
+          "enabled": {
+            "hasRing": true
+          }
+        },
+        {
+          "name": "ringThickness",
+          "displayName": "Ring Thickness",
+          "type": "number",
+          "default": 0,
+          "enabled": {
+            "hasRing": true
+          },
+          "control": {
+            "type": "slider",
+            "min": 0,
+            "max": 20
+          }
+        },
+        {
+          "name": "shadow",
+          "displayName": "Shadow",
+          "type": "number",
+          "default": 3,
+          "control": {
+            "type": "slider",
+            "min": 0,
+            "max": 10
+          }
+        },
+        {
+          "name": "hasGrip",
+          "displayName": "Has Drag Handle",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "name": "gripColor",
+          "displayName": "Drag Handle Color",
+          "type": "color",
+          "default": "@primary",
+          "enabled": {
+            "hasGrip": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sparkline",
+      "props": [
+        {
+          "name": "subdivisions",
+          "displayName": "Number of subdivisions",
+          "type": "number",
+          "default": 20
+        }
+      ]
+    },
+    {
+      "name": "valueLabel",
+      "displayName": "Value Label",
+      "props": [
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "name": "color",
+          "displayName": "Color",
+          "type": "color",
+          "default": "@primary"
+        },
+        {
+          "name": "textColor",
+          "displayName": "Text Color",
+          "type": "color",
+          "default": "#ffffff"
+        }
+      ]
+    }
+  ]
+}
