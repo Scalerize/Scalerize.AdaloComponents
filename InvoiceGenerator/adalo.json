@@ -1,0 +1,12 @@
+{
+  "displayName": "InvoiceGenerator",
+  "components": [
+    {
+      "name": "InvoiceGenerator",
+      "manifest": "./src/components/InvoiceGenerator/manifest.json"
+    }
+  ],
+  "author": "",
+  "description": "",
+  "logo": "./example-logo.png"
+}

@@ -1,14 +1,30 @@
-import {useCallback, useState} from 'react';
-import min from 'lodash/min';
-import max from 'lodash/max';
-import zip from 'lodash/zip';
-import {StyleSheet, View} from 'react-native'; 
-import {report} from "../../../../Shared/utils";
+import {WebView} from 'react-native-webview';
 
 const componentId = 2;
+const paypalUrl = 'https://paypal-scalerize.flutterflow.app/';
 
-const Paypal = (props) => {
-    return <View>Paypal works</View>;
+const Paypal = ({
+                    editor,
+                    backgroundColor,
+                    foregroundColor,
+                    onFinished,
+                    amount,
+                    currency,
+                    clientId,
+                    clientSecret,
+                    isSandbox,
+                    language
+                }) => {
+    return <WebView
+        source={{uri: paypalUrl}}
+        onNavigationStateChange={(webViewState) => {
+            if (webViewState.url.startsWith(paypalUrl + 'success')) {
+                onFinished(true);
+            } else if (webViewState.url.startsWith(paypalUrl + 'error')) {
+                onFinished(false);
+            }
+        }}
+    />;
 };
 
 export default Paypal;
