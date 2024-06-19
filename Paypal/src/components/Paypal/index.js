@@ -5,23 +5,25 @@ const paypalUrl = 'https://paypal-scalerize.flutterflow.app/';
 
 const Paypal = ({
                     editor,
-                    backgroundColor,
-                    foregroundColor,
-                    onFinished,
+                    paymentPage,
                     amount,
                     currency,
+                    description,
+                    button,
                     clientId,
                     clientSecret,
                     isSandbox,
-                    language
+                    onSuccess,
+                    onCancel,
+                    itemName
                 }) => {
     return <WebView
         source={{uri: paypalUrl}}
         onNavigationStateChange={(webViewState) => {
             if (webViewState.url.startsWith(paypalUrl + 'success')) {
-                onFinished(true);
+                onSuccess();
             } else if (webViewState.url.startsWith(paypalUrl + 'error')) {
-                onFinished(false);
+                onCancel();
             }
         }}
     />;

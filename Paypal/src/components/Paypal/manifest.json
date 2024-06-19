@@ -6,5 +6,226 @@
   "resizeY": true,
   "components": "./index.js",
   "icon": "./thumbnail.png",
-  "props": []
+  "props": [
+    {
+      "name": "amount",
+      "displayName": "Amount",
+      "type": "number",
+      "default": 100
+    },
+    {
+      "name": "currency",
+      "displayName": "Currency",
+      "type": "string",
+      "default": "USD",
+      "control": {
+        "type": "menu",
+        "options": [
+          {
+            "value": "USD",
+            "label": "USD"
+          },
+          {
+            "value": "EUR",
+            "label": "EUR"
+          },
+          {
+            "value": "GBP",
+            "label": "GBP"
+          },
+          {
+            "value": "JPY",
+            "label": "JPY"
+          },
+          {
+            "value": "AUD",
+            "label": "AUD"
+          },
+          {
+            "value": "CAD",
+            "label": "CAD"
+          },
+          {
+            "value": "CHF",
+            "label": "CHF"
+          },
+          {
+            "value": "CZK",
+            "label": "CZK"
+          },
+          {
+            "value": "DKK",
+            "label": "DKK"
+          },
+          {
+            "value": "HKD",
+            "label": "HKD"
+          },
+          {
+            "value": "HUF",
+            "label": "HUF"
+          },
+          {
+            "value": "ILS",
+            "label": "ILS"
+          },
+          {
+            "value": "MXN",
+            "label": "MXN"
+          },
+          {
+            "value": "NOK",
+            "label": "NOK"
+          },
+          {
+            "value": "NZD",
+            "label": "NZD"
+          },
+          {
+            "value": "PHP",
+            "label": "PHP"
+          },
+          {
+            "value": "PLN",
+            "label": "PLN"
+          },
+          {
+            "value": "SEK",
+            "label": "SEK"
+          },
+          {
+            "value": "SGD",
+            "label": "SGD"
+          },
+          {
+            "value": "THB",
+            "label": "THB"
+          },
+          {
+            "value": "TWD",
+            "label": "TWD"
+          },
+          {
+            "value": "BRL",
+            "label": "BRL"
+          },
+          {
+            "value": "CNY",
+            "label": "CNY"
+          },
+          {
+            "value": "INR",
+            "label": "INR"
+          },
+          {
+            "value": "KRW",
+            "label": "KRW"
+          },
+          {
+            "value": "MYR",
+            "label": "MYR"
+          },
+          {
+            "value": "RUB",
+            "label": "RUB"
+          },
+          {
+            "value": "TRY",
+            "label": "TRY"
+          },
+          {
+            "value": "ZAR",
+            "label": "ZAR"
+          }
+        ]
+      }
+    },
+    {
+      "name": "description",
+      "displayName": "Description",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "clientId",
+      "displayName": "Client ID",
+      "type": "string"
+    },
+    {
+      "name": "clientSecret",
+      "displayName": "Client Secret",
+      "type": "string"
+    },
+    {
+      "name": "isSandbox",
+      "displayName": "Sandbox",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "onSuccess",
+      "displayName": "On Success",
+      "type": "action"
+    },
+    {
+      "name": "onCancel",
+      "displayName": "On Cancel",
+      "type": "action"
+    },
+    {
+      "name": "itemName",
+      "displayName": "Item Name",
+      "type": "string"
+    }
+  ],
+  "childComponents": [
+    {
+      "name": "paymentPage",
+      "displayName": "Payment Page",
+      "props": [
+        {
+          "name": "backgroundColor",
+          "displayName": "Background Color",
+          "type": "color",
+          "default": "#ffffff"
+        },
+        {
+          "name": "textColor",
+          "displayName": "Text Color",
+          "type": "color",
+          "default": "#000000"
+        }
+      ]
+    },
+    {
+      "name": "button",
+      "displayName": "Button",
+      "props": [
+        {
+          "name": "buttonText",
+          "displayName": "Button Text",
+          "type": "string",
+          "default": "Pay with PayPal"
+        },
+        {
+          "name": "buttonColor",
+          "displayName": "Button Color",
+          "type": "color",
+          "default": "#003087"
+        },
+        {
+          "name": "buttonRounding",
+          "displayName": "Button Rounding",
+          "type": "number",
+          "default": 0
+        },
+        {
+          "name": "buttonTextColor",
+          "displayName": "Button Text Color",
+          "type": "color",
+          "default": "#ffffff"
+        }
+      ]
+    }
+  ]
 }
