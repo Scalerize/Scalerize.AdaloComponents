@@ -21,7 +21,9 @@ const Paypal = ({
         source={{uri: paypalUrl}}
         onNavigationStateChange={(webViewState) => {
             if (webViewState.url.startsWith(paypalUrl + 'success')) {
-                onSuccess();
+                const urlParams = new URLSearchParams(webViewState.url);
+                const paymentId = urlParams.get('paymentId');
+                onSuccess(paymentId);
             } else if (webViewState.url.startsWith(paypalUrl + 'error')) {
                 onCancel();
             }

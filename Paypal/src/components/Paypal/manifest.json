@@ -165,7 +165,13 @@
     {
       "name": "onSuccess",
       "displayName": "On Success",
-      "type": "action"
+      "type": "action",
+      "arguments": [
+        {
+          "type": "text",
+          "displayName": "Payment ID"
+        }
+      ]
     },
     {
       "name": "onCancel",
@@ -202,25 +208,25 @@
       "displayName": "Button",
       "props": [
         {
-          "name": "buttonText",
+          "name": "text",
           "displayName": "Button Text",
           "type": "string",
           "default": "Pay with PayPal"
         },
         {
-          "name": "buttonColor",
+          "name": "color",
           "displayName": "Button Color",
           "type": "color",
-          "default": "#003087"
+          "default": "@primary"
         },
         {
-          "name": "buttonRounding",
+          "name": "rounding",
           "displayName": "Button Rounding",
           "type": "number",
-          "default": 0
+          "default": 4
         },
         {
-          "name": "buttonTextColor",
+          "name": "textColor",
           "displayName": "Button Text Color",
           "type": "color",
           "default": "#ffffff"
