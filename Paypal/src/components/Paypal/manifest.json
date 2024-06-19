@@ -141,12 +141,6 @@
       }
     },
     {
-      "name": "description",
-      "displayName": "Description",
-      "type": "string",
-      "default": ""
-    },
-    {
       "name": "clientId",
       "displayName": "Client ID",
       "type": "string"
@@ -189,6 +183,12 @@
       "name": "paymentPage",
       "displayName": "Payment Page",
       "props": [
+        {
+          "name": "text",
+          "displayName": "Button Text",
+          "type": "string",
+          "default": "Pay with PayPal"
+        },
         {
           "name": "backgroundColor",
           "displayName": "Background Color",

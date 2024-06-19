@@ -3,29 +3,33 @@ import {WebView} from 'react-native-webview';
 const componentId = 2;
 const paypalUrl = 'https://paypal-scalerize.flutterflow.app/';
 
-const Paypal = ({
-                    editor,
-                    paymentPage,
-                    amount,
-                    currency,
-                    description,
-                    button,
-                    clientId,
-                    clientSecret,
-                    isSandbox,
-                    onSuccess,
-                    onCancel,
-                    itemName
-                }) => {
+const Paypal = (props) => {
+    const buildQueryString = (props) => {
+        let queryString = '';
+        Object.keys(props).forEach(key => {
+            if (typeof props[key] === 'object' && props[key] != null) {
+                Object.keys(props[key]).forEach(nestedKey => {
+                    if (props[key][nestedKey] !== undefined) {
+                        let combinedKey = key + nestedKey.charAt(0).toUpperCase() + nestedKey.slice(1);
+                        queryString += `${encodeURIComponent(combinedKey)}=${encodeURIComponent(props[key][nestedKey])}&`;
+                    }
+                });
+            } else if (props[key] != null) {
+                queryString += `${encodeURIComponent(key)}=${encodeURIComponent(props[key])}&`;
+            }
+        });
+        return queryString.slice(0, -1);
+    };
+
     return <WebView
-        source={{uri: paypalUrl}}
+        source={{uri: paypalUrl + '?' + buildQueryString(props)}}
         onNavigationStateChange={(webViewState) => {
             if (webViewState.url.startsWith(paypalUrl + 'success')) {
                 const urlParams = new URLSearchParams(webViewState.url);
                 const paymentId = urlParams.get('paymentId');
-                onSuccess(paymentId);
+                props.onSuccess(paymentId);
             } else if (webViewState.url.startsWith(paypalUrl + 'error')) {
-                onCancel();
+                props.onCancel();
             }
         }}
     />;
