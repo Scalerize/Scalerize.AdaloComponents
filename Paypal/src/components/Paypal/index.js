@@ -1,11 +1,23 @@
 import WebView from 'react-native-webview';
+import {Platform} from 'react-native';
+import {useRef, memo} from "react";
 
 const paypalUrl = 'https://paypal-scalerize.flutterflow.app/';
 
-const Paypal = (props) => {
+const Paypal = memo((props) => {
+    const onUriChange = (url) => {
+        if (!url) {
+            return;
+        }
 
-    console.log(props);
-
+        if (url.startsWith(paypalUrl + 'success')) {
+            const urlParams = new URLSearchParams(url);
+            const paymentId = urlParams.get('paymentId');
+            props.onSuccess?.(paymentId);
+        } else if (url.startsWith(paypalUrl + 'error')) {
+            props.onCancel?.();
+        }
+    };
     const buildQueryString = (props) => {
         let queryString = '';
         Object.keys(props).forEach(key => {
@@ -23,19 +35,27 @@ const Paypal = (props) => {
         return queryString.slice(0, -1);
     };
 
+    let iframeRef = useRef(null);
     let uri = paypalUrl + '?' + buildQueryString(props);
 
-    return <WebView
-        source={{uri}}
-        onNavigationStateChange={(webViewState) => {
-            if (webViewState.url.startsWith(paypalUrl + 'success')) {
-                const urlParams = new URLSearchParams(webViewState.url);
-                const paymentId = urlParams.get('paymentId');
-                props.onSuccess(paymentId);
-            } else if (webViewState.url.startsWith(paypalUrl + 'error')) {
-                props.onCancel();
-            }
-        }}/>;
-};
+    return Platform.OS === 'web'
+                ? <iframe
+                    src={uri}
+                    ref={iframeRef}
+                    onLoad={() => onUriChange(iframeRef?.contentWindow?.location)}></iframe>
+                : <WebView
+                    source={{uri}}
+                    onNavigationStateChange={(state => onUriChange(state?.url))}/>;
+}, (prevProps, nextProps) => {
+    return JSON.stringify(prevProps?.button) === JSON.stringify(nextProps?.button) &&
+        JSON.stringify(prevProps?.paymentPage) === JSON.stringify(nextProps?.paymentPage) &&
+        prevProps?.amount === nextProps?.amount &&
+        prevProps?.currency === nextProps?.currency &&
+        prevProps?.clientId === nextProps?.clientId &&
+        prevProps?.clientSecret === nextProps?.clientSecret &&
+        prevProps?.isSandbox === nextProps?.isSandbox &&
+        prevProps?.itemName === nextProps?.itemName;
+});
+
 
 export default Paypal;
