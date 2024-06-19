@@ -39,13 +39,15 @@ const Paypal = memo((props) => {
     let uri = paypalUrl + '?' + buildQueryString(props);
 
     return Platform.OS === 'web'
-                ? <iframe
-                    src={uri}
-                    ref={iframeRef}
-                    onLoad={() => onUriChange(iframeRef?.contentWindow?.location)}></iframe>
-                : <WebView
-                    source={{uri}}
-                    onNavigationStateChange={(state => onUriChange(state?.url))}/>;
+        ? <iframe
+            style={{width: '100%', height: '100%', borderWidth: 0}}
+            src={uri}
+            ref={iframeRef}
+            onLoad={() => onUriChange(iframeRef?.contentWindow?.location)}></iframe>
+        : <WebView
+            style={{width: '100%', height: '100%'}}
+            source={{uri}}
+            onNavigationStateChange={(state => onUriChange(state?.url))}/>;
 }, (prevProps, nextProps) => {
     return JSON.stringify(prevProps?.button) === JSON.stringify(nextProps?.button) &&
         JSON.stringify(prevProps?.paymentPage) === JSON.stringify(nextProps?.paymentPage) &&

@@ -143,12 +143,12 @@
     {
       "name": "clientId",
       "displayName": "Client ID",
-      "type": "string"
+      "type": "text"
     },
     {
       "name": "clientSecret",
       "displayName": "Client Secret",
-      "type": "string"
+      "type": "text"
     },
     {
       "name": "isSandbox",
@@ -175,7 +175,7 @@
     {
       "name": "itemName",
       "displayName": "Item Name",
-      "type": "string"
+      "type": "text"
     }
   ],
   "childComponents": [
@@ -185,8 +185,8 @@
       "props": [
         {
           "name": "text",
-          "displayName": "Button Text",
-          "type": "string",
+          "displayName": "Payment page text",
+          "type": "text",
           "default": "Pay with PayPal"
         },
         {
@@ -210,7 +210,7 @@
         {
           "name": "text",
           "displayName": "Button Text",
-          "type": "string",
+          "type": "text",
           "default": "Pay with PayPal"
         },
         {
