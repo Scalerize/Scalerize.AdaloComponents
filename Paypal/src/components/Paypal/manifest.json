@@ -223,6 +223,11 @@
           "name": "rounding",
           "displayName": "Button Rounding",
           "type": "number",
+          "control": {
+            "type": "slider",
+            "min": 0,
+            "max": 20
+          },
           "default": 4
         },
         {
@@ -235,6 +240,11 @@
           "name": "shadow",
           "displayName": "Button Shadow",
           "type": "number",
+          "control": {
+            "type": "slider",
+            "min": 0,
+            "max": 20
+          },
           "default": "5"
         }
       ]

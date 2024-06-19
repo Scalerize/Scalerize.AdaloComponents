@@ -5,6 +5,8 @@ import {useRef, memo} from "react";
 const paypalUrl = 'https://paypal-scalerize.flutterflow.app/HomePage';
 
 const Paypal = memo((props) => {
+    console.log(props);
+    
     const onUriChange = (url) => {
         if (!url) {
             return;
