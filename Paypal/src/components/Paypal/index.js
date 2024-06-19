@@ -1,9 +1,11 @@
-import {WebView} from 'react-native-webview';
+import WebView from 'react-native-webview';
 
-const componentId = 2;
 const paypalUrl = 'https://paypal-scalerize.flutterflow.app/';
 
 const Paypal = (props) => {
+
+    console.log(props);
+
     const buildQueryString = (props) => {
         let queryString = '';
         Object.keys(props).forEach(key => {
@@ -21,8 +23,10 @@ const Paypal = (props) => {
         return queryString.slice(0, -1);
     };
 
+    let uri = paypalUrl + '?' + buildQueryString(props);
+
     return <WebView
-        source={{uri: paypalUrl + '?' + buildQueryString(props)}}
+        source={{uri}}
         onNavigationStateChange={(webViewState) => {
             if (webViewState.url.startsWith(paypalUrl + 'success')) {
                 const urlParams = new URLSearchParams(webViewState.url);
@@ -31,8 +35,7 @@ const Paypal = (props) => {
             } else if (webViewState.url.startsWith(paypalUrl + 'error')) {
                 props.onCancel();
             }
-        }}
-    />;
+        }}/>;
 };
 
 export default Paypal;

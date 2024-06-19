@@ -1,4 +1,4 @@
-﻿import {beaconUrl, environment, environments} from "./constants"; 
+﻿import {beaconUrl, environment, environments} from "./constants";
 
 export const log = (val) => {
     if (environment === environments.develop) {
@@ -8,9 +8,20 @@ export const log = (val) => {
 
 export const report = (values) => {
     if (environment === environments.production) {
+        let body = JSON.stringify(values);
         try {
             if (navigator?.sendBeacon && typeof (navigator.sendBeacon) === 'function') {
-                navigator.sendBeacon(beaconUrl, JSON.stringify(values))
+                navigator.sendBeacon(beaconUrl, body)
+            } else if (window.fetch && typeof (window.fetch) === 'function') {
+                fetch(beaconUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: body
+                }).then((response) => {
+                    // Ignore response
+                });
             }
         } catch {
             // Do nothing
@@ -18,19 +29,4 @@ export const report = (values) => {
     } else {
         log(values);
     }
-    // TODO: Add a fallback to fetch if needed
-} 
-
-/* 
-    import AsyncStorage from '@react-native-async-storage/async-storage';
-    
-    useEffect(() => {
-    let key = 'persist:root';
-        AsyncStorage.getItem(key).then(
-            (value) => {
-                value = value || window.localStorage.getItem(key);
-                return log(value);
-            }
-        )
-    })
- */
+}

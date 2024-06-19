@@ -6,6 +6,7 @@
   "demoAppURL": "https://previewer.adalo.com/d51df6a9-57ae-41b7-ad5d-502e0035a7c2?target=1rfu6o7w2dt5idmddfavljyg4",
   "supportURL": "https://www.scalerize.fr?content=components",
   "logo": "./logo.png",
+  "webpackConfig": "./webpack.config.js",
   "components": [
     {
       "name": "Paypal",
