@@ -193,13 +193,13 @@
           "name": "backgroundColor",
           "displayName": "Background Color",
           "type": "color",
-          "default": "#ffffff"
+          "default": "@background"
         },
         {
           "name": "textColor",
           "displayName": "Text Color",
           "type": "color",
-          "default": "#000000"
+          "default": "@text"
         }
       ]
     },
@@ -229,7 +229,7 @@
           "name": "textColor",
           "displayName": "Button Text Color",
           "type": "color",
-          "default": "#ffffff"
+          "default": "@text"
         },
         {
           "name": "shadow",
