@@ -5,8 +5,6 @@ import {useRef, memo} from "react";
 const paypalUrl = 'https://paypal-scalerize.flutterflow.app/HomePage';
 
 const Paypal = memo((props) => {
-    console.log(props);
-    
     const onUriChange = (url) => {
         if (!url) {
             return;
@@ -48,12 +46,12 @@ const Paypal = memo((props) => {
     // TODO: fix dynamic height
     return Platform.OS === 'web'
         ? <iframe
-            style={{width: '100%', height: '100%', borderWidth: 0}}
+            style={{width: '100%', height: props._height, borderWidth: 0}}
             src={uri}
             ref={iframeRef}
             onLoad={() => onUriChange(iframeRef?.contentWindow?.location)}></iframe>
         : <WebView
-            style={{width: '100%', height: '100%'}}
+            style={{width: '100%', height: props._height}}
             source={{uri}}
             onNavigationStateChange={(state => onUriChange(state?.url))}/>;
 }, (prevProps, nextProps) => {
