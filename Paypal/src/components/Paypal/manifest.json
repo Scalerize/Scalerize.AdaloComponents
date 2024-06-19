@@ -230,6 +230,12 @@
           "displayName": "Button Text Color",
           "type": "color",
           "default": "#ffffff"
+        },
+        {
+          "name": "shadow",
+          "displayName": "Button Shadow",
+          "type": "number",
+          "default": "5"
         }
       ]
     }

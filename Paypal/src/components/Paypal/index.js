@@ -18,18 +18,25 @@ const Paypal = memo((props) => {
             props.onCancel?.();
         }
     };
+    const getQueryStringValue = (key, value) => {
+        return encodeURIComponent(key.endsWith('Color') ? value.replace('#', '0xff') : value);
+    }
     const buildQueryString = (props) => {
         let queryString = '';
-        Object.keys(props).forEach(key => {
+        Object.keys(props)
+            .filter(x => !x.startsWith('_'))
+            .forEach(key => {
             if (typeof props[key] === 'object' && props[key] != null) {
                 Object.keys(props[key]).forEach(nestedKey => {
                     if (props[key][nestedKey] !== undefined) {
                         let combinedKey = key + nestedKey.charAt(0).toUpperCase() + nestedKey.slice(1);
-                        queryString += `${encodeURIComponent(combinedKey)}=${encodeURIComponent(props[key][nestedKey])}&`;
+                        const value = getQueryStringValue(combinedKey, props[key][nestedKey]);
+                        queryString += `${encodeURIComponent(combinedKey)}=${value}&`;
                     }
                 });
             } else if (props[key] != null) {
-                queryString += `${encodeURIComponent(key)}=${encodeURIComponent(props[key])}&`;
+                const value = getQueryStringValue(key, props[key]);
+                queryString += `${encodeURIComponent(key)}=${value}&`;
             }
         });
         return queryString.slice(0, -1);
