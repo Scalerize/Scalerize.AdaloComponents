@@ -2,9 +2,13 @@ import WebView from 'react-native-webview';
 import {Platform} from 'react-native';
 import {useRef, memo} from "react";
 
-const paypalUrl = 'https://paypal-scalerize.flutterflow.app/HomePage';
+const paypalUrl = 'https://paypal-scalerize.flutterflow.app/';
 
 const Paypal = memo((props) => {
+    if (props.editor === undefined) {
+        props.editor = false;
+    }
+
     const onUriChange = (url) => {
         if (!url) {
             return;
@@ -13,35 +17,33 @@ const Paypal = memo((props) => {
         if (url.startsWith(paypalUrl + 'success')) {
             const urlParams = new URLSearchParams(url);
             const paymentId = urlParams.get('paymentId');
-            props.onSuccess?.(paymentId);
+            !!props.onSuccess && props.onSuccess(paymentId);
         } else if (url.startsWith(paypalUrl + 'error')) {
-            props.onCancel?.();
+            !!props.onCancel && props.onCancel();
         }
     };
-    const getQueryStringValue = (key, value) => {
-        return encodeURIComponent(value);
-    }
+
     const buildQueryString = (props) => {
         let queryString = '';
         Object.keys(props)
             .filter(x => !x.startsWith('_'))
             .forEach(key => {
-            if (typeof props[key] === 'object' && props[key] != null) {
-                Object.keys(props[key]).forEach(nestedKey => {
-                    if (props[key][nestedKey] !== undefined) {
-                        let combinedKey = key + nestedKey.charAt(0).toUpperCase() + nestedKey.slice(1); 
-                        queryString += `${encodeURIComponent(combinedKey)}=${encodeURIComponent(props[key][nestedKey])}&`;
-                    }
-                });
-            } else if (props[key] != null) { 
-                queryString += `${encodeURIComponent(key)}=${encodeURIComponent(props[key])}&`;
-            }
-        });
+                if (typeof props[key] === 'object' && props[key] != null) {
+                    Object.keys(props[key]).forEach(nestedKey => {
+                        if (props[key][nestedKey] !== undefined) {
+                            let combinedKey = key + nestedKey.charAt(0).toUpperCase() + nestedKey.slice(1);
+                            queryString += `${encodeURIComponent(combinedKey)}=${encodeURIComponent(props[key][nestedKey])}&`;
+                        }
+                    });
+                } else if (props[key] != null) {
+                    queryString += `${encodeURIComponent(key)}=${encodeURIComponent(props[key])}&`;
+                }
+            });
         return queryString.slice(0, -1);
     };
 
     let iframeRef = useRef(null);
-    let uri = paypalUrl + '?' + buildQueryString(props);
+    let uri = paypalUrl + 'pay?' + buildQueryString(props);
 
     return Platform.OS === 'web'
         ? <iframe
