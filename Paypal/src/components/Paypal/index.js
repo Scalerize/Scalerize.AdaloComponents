@@ -10,6 +10,7 @@ const Paypal = memo((props) => {
     }
 
     const onUriChange = (url) => {
+        // TODO: fix url that not change
         if (!url) {
             return;
         }
@@ -17,9 +18,9 @@ const Paypal = memo((props) => {
         if (url.startsWith(paypalUrl + 'success')) {
             const urlParams = new URLSearchParams(url);
             const paymentId = urlParams.get('paymentId');
-            !!props.onSuccess && props.onSuccess(paymentId);
+            setTimeout(() => !!props.onSuccess && props.onSuccess(paymentId), 1000);
         } else if (url.startsWith(paypalUrl + 'error')) {
-            !!props.onCancel && props.onCancel();
+            setTimeout(() => !!props.onCancel && props.onCancel(), 1000);
         }
     };
 
