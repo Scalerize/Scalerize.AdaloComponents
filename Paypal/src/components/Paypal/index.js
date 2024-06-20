@@ -1,6 +1,6 @@
 import WebView from 'react-native-webview';
 import {Platform} from 'react-native';
-import {useRef, memo} from "react";
+import {useRef, useEffect, memo} from "react";
 
 const paypalUrl = 'https://paypal-scalerize.flutterflow.app/';
 
@@ -9,18 +9,25 @@ const Paypal = memo((props) => {
         props.editor = false;
     }
 
-    const onUriChange = (url) => {
-        // TODO: fix url that not change
-        if (!url) {
+    let isWeb = Platform.OS === 'web';
+
+    if (isWeb) {
+        useEffect(() => {
+            window.addEventListener('message', onUriChange);
+            return () => {
+                window.removeEventListener('message', onUriChange);
+            };
+        }, []);
+    }
+
+    const onUriChange = ({origin, data: {isSuccess, paymentId}}) => {
+        if (origin !== 'https://paypal-scalerize.flutterflow.app') {
             return;
         }
-
-        if (url.startsWith(paypalUrl + 'success')) {
-            const urlParams = new URLSearchParams(url);
-            const paymentId = urlParams.get('paymentId');
-            setTimeout(() => !!props.onSuccess && props.onSuccess(paymentId), 1000);
-        } else if (url.startsWith(paypalUrl + 'error')) {
-            setTimeout(() => !!props.onCancel && props.onCancel(), 1000);
+        if (isSuccess) {
+            !!props.onSuccess && props.onSuccess(paymentId);
+        } else {
+            !!props.onCancel && props.onCancel();
         }
     };
 
@@ -46,16 +53,18 @@ const Paypal = memo((props) => {
     let iframeRef = useRef(null);
     let uri = paypalUrl + 'pay?' + buildQueryString(props);
 
-    return Platform.OS === 'web'
+    let height = props.editor ? '100%' : props._height;
+    return isWeb
         ? <iframe
-            style={{width: '100%', height: props._height, borderWidth: 0}}
+            style={{width: '100%', height: height, borderWidth: 0}}
             src={uri}
-            ref={iframeRef}
-            onLoad={() => onUriChange(iframeRef?.contentWindow?.location)}></iframe>
+            ref={iframeRef}></iframe>
         : <WebView
-            style={{width: '100%', height: props._height}}
+            style={{width: '100%', height: height}}
             source={{uri}}
+            onMessage={({nativeEvent}) => onUriChange(nativeEvent)}
             onNavigationStateChange={(state => onUriChange(state?.url))}/>;
+
 }, (prevProps, nextProps) => {
     return JSON.stringify(prevProps?.button) === JSON.stringify(nextProps?.button) &&
         JSON.stringify(prevProps?.paymentPage) === JSON.stringify(nextProps?.paymentPage) &&

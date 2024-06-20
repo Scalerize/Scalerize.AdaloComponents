@@ -11,7 +11,7 @@
       "name": "amount",
       "displayName": "Amount",
       "type": "number",
-      "default": 100
+      "default": 0
     },
     {
       "name": "currency",
@@ -181,25 +181,13 @@
   "childComponents": [
     {
       "name": "paymentPage",
-      "displayName": "Payment Page",
+      "displayName": "Background",
       "props": [
-        {
-          "name": "text",
-          "displayName": "Payment page text",
-          "type": "text",
-          "default": "Pay with PayPal"
-        },
         {
           "name": "backgroundColor",
           "displayName": "Background Color",
           "type": "color",
           "default": "@background"
-        },
-        {
-          "name": "textColor",
-          "displayName": "Text Color",
-          "type": "color",
-          "default": "@text"
         }
       ]
     },
