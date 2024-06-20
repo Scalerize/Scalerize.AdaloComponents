@@ -11,7 +11,6 @@
     "publish": "adalo publish"
   },
   "dependencies": {
-    "react-native-web-webview": "^1.0.2",
     "react-native-webview": "^13.10.3"
   },
   "devDependencies": {

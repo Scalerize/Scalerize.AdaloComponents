@@ -43,7 +43,6 @@ const Paypal = memo((props) => {
     let iframeRef = useRef(null);
     let uri = paypalUrl + '?' + buildQueryString(props);
 
-    // TODO: fix dynamic height
     return Platform.OS === 'web'
         ? <iframe
             style={{width: '100%', height: props._height, borderWidth: 0}}
