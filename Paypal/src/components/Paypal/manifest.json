@@ -1,17 +1,27 @@
 {
   "displayName": "Paypal",
-  "defaultWidth": 600,
-  "defaultHeight": 200,
+  "defaultWidth": 300,
+  "defaultHeight": 60,
   "resizeX": true,
   "resizeY": true,
   "components": "./index.js",
   "icon": "./thumbnail.png",
   "props": [
     {
+      "name": "itemName",
+      "displayName": "Product Name",
+      "type": "text"
+    },
+    {
+      "name": "quantity",
+      "displayName": "Quantity",
+      "type": "number",
+      "default": 1
+    },
+    {
       "name": "amount",
       "displayName": "Amount",
-      "type": "number",
-      "default": 0
+      "type": "number"
     },
     {
       "name": "currency",
@@ -171,11 +181,6 @@
       "name": "onCancel",
       "displayName": "On Cancel",
       "type": "action"
-    },
-    {
-      "name": "itemName",
-      "displayName": "Item Name",
-      "type": "text"
     }
   ],
   "childComponents": [

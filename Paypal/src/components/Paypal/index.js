@@ -1,6 +1,9 @@
 import WebView from 'react-native-webview';
 import {Platform} from 'react-native';
 import {useRef, useEffect, memo} from "react";
+import {v4 as uuidv4} from 'uuid';
+import {HubConnectionBuilder, HttpTransportType} from '@microsoft/signalr';
+import {log} from "../../../../Shared/utils";
 
 const paypalUrl = 'https://paypal-scalerize.flutterflow.app/';
 
@@ -8,29 +11,38 @@ const Paypal = memo((props) => {
     if (props.editor === undefined) {
         props.editor = false;
     }
+    props.operationId = uuidv4();
 
     let isWeb = Platform.OS === 'web';
 
-    if (isWeb) {
+    if (!props.editor) {
         useEffect(() => {
-            window.addEventListener('message', onUriChange);
+            let connection = new HubConnectionBuilder()
+                .withUrl("https://www.scalerize.fr/client-hubs/adalo/paypal/payment", {
+                    skipNegotiation: true,
+                    transport: HttpTransportType.WebSockets
+                })
+                .withAutomaticReconnect()
+                .build();
+
+            connection.on('SendPaymentUpdate', (state, payerId, paymentId) => {
+                if (state === 'Success') {
+                    !!props.onSuccess && props.onSuccess(paymentId);
+                } else {
+                    !!props.onCancel && props.onCancel();
+                }
+            });
+            connection.start().then(() => {
+                connection.invoke("ListenNewPayment", props.operationId, false)
+                    .catch(err => log(err));
+            })
+
             return () => {
-                window.removeEventListener('message', onUriChange);
-            };
-        }, []);
+                connection.stop();
+            }
+        });
     }
-
-    const onUriChange = ({origin, data: {isSuccess, paymentId}}) => {
-        if (origin !== 'https://paypal-scalerize.flutterflow.app') {
-            return;
-        }
-        if (isSuccess) {
-            !!props.onSuccess && props.onSuccess(paymentId);
-        } else {
-            !!props.onCancel && props.onCancel();
-        }
-    };
-
+    
     const buildQueryString = (props) => {
         let queryString = '';
         Object.keys(props)
@@ -50,20 +62,16 @@ const Paypal = memo((props) => {
         return queryString.slice(0, -1);
     };
 
-    let iframeRef = useRef(null);
     let uri = paypalUrl + 'pay?' + buildQueryString(props);
-
     let height = props.editor ? '100%' : props._height;
+
     return isWeb
         ? <iframe
             style={{width: '100%', height: height, borderWidth: 0}}
-            src={uri}
-            ref={iframeRef}></iframe>
+            src={uri}></iframe>
         : <WebView
             style={{width: '100%', height: height}}
-            source={{uri}}
-            onMessage={({nativeEvent}) => onUriChange(nativeEvent)}
-            onNavigationStateChange={(state => onUriChange(state?.url))}/>;
+            source={{uri}}/>;
 
 }, (prevProps, nextProps) => {
     return JSON.stringify(prevProps?.button) === JSON.stringify(nextProps?.button) &&

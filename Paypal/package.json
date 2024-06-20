@@ -11,6 +11,7 @@
     "publish": "adalo publish"
   },
   "dependencies": {
+    "@microsoft/signalr": "^8.0.0",
     "react-native-webview": "^13.10.3"
   },
   "devDependencies": {
