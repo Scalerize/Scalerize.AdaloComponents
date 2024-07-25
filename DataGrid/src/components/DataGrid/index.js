@@ -1,10 +1,8 @@
 ﻿import {useState, useEffect} from 'react';
-import {DataGrid} from '@mui/x-data-grid';
+import {DataTable} from 'react-native-paper';
 import {log, report} from "../../../../Shared/utils";
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
-import dayjs from 'dayjs'
-import {Text, View, Linking, Image} from 'react-native';
+import {DateTime} from 'luxon';
+import {Text, View, Linking, Image, StyleSheet} from 'react-native';
 
 const Cell = ({type, value}) => {
     const style = {
@@ -28,10 +26,12 @@ const Cell = ({type, value}) => {
         return /^[+0-9a-z._-]+@{1}[0-9a-z.-]{2,}[.]{1}[a-z]{2,5}$/gm.test(email);
     }
 
+    const date = type.startsWith('date') ? DateTime.fromISO(value) : null;
+
     if (type === 'date') {
-        return <Text>{dayjs(Date.parse(value)).format('DD/MM/YYYY')}</Text>
+        return <Text>{date.toLocaleString(DateTime.DATE_SHORT)}</Text>
     } else if (type === 'dateOnly') {
-        return <Text>{dayjs(Date.parse(value)).format('DD/MM/YYYY hh:mm:ss')}</Text>
+        return <Text>{date.toLocaleString(DateTime.DATETIME_SHORT)}</Text>
     } else if (type === 'image') {
         return <View style={style}>
             <Image height="24" alt={value.filename}
@@ -47,7 +47,6 @@ const Cell = ({type, value}) => {
     }
 }
 const Table = (props) => {
-    log(props);
     const propsRows = props?.rows || [];
     const propsColumns = props?.columns || [];
     const appId = props?.appId;
@@ -91,11 +90,7 @@ const Table = (props) => {
         ?.map(x => x['Column Definition'])
         ?.map(x => ({
             field: getField(x),
-            headerName: x.headerName || getField(x),
-            width: x.width === 0 ? undefined : x.width,
-            flex: x.width === 0 ? 1 : undefined,
-            editable: false,
-            renderCell: ({value}) => <Cell type={propertiesTypesDict?.[x.field]} value={value}></Cell>
+            headerName: x.headerName || getField(x)
         }))
         ?.reduce((acc, next) => {
             if (!acc.some(x => x.field === next.field)) {
@@ -108,80 +103,20 @@ const Table = (props) => {
     const rows = propsRows?.map(x => x?._meta?.record)
         .filter(x => !!x) || [];
 
-    let style = props.Style;
-
-    const componentProperties = {
-        columns,
-        rows,
-        disableColumnMenu: true,
-        disableColumnResize: true,
-        disableRowSelectionOnClick: true,
-        density: style.density || 'standard',
-        getRowClassName: style.stripped ? (x) => x.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd' : undefined,
-        sx: {
-            width: '100%', color: style.foregroundColor, bgcolor: style.backgroundColor, '& .even': {
-                bgcolor: 'rgba(0, 0, 0, 0.05)'
-            },
-        }
-    };
-
-    // Configure height
-    let isComponentHeight = style.tableHeight === 'manual';
-    if (isComponentHeight) {
-        // Component height is fetch from component props
-        componentProperties.sx.height = `${props._height}px`;
-    } else {
-        componentProperties.autoHeight = true;
-    }
-
-    // Configure border color, thickness and sides
-    componentProperties.sx.border = style.borderThickness;
-    componentProperties.sx.borderColor = style.borderColor;
-    componentProperties.sx['& .MuiDataGrid-withBorderColor'] = {
-        border: 0
-    };
-    componentProperties.sx['& .MuiDataGrid-footerContainer'] = {
-        border: 0, borderTop: 0, borderColor: style.borderColor
-    };
-    componentProperties.sx["& .MuiDataGrid-cell *"] = {
-        overflow: 'hidden', textOverflow: 'ellipsis'
-    }
-    if (style.borderType === 'rows-and-cols') {
-        componentProperties.sx['& .MuiDataGrid-columnHeader'] = {
-            borderRight: style.borderThickness, borderColor: style.borderColor
-        }
-        componentProperties.sx["& .MuiDataGrid-cell:not(:last-child)"] = {
-            borderRight: style.borderThickness, borderColor: style.borderColor,
-        }
-        componentProperties.sx["& .MuiDataGrid-cell:last-child"] = {
-            borderRight: 0
-        }
-    }
-    componentProperties.sx['& .MuiDataGrid-columnHeaders'] = {
-        borderBottom: style.borderThickness, borderColor: style.borderColor, bgcolor: style.headerBackgroundColor
-    }
-    componentProperties.sx["& .MuiDataGrid-row"] = {
-        borderBottom: style.borderThickness, borderColor: style.borderColor, borderTop: 0
-    }
-
-    // Configure foregroud color
-    componentProperties.sx['& .MuiTablePagination-root'] = {
-        color: `${style.foregroundColor} !important`
-    }
-
-    componentProperties.sx['& .MuiDataGrid-columnHeader:focus'] = {
-        outline: 'none',
-    }
-    componentProperties.sx['& .MuiDataGrid-cell:focus'] = {
-        outline: 'none',
-    }
-
-    let wrapperStyle = {
-        width: componentProperties.sx.width, height: componentProperties.sx.height
-    };
 
     return <View style={wrapperStyle}>
-        <DataGrid {...componentProperties}></DataGrid>
+        <DataTable>
+            <DataTable.Header>
+                {columns.map((x, i) => <DataTable.Title key={i}>{x.headerName}</DataTable.Title>)}
+            </DataTable.Header>
+            {rows.map((row, i) => <DataTable.Row key={i}>
+                {columns.map((column, j) =>
+                    <DataTable.Cell key={j}>
+                        <Cell type={propertiesTypesDict?.[column.field]} value={row[column.field]}></Cell>
+                    </DataTable.Cell>
+                )}
+            </DataTable.Row>)}
+        </DataTable>
     </View>;
 
 };

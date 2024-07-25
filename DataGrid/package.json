@@ -1,9 +1,9 @@
-﻿{
+{
   "name": "datagrid-component",
   "description": "",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT",
+  "license": "ISC",
   "author": "",
   "scripts": {
     "start": "adalo dev",
@@ -12,14 +12,14 @@
   },
   "dependencies": {
     "react-native-paper": "^5.12.3",
-    "dayjs": "^1.11.10"
+    "luxon": "^3.4.4"
   },
   "devDependencies": {
-    "@adalo/cli": "^0.0.67",
-    "react": "^16.14.0",
-    "react-art": "^16.13.1",
-    "react-dom": "^16.14.0",
-    "react-native-web": "^0.9.13",
-    "react-native": "^0.74.1"
+    "@adalo/cli": "^1.0.0",
+    "react": "^18.3.1",
+    "react-art": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-native": "^0.74.3",
+    "react-native-web": "^0.19.12"
   }
 }
