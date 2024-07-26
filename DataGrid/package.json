@@ -11,8 +11,8 @@
     "publish": "adalo publish"
   },
   "dependencies": {
-    "react-native-paper": "^5.12.3",
-    "luxon": "^3.4.4"
+    "react-native-paper": "5.12.3",
+    "luxon": "3.4.4"
   },
   "devDependencies": {
     "@adalo/cli": "1.0.0",
