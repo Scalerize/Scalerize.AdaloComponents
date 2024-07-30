@@ -228,7 +228,7 @@
           "name": "text",
           "displayName": "Text",
           "type": "text",
-          "default": "Button",
+          "default": "Create",
           "styles": {
             "fontFamily": "@body",
             "fontWeight": "600"
@@ -238,7 +238,7 @@
           "name": "icon",
           "displayName": "Icon",
           "type": "icon",
-          "default": "add"
+          "default": "create"
         },
         {
           "name": "sizing",

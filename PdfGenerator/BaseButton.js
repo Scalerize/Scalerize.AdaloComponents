@@ -308,11 +308,6 @@ export class BaseButton extends Component {
 }
 
 export const styles = StyleSheet.create({ 
-    button: {
-        flex: 1,
-        height: '100%',
-        width: '100%',
-    },
     loading: {
         position: 'absolute',
         left: 0,

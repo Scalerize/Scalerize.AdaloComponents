@@ -1,9 +1,12 @@
-import {BaseButton, styles} from "../../../BaseButton";
+import {BaseButton} from "../../../BaseButton";
 import {defaultApiHeaders} from "../../../../Shared/constants";
 
 const CertificateGenerator = (props) => {
+    console.log(props);
     props.button = {
-        ...props.button, generateDocument: async () => {
+        ...props.button,
+        _height: props._height,
+        generateDocument: async () => {
             const response = await fetch(`${urls.basePdfUrl}certificate`, {
                 method: 'POST',
                 headers: defaultApiHeaders,
@@ -14,7 +17,7 @@ const CertificateGenerator = (props) => {
             return json.url;
         }
     }
-    return<BaseButton style={styles.button} {...props.button}></BaseButton>;
+    return <BaseButton {...props.button}></BaseButton>;
 };
 
 export default CertificateGenerator;
