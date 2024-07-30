@@ -3,8 +3,6 @@ import { View, StyleSheet, ActivityIndicator } from 'react-native'
 import color from 'color'
 import { Button } from '@protonapp/react-native-material-ui'
 
-import '../Shared/icons'
-
 const SIZE_PROPERTIES = new Map([
     ['gigantic', { icon: 48, space: 16, font: 32 }],
     ['extraLarge', { icon: 32, space: 12, font: 24 }],

@@ -1,9 +1,7 @@
-import React from 'react'
-import '../Shared/icons'
 import {BaseButton} from "../../../BaseButton";
 import {defaultApiHeaders} from "../../../../Shared/constants";
 
-export const CertificateGenerator = (props) => {
+const CertificateGenerator = (props) => {
     props.button = {
         ...props.button, generateDocument: async () => {
             const response = await fetch(`${urls.basePdfUrl}certificate`, {
@@ -18,3 +16,5 @@ export const CertificateGenerator = (props) => {
     }
     return <BaseButton {...props.button}></BaseButton>;
 };
+
+export default CertificateGenerator;

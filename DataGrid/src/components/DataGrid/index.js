@@ -49,7 +49,7 @@ const Cell = memo(({type, value}) => {
     }
 });
 
-const Table = (props) => {
+const DataGrid = (props) => {
     const propsRows = props?.rows || [];
     const propsColumns = props?.columns || [];
     const appId = props?.appId;
@@ -160,7 +160,7 @@ const Table = (props) => {
     </DataTable>;
 };
 
-export default Table;
+export default DataGrid;
 
 const style = StyleSheet.create({
     table: {

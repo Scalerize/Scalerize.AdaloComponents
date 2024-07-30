@@ -2,7 +2,7 @@
   "displayName": "Pdf Generator",
   "author": "Scalerize",
   "description": "Two components that allow respectively to generate invoices and certificates in PDF format.",
-  "price": 29,
+  "price": 49,
   "demoAppURL": "https://previewer.adalo.com/d51df6a9-57ae-41b7-ad5d-502e0035a7c2",
   "supportURL": "https://www.scalerize.fr?content=components",
   "logo": "./logo.png",

@@ -1,8 +1,8 @@
-import React from 'react'
 import {BaseButton} from "../../../BaseButton";
 import {defaultApiHeaders, urls} from "../../../../Shared/constants";
+import {View} from "react-native";
 
-export const InvoiceGenerator = (props) = (props) => {
+const InvoiceGenerator = (props) => {
      const getCompany = (company) => ({
          ...company,
          address: {
@@ -24,11 +24,12 @@ export const InvoiceGenerator = (props) = (props) => {
                     client: getCompany(props.client),
                 }),
             });
-            
+
             const json = await response.json();
             return json.url;
         }
     }
-    return <BaseButton {...props.button}></BaseButton>;
+    return <View {...props.button}></View>;
 };
 
+export default InvoiceGenerator;
