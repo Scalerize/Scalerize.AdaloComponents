@@ -4,6 +4,10 @@
     {
       "name": "InvoiceGenerator",
       "manifest": "./src/components/InvoiceGenerator/manifest.json"
+    },
+    {
+      "name": "CertificateGenerator",
+      "manifest": "./src/components/CertificateGenerator/manifest.json"
     }
   ],
   "author": "",

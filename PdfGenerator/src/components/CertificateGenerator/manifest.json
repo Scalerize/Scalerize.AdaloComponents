@@ -1,0 +1,43 @@
+{
+  "displayName": "Certificate Generator",
+  "defaultWidth": 600,
+  "defaultHeight": 400,
+  "resizeX": true,
+  "resizeY": true,
+  "components": "./index.js",
+  "icon": "./thumbnail.png",
+  "props": [
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "text"
+    },
+    {
+      "name": "description",
+      "displayName": "Description",
+      "type": "text"
+    }
+  ],
+  "childComponents": [
+    {
+      "name": "Signature",
+      "props": [
+        {
+          "name": "name",
+          "displayName": "Signature Name",
+          "type": "text"
+        },
+        {
+          "name": "role",
+          "displayName": "Role",
+          "type": "text"
+        },
+        {
+          "name": "signatureUrl",
+          "displayName": "Signature URL",
+          "type": "text"
+        }
+      ]
+    }
+  ]
+}

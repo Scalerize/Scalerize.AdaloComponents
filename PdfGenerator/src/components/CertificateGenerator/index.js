@@ -1,6 +1,7 @@
 import React from 'react'
 import { Text, View, StyleSheet } from 'react-native'
 
+// https://github.com/AdaloHQ/material-components-library/blob/main/src/TextButton/TextButton.js
 const InvoiceGenerator = (props) => {
 	const { color, text } = props
 

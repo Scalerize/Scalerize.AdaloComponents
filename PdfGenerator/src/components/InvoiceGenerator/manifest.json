@@ -1,0 +1,188 @@
+{
+  "displayName": "Accounting Document Generator",
+  "defaultWidth": 600,
+  "defaultHeight": 400,
+  "resizeX": true,
+  "resizeY": true,
+  "components": "./index.js",
+  "icon": "./thumbnail.png",
+  "props": [
+    {
+      "name": "type",
+      "displayName": "PDF Generation Type",
+      "type": "text",
+      "control": {
+        "type": "menu",
+        "options": [
+          {
+            "value": "Quote",
+            "label": "Quote"
+          },
+          {
+            "value": "Invoice",
+            "label": "Invoice"
+          }
+        ]
+      }
+    },
+    {
+      "name": "logoUrl",
+      "displayName": "Logo URL",
+      "type": "text"
+    },
+    {
+      "name": "id",
+      "displayName": "Document ID",
+      "type": "text"
+    },
+    {
+      "name": "clientId",
+      "displayName": "Client ID",
+      "type": "text"
+    },
+    {
+      "name": "paymentTerms",
+      "displayName": "Payment Terms",
+      "type": "text"
+    },
+    {
+      "name": "bankDetails",
+      "displayName": "Bank Details",
+      "type": "text"
+    },
+    {
+      "name": "bottomNotes",
+      "displayName": "Bottom Notes",
+      "type": "text"
+    },
+    {
+      "name": "footerNotes",
+      "displayName": "Footer Notes",
+      "type": "text"
+    }
+  ],
+  "childComponents": [
+    {
+      "name": "Company Coordinates",
+      "props": [
+        {
+          "name": "name",
+          "displayName": "Company Name",
+          "type": "text"
+        },
+        {
+          "name": "street",
+          "displayName": "Street",
+          "type": "text"
+        },
+        {
+          "name": "city",
+          "displayName": "City",
+          "type": "text"
+        },
+        {
+          "name": "zipCode",
+          "displayName": "Zip Code",
+          "type": "text"
+        },
+        {
+          "name": "country",
+          "displayName": "Country",
+          "type": "text"
+        },
+        {
+          "name": "email",
+          "displayName": "Email",
+          "type": "text"
+        },
+        {
+          "name": "phone",
+          "displayName": "Phone",
+          "type": "text"
+        },
+        {
+          "name": "vatNumber",
+          "displayName": "VAT Number",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "name": "Client Coordinates",
+      "props": [
+        {
+          "name": "name",
+          "displayName": "Client Name",
+          "type": "text"
+        },
+        {
+          "name": "street",
+          "displayName": "Street",
+          "type": "text"
+        },
+        {
+          "name": "city",
+          "displayName": "City",
+          "type": "text"
+        },
+        {
+          "name": "zipCode",
+          "displayName": "Zip Code",
+          "type": "text"
+        },
+        {
+          "name": "country",
+          "displayName": "Country",
+          "type": "text"
+        },
+        {
+          "name": "email",
+          "displayName": "Email",
+          "type": "text"
+        },
+        {
+          "name": "phone",
+          "displayName": "Phone",
+          "type": "text"
+        },
+        {
+          "name": "vatNumber",
+          "displayName": "VAT Number",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "name": "Product Line",
+      "role": "listItem",
+      "reference": "products",
+      "props": [
+        {
+          "name": "reference",
+          "displayName": "Reference",
+          "type": "text"
+        },
+        {
+          "name": "description",
+          "displayName": "Description",
+          "type": "text"
+        },
+        {
+          "name": "quantity",
+          "displayName": "Quantity",
+          "type": "number"
+        },
+        {
+          "name": "unitPrice",
+          "displayName": "Unit Price",
+          "type": "number"
+        },
+        {
+          "name": "vatRate",
+          "displayName": "VAT Rate",
+          "type": "number"
+        }
+      ]
+    }
+  ]
+}
