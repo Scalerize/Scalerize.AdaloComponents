@@ -13,7 +13,7 @@ const InvoiceGenerator = (props) => {
         },
     })
 
-    props.button = {
+    const newProps = {
         ...props.button, 
         _height: props._height,
         generateDocument: async () => {
@@ -31,7 +31,7 @@ const InvoiceGenerator = (props) => {
             return json.url;
         }
     }
-    return <BaseButton {...props.button}></BaseButton>;
+    return <BaseButton {...newProps}></BaseButton>;
 };
 
 export default InvoiceGenerator;

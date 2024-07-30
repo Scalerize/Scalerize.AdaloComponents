@@ -3,7 +3,7 @@ import {defaultApiHeaders} from "../../../../Shared/constants";
 
 const CertificateGenerator = (props) => {
     console.log(props);
-    props.button = {
+    const newProps = {
         ...props.button,
         _height: props._height,
         generateDocument: async () => {
@@ -17,7 +17,7 @@ const CertificateGenerator = (props) => {
             return json.url;
         }
     }
-    return <BaseButton {...props.button}></BaseButton>;
+    return <BaseButton {...newProps}></BaseButton>;
 };
 
 export default CertificateGenerator;
