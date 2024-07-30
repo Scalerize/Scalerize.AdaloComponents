@@ -9,13 +9,29 @@
   "props": [
     {
       "name": "name",
-      "displayName": "Name",
+      "displayName": "Full Name",
       "type": "text"
     },
     {
       "name": "description",
       "displayName": "Description",
       "type": "text"
+    },
+    {
+      "name": "borderColor",
+      "displayName": "Border Color",
+      "type": "color"
+    },
+    {
+      "name": "download",
+      "displayName": "Download Action",
+      "type": "action",
+      "arguments": [
+        {
+          "type": "text",
+          "displayName": "File URL"
+        }
+      ]
     }
   ],
   "childComponents": [
@@ -24,7 +40,7 @@
       "props": [
         {
           "name": "name",
-          "displayName": "Signature Name",
+          "displayName": "Name",
           "type": "text"
         },
         {
@@ -34,8 +50,8 @@
         },
         {
           "name": "signatureUrl",
-          "displayName": "Signature URL",
-          "type": "text"
+          "displayName": "Signature Image",
+          "type": "image"
         }
       ]
     }

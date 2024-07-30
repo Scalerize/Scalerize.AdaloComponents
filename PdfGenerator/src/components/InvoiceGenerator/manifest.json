@@ -59,6 +59,17 @@
       "name": "footerNotes",
       "displayName": "Footer Notes",
       "type": "text"
+    },
+    {
+      "name": "download",
+      "displayName": "Download Action",
+      "type": "action",
+      "arguments": [
+        {
+          "type": "text",
+          "displayName": "File URL"
+        }
+      ]
     }
   ],
   "childComponents": [
