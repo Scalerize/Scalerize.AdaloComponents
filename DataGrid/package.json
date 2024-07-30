@@ -11,15 +11,14 @@
     "publish": "adalo publish"
   },
   "dependencies": {
-    "react-native-paper": "5.12.3",
+    "react-native-paper": "4.7.2",
     "luxon": "3.4.4"
   },
   "devDependencies": {
     "@adalo/cli": "1.0.0",
-    "react": "18.2.0",
-    "react-art": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-native": "0.74.3",
-    "react-native-web": "0.19.12"
+    "react": "16.5.2",
+    "react-art": "16.6.0", 
+    "react-dom": "16.5.2",
+    "react-native-web": "0.9.5"
   }
 }

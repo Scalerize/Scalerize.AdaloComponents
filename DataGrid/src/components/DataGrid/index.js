@@ -129,15 +129,7 @@ const Table = (props) => {
             : propsRows?.map(x => x?._meta?.record)
             .filter(x => !!x) || [];
     }
-
-    const style = StyleSheet.create({
-        table: {
-            height: '100%',
-            width: '100%'
-        }
-    });
-
-
+    
     const columns = getColumns();
     const rows = getRows();
 
@@ -169,3 +161,10 @@ const Table = (props) => {
 };
 
 export default Table;
+
+const style = StyleSheet.create({
+    table: {
+        height: '100%',
+        width: '100%'
+    }
+});
