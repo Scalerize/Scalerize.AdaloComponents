@@ -63,7 +63,8 @@
   ],
   "childComponents": [
     {
-      "name": "Company Coordinates",
+      "name": "company",
+      "displayName": "Company Coordinates",
       "props": [
         {
           "name": "name",
@@ -108,7 +109,8 @@
       ]
     },
     {
-      "name": "Client Coordinates",
+      "name": "client",
+      "displayName": "Client Coordinates",
       "props": [
         {
           "name": "name",

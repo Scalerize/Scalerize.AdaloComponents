@@ -1,4 +1,4 @@
-﻿import {beaconUrl, environment, environments} from "./constants";
+﻿import {urls, environment, environments} from "./constants";
 
 export const log = (val) => {
     if (environment === environments.develop) {
@@ -11,9 +11,9 @@ export const report = (values) => {
         let body = JSON.stringify(values);
         try {
             if (navigator?.sendBeacon && typeof (navigator.sendBeacon) === 'function') {
-                navigator.sendBeacon(beaconUrl, body)
+                navigator.sendBeacon(urls.beacon, body)
             } else if (window.fetch && typeof (window.fetch) === 'function') {
-                fetch(beaconUrl, {
+                fetch(urls.beacon, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

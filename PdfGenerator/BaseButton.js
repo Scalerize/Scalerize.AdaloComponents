@@ -210,11 +210,11 @@ export class BaseButton extends Component {
     }
 
     submitAction = async () => {
-        const { action } = this.props
+        const { action, generateDocument } = this.props
 
         this.setState({ loading: true })
-
-        await action()
+        const url = await generateDocument();
+        await action(url)
 
         if (this._isMounted) {
             this.setState({ loading: false })
