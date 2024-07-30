@@ -21,17 +21,6 @@
       "name": "borderColor",
       "displayName": "Border Color",
       "type": "color"
-    },
-    {
-      "name": "download",
-      "displayName": "Download Action",
-      "type": "action",
-      "arguments": [
-        {
-          "type": "text",
-          "displayName": "File URL"
-        }
-      ]
     }
   ],
   "childComponents": [
@@ -258,7 +247,13 @@
         {
           "name": "action",
           "type": "action",
-          "displayName": "Click Actions"
+          "displayName": "Click Actions",
+          "arguments": [
+            {
+              "type": "text",
+              "displayName": "File URL"
+            }
+          ]
         }
       ]
     }

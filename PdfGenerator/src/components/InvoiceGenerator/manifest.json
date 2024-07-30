@@ -59,17 +59,6 @@
       "name": "footerNotes",
       "displayName": "Footer Notes",
       "type": "text"
-    },
-    {
-      "name": "download",
-      "displayName": "Download Action",
-      "type": "action",
-      "arguments": [
-        {
-          "type": "text",
-          "displayName": "File URL"
-        }
-      ]
     }
   ],
   "childComponents": [
@@ -397,7 +386,13 @@
         {
           "name": "action",
           "type": "action",
-          "displayName": "Click Actions"
+          "displayName": "Click Actions",
+          "arguments": [
+            {
+              "type": "text",
+              "displayName": "File URL"
+            }
+          ]
         }
       ]
     }
