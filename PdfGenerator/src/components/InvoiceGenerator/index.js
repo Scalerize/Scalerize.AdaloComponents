@@ -1,21 +1,21 @@
 import {BaseButton} from "../../../BaseButton";
 import {defaultApiHeaders, urls} from "../../../../Shared/constants";
-import {View} from "react-native";
+import {styles} from "../../../BaseButton";
 
 const InvoiceGenerator = (props) => {
-     const getCompany = (company) => ({
-         ...company,
-         address: {
-             street: company.address.street,
-             city: company.address.city,
-             country: company.address.country,
-             zipCode: company.address.zipCode,
-         },
-     })
+    const getCompany = (company) => ({
+        ...company,
+        address: {
+            street: company.address.street,
+            city: company.address.city,
+            country: company.address.country,
+            zipCode: company.address.zipCode,
+        },
+    })
 
     props.button = {
-        ...props.button, generateDocument: async () => {  
-           const response = await fetch(`${urls.basePdfUrl}accounting-document`, {
+        ...props.button, generateDocument: async () => {
+            const response = await fetch(`${urls.basePdfUrl}accounting-document`, {
                 method: 'POST',
                 headers: defaultApiHeaders,
                 body: JSON.stringify({
@@ -29,7 +29,7 @@ const InvoiceGenerator = (props) => {
             return json.url;
         }
     }
-    return <View {...props.button}></View>;
+    return <BaseButton style={styles.button} {...props.button}></BaseButton>;
 };
 
 export default InvoiceGenerator;

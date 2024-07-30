@@ -1,7 +1,7 @@
 {
   "displayName": "Accounting Document Generator",
-  "defaultWidth": 600,
-  "defaultHeight": 400,
+  "defaultWidth": 160,
+  "defaultHeight": 36, 
   "resizeX": true,
   "resizeY": true,
   "components": "./index.js",
@@ -11,6 +11,7 @@
       "name": "type",
       "displayName": "PDF Generation Type",
       "type": "text",
+      "default": "Quote",
       "control": {
         "type": "menu",
         "options": [
@@ -59,6 +60,11 @@
       "name": "footerNotes",
       "displayName": "Footer Notes",
       "type": "text"
+    },
+    {
+        "name": "products",
+        "displayName": "Products",
+        "type": "list"
     }
   ],
   "childComponents": [

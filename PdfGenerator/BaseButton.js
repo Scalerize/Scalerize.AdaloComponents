@@ -1,15 +1,15 @@
-﻿import React, { Component } from 'react'
-import { View, StyleSheet, ActivityIndicator } from 'react-native'
+﻿import React, {Component} from 'react'
+import {View, StyleSheet, ActivityIndicator} from 'react-native'
 import color from 'color'
-import { Button } from '@protonapp/react-native-material-ui'
+import {Button} from '@protonapp/react-native-material-ui'
 
 const SIZE_PROPERTIES = new Map([
-    ['gigantic', { icon: 48, space: 16, font: 32 }],
-    ['extraLarge', { icon: 32, space: 12, font: 24 }],
-    ['large', { icon: 24, space: 8, font: 18 }],
-    ['medium', { icon: 20, space: 6, font: 14 }],
-    ['small', { icon: 18, space: 4, font: 12 }],
-    ['extraSmall', { icon: 16, space: 2, font: 10 }],
+    ['gigantic', {icon: 48, space: 16, font: 32}],
+    ['extraLarge', {icon: 32, space: 12, font: 24}],
+    ['large', {icon: 24, space: 8, font: 18}],
+    ['medium', {icon: 20, space: 6, font: 14}],
+    ['small', {icon: 18, space: 4, font: 12}],
+    ['extraSmall', {icon: 16, space: 2, font: 10}],
 ])
 
 const RAISED_BUTTON_TYPES = new Set(['contained', 'custom'])
@@ -44,7 +44,7 @@ export class BaseButton extends Component {
             advancedShadow = {},
             hover = false,
         } = this.props
-        const { hovering } = this.state
+        const {hovering} = this.state
 
         const containerStyles = SIZE_PROPERTIES.has(sizing)
             ? {
@@ -123,7 +123,7 @@ export class BaseButton extends Component {
     }
 
     getHoverColor() {
-        const { primaryColor = defaults.primaryColor } = this.props
+        const {primaryColor = defaults.primaryColor} = this.props
 
         const baseColor = color(primaryColor)
         const lighten =
@@ -141,8 +141,8 @@ export class BaseButton extends Component {
     }
 
     getTextStyles() {
-        const { _fonts, ...defaults } = this.props
-        const { hovering } = this.state
+        const {_fonts, ...defaults} = this.props
+        const {hovering} = this.state
         const {
             primaryColor = defaults.primaryColor,
             contrastColor = defaults.contrastColor,
@@ -153,7 +153,7 @@ export class BaseButton extends Component {
             hover = false,
         } = this.props
 
-        const textStyles = { fontWeight: '600' }
+        const textStyles = {fontWeight: '600'}
 
         if (contrastColor && RAISED_BUTTON_TYPES.has(type)) {
             textStyles.color = contrastColor
@@ -188,34 +188,34 @@ export class BaseButton extends Component {
     }
 
     getIconStyles() {
-        const { sizing } = this.props
+        const {sizing} = this.props
 
         if (SIZE_PROPERTIES.has(sizing)) {
-            return { fontSize: SIZE_PROPERTIES.get(sizing).icon }
+            return {fontSize: SIZE_PROPERTIES.get(sizing).icon}
         }
 
         return {}
     }
 
     getAdditionalProps() {
-        const { type = this.props.type, shadow = true } = this.props
+        const {type = this.props.type, shadow = true} = this.props
 
         if (RAISED_BUTTON_TYPES.has(type) && shadow) {
-            return { raised: true }
+            return {raised: true}
         }
 
         return {}
     }
 
     submitAction = async () => {
-        const { action, generateDocument } = this.props
+        const {action, generateDocument} = this.props
 
-        this.setState({ loading: true })
+        this.setState({loading: true})
         const url = await generateDocument();
         await action(url)
 
         if (this._isMounted) {
-            this.setState({ loading: false })
+            this.setState({loading: false})
         }
     }
 
@@ -238,18 +238,18 @@ export class BaseButton extends Component {
             sizing = defaults.sizing,
         } = this.props
         const newButtonStyles = SIZE_PROPERTIES.has(sizing)
-        const { hovering } = this.state
+        const {hovering} = this.state
 
         let containerStyles = this.getContainerStyles()
         let iconStyles = this.getTextStyles()
-        let textStyles = { ...this.getTextStyles() }
+        let textStyles = {...this.getTextStyles()}
 
         if (icon && !newButtonStyles) {
             textStyles.marginRight = 5
         }
 
         if (newButtonStyles) {
-            iconStyles = { ...iconStyles, ...this.getIconStyles() }
+            iconStyles = {...iconStyles, ...this.getIconStyles()}
 
             if (!text) {
                 textStyles = {}
@@ -265,11 +265,11 @@ export class BaseButton extends Component {
         }
 
         const onMouseEnter = () => {
-            this.setState({ hovering: true })
+            this.setState({hovering: true})
         }
 
         const onMouseLeave = () => {
-            this.setState({ hovering: false })
+            this.setState({hovering: false})
         }
 
         return (
@@ -285,7 +285,7 @@ export class BaseButton extends Component {
                             container: [
                                 containerStyles,
                                 container,
-                                { height: this.props._height },
+                                {height: this.props._height},
                             ],
                             icon: iconStyles,
                             text: [textStyles, styles.text],
@@ -295,7 +295,7 @@ export class BaseButton extends Component {
                 </View>
                 {this.state.loading && (
                     <View style={styles.loading}>
-                        <ActivityIndicator size="small" color={textStyles.color} />
+                        <ActivityIndicator size="small" color={textStyles.color}/>
                     </View>
                 )}
             </View>
@@ -307,7 +307,12 @@ export class BaseButton extends Component {
     }
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({ 
+    button: {
+        flex: 1,
+        height: '100%',
+        width: '100%',
+    },
     loading: {
         position: 'absolute',
         left: 0,

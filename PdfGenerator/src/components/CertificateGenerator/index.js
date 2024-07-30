@@ -1,4 +1,4 @@
-import {BaseButton} from "../../../BaseButton";
+import {BaseButton, styles} from "../../../BaseButton";
 import {defaultApiHeaders} from "../../../../Shared/constants";
 
 const CertificateGenerator = (props) => {
@@ -14,7 +14,7 @@ const CertificateGenerator = (props) => {
             return json.url;
         }
     }
-    return <BaseButton {...props.button}></BaseButton>;
+    return<BaseButton style={styles.button} {...props.button}></BaseButton>;
 };
 
 export default CertificateGenerator;

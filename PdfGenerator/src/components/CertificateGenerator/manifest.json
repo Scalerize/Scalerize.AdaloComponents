@@ -1,7 +1,7 @@
 {
   "displayName": "Certificate Generator",
-  "defaultWidth": 600,
-  "defaultHeight": 400,
+  "defaultWidth": 160,
+  "defaultHeight": 36,
   "resizeX": true,
   "resizeY": true,
   "components": "./index.js",
