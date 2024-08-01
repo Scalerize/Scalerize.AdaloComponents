@@ -1,5 +1,5 @@
 import {BaseButton} from "../../../BaseButton";
-import {componentsIds, defaultApiHeaders} from "../../../../Shared/constants";
+import {componentsIds, defaultApiHeaders, urls} from "../../../../Shared/constants";
 
 const CertificateGenerator = (props) => {
     const newProps = {
@@ -8,8 +8,10 @@ const CertificateGenerator = (props) => {
         _height: props._height,
         generateDocument: async () => {
             var apiProps = {
-                ...props,
-                border: props.certificateBorder
+                name: props.name,
+                description: props.description, 
+                border: props.certificateBorder,
+                signature: props.signature
             }; 
             const response = await fetch(`${urls.basePdfUrl}certificate`, {
                 method: 'POST',

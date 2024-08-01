@@ -16,12 +16,7 @@
       "name": "description",
       "displayName": "Description",
       "type": "text"
-    },
-    {
-      "name": "borderColor",
-      "displayName": "Border Color",
-      "type": "color"
-    },
+    }, 
     {
       "name": "certificateBorder",
       "displayName": "Border",

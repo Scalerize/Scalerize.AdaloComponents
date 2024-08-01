@@ -162,7 +162,7 @@
     },
     {
       "name": "productItem",
-      "displayName": "Product Line",
+      "displayName": "Product Lines",
       "role": "listItem",
       "reference": "products",
       "props": [
