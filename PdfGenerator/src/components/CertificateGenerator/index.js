@@ -1,9 +1,10 @@
 import {BaseButton} from "../../../BaseButton";
-import {defaultApiHeaders} from "../../../../Shared/constants";
+import {componentsIds, defaultApiHeaders} from "../../../../Shared/constants";
 
 const CertificateGenerator = (props) => {
     const newProps = {
         ...props.button,
+        componentId: componentsIds.certificateGenerator,
         _height: props._height,
         generateDocument: async () => {
             var apiProps = {

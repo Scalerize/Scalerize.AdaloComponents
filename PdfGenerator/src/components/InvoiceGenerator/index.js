@@ -1,5 +1,5 @@
 import {BaseButton} from "../../../BaseButton";
-import {defaultApiHeaders, urls} from "../../../../Shared/constants";
+import {componentsIds, defaultApiHeaders, urls} from "../../../../Shared/constants";
 
 const InvoiceGenerator = (props) => {
     const getCompany = (company, prefix) => ({
@@ -18,12 +18,13 @@ const InvoiceGenerator = (props) => {
     const newProps = {
         ...props.button,
         _height: props._height,
+        componentId: componentsIds.invoiceGenerator,
         generateDocument: async () => {
             let apiProps = {
                 ...props,
                 company: getCompany(props.company, 'company'),
                 client: getCompany(props.client, 'client'),
-            }; 
+            };
             const response = await fetch(`${urls.basePdfUrl}accounting-document`, {
                 method: 'POST',
                 headers: defaultApiHeaders,

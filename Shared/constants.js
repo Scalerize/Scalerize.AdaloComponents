@@ -12,3 +12,9 @@ export const defaultApiHeaders = {
     Accept: 'application/pdf',
     'Content-Type': 'application/json'
 };
+
+export const componentsIds = {
+    slider: 1,
+    invoiceGenerator: 2,
+    certificateGenerator: 3,
+};

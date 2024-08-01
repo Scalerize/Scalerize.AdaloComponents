@@ -2,6 +2,7 @@
 import {View, StyleSheet, ActivityIndicator} from 'react-native'
 import color from 'color'
 import {Button} from '@protonapp/react-native-material-ui'
+import {report} from "../Shared/utils";
 
 const SIZE_PROPERTIES = new Map([
     ['gigantic', {icon: 48, space: 16, font: 32}],
@@ -211,8 +212,15 @@ export class BaseButton extends Component {
         const {action, generateDocument} = this.props
 
         this.setState({loading: true})
-        const url = await generateDocument();
-        await action(url);
+        try {
+            const url = await generateDocument();
+            await action(url);
+        } catch (e) {
+            report({
+                componentId: this.props.componentId,
+                message: e.message
+            })
+        }
 
         if (this._isMounted) {
             this.setState({loading: false})
