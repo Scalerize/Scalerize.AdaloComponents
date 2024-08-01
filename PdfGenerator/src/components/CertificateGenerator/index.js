@@ -2,7 +2,6 @@ import {BaseButton} from "../../../BaseButton";
 import {defaultApiHeaders} from "../../../../Shared/constants";
 
 const CertificateGenerator = (props) => {
-    console.log(props);
     const newProps = {
         ...props.button,
         _height: props._height,
