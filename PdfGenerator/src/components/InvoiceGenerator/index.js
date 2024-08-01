@@ -23,8 +23,7 @@ const InvoiceGenerator = (props) => {
                 ...props,
                 company: getCompany(props.company, 'company'),
                 client: getCompany(props.client, 'client'),
-            };
-            console.log(apiProps);
+            }; 
             const response = await fetch(`${urls.basePdfUrl}accounting-document`, {
                 method: 'POST',
                 headers: defaultApiHeaders,

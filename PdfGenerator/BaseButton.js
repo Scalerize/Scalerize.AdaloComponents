@@ -212,10 +212,7 @@ export class BaseButton extends Component {
 
         this.setState({loading: true})
         const url = await generateDocument();
-        console.log(url);
-        if(!!action) {
-            await action(url)
-        }
+        await action(url);
 
         if (this._isMounted) {
             this.setState({loading: false})
@@ -282,7 +279,7 @@ export class BaseButton extends Component {
                         {...this.getAdditionalProps()}
                         upperCase={!!upperCase}
                         icon={this.state.loading ? '' : icon}
-                        onPress={this.submitAction}
+                        onPress={action && this.submitAction}
                         text={this.state.loading ? '' : text}
                         style={{
                             container: [
@@ -310,7 +307,7 @@ export class BaseButton extends Component {
     }
 }
 
-export const styles = StyleSheet.create({ 
+export const styles = StyleSheet.create({
     loading: {
         position: 'absolute',
         left: 0,

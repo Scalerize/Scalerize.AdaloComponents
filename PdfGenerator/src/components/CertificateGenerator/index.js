@@ -9,8 +9,7 @@ const CertificateGenerator = (props) => {
             var apiProps = {
                 ...props,
                 border: props.certificateBorder
-            };
-            console.log(apiProps);
+            }; 
             const response = await fetch(`${urls.basePdfUrl}certificate`, {
                 method: 'POST',
                 headers: defaultApiHeaders,
