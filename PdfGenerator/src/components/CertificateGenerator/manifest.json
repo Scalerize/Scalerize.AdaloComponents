@@ -21,6 +21,23 @@
       "name": "borderColor",
       "displayName": "Border Color",
       "type": "color"
+    },
+    {
+      "name": "border",
+      "displayName": "Border",
+      "type": "object",
+      "control": {
+        "type": "border"
+      },
+      "enabled": {
+        "type": "custom"
+      },
+      "default": {
+        "borderColor": "@primary",
+        "borderWidth": 2,
+        "borderStyle": "solid"
+      },
+      "style": true
     }
   ],
   "childComponents": [
@@ -29,7 +46,7 @@
       "displayName": "Signature",
       "props": [
         {
-          "name": "name",
+          "name": "signatoryName",
           "displayName": "Name",
           "type": "text"
         },

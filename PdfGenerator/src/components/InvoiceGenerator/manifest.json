@@ -1,7 +1,7 @@
 {
   "displayName": "Accounting Document Generator",
   "defaultWidth": 160,
-  "defaultHeight": 36, 
+  "defaultHeight": 36,
   "resizeX": true,
   "resizeY": true,
   "components": "./index.js",
@@ -62,9 +62,9 @@
       "type": "text"
     },
     {
-        "name": "products",
-        "displayName": "Products",
-        "type": "list"
+      "name": "products",
+      "displayName": "Products",
+      "type": "list"
     }
   ],
   "childComponents": [
@@ -73,42 +73,42 @@
       "displayName": "Company Coordinates",
       "props": [
         {
-          "name": "name",
+          "name": "companyName",
           "displayName": "Company Name",
           "type": "text"
         },
         {
-          "name": "street",
+          "name": "companyStreet",
           "displayName": "Street",
           "type": "text"
         },
         {
-          "name": "city",
+          "name": "companyCity",
           "displayName": "City",
           "type": "text"
         },
         {
-          "name": "zipCode",
+          "name": "companyZipCode",
           "displayName": "Zip Code",
           "type": "text"
         },
         {
-          "name": "country",
+          "name": "companyCountry",
           "displayName": "Country",
           "type": "text"
         },
         {
-          "name": "email",
+          "name": "companyEmail",
           "displayName": "Email",
           "type": "text"
         },
         {
-          "name": "phone",
+          "name": "companyPhone",
           "displayName": "Phone",
           "type": "text"
         },
         {
-          "name": "vatNumber",
+          "name": "companyVatNumber",
           "displayName": "VAT Number",
           "type": "text"
         }
@@ -119,49 +119,50 @@
       "displayName": "Client Coordinates",
       "props": [
         {
-          "name": "name",
+          "name": "clientName",
           "displayName": "Client Name",
           "type": "text"
         },
         {
-          "name": "street",
+          "name": "clientStreet",
           "displayName": "Street",
           "type": "text"
         },
         {
-          "name": "city",
+          "name": "clientCity",
           "displayName": "City",
           "type": "text"
         },
         {
-          "name": "zipCode",
+          "name": "clientZipCode",
           "displayName": "Zip Code",
           "type": "text"
         },
         {
-          "name": "country",
+          "name": "clientCountry",
           "displayName": "Country",
           "type": "text"
         },
         {
-          "name": "email",
+          "name": "clientEmail",
           "displayName": "Email",
           "type": "text"
         },
         {
-          "name": "phone",
+          "name": "clientPhone",
           "displayName": "Phone",
           "type": "text"
         },
         {
-          "name": "vatNumber",
+          "name": "clientVatNumber",
           "displayName": "VAT Number",
           "type": "text"
         }
       ]
     },
     {
-      "name": "Product Line",
+      "name": "productItem",
+      "displayName": "Product Line",
       "role": "listItem",
       "reference": "products",
       "props": [
