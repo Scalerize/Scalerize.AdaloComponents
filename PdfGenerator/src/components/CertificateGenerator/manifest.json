@@ -23,15 +23,12 @@
       "type": "color"
     },
     {
-      "name": "border",
+      "name": "certificateBorder",
       "displayName": "Border",
       "type": "object",
       "control": {
         "type": "border"
-      },
-      "enabled": {
-        "type": "custom"
-      },
+      }, 
       "default": {
         "borderColor": "@primary",
         "borderWidth": 2,
@@ -61,23 +58,6 @@
           "type": "image"
         }
       ]
-    },
-    {
-      "name": "border",
-      "displayName": "Border",
-      "type": "object",
-      "control": {
-        "type": "border"
-      },
-      "enabled": {
-        "type": "custom"
-      },
-      "default": {
-        "borderColor": "@primary",
-        "borderWidth": 2,
-        "borderStyle": "solid"
-      },
-      "style": true
     },
     {
       "name": "button",

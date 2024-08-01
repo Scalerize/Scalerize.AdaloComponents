@@ -19,14 +19,16 @@ const InvoiceGenerator = (props) => {
         ...props.button,
         _height: props._height,
         generateDocument: async () => {
+            let apiProps = {
+                ...props,
+                company: getCompany(props.company, 'company'),
+                client: getCompany(props.client, 'client'),
+            };
+            console.log(apiProps);
             const response = await fetch(`${urls.basePdfUrl}accounting-document`, {
                 method: 'POST',
                 headers: defaultApiHeaders,
-                body: JSON.stringify({
-                    ...props,
-                    company: getCompany(props.company, 'company'),
-                    client: getCompany(props.client, 'client'),
-                }),
+                body: JSON.stringify(apiProps),
             });
 
             const json = await response.json();

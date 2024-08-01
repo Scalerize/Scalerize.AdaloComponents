@@ -7,10 +7,15 @@ const CertificateGenerator = (props) => {
         ...props.button,
         _height: props._height,
         generateDocument: async () => {
+            var apiProps = {
+                ...props,
+                border: props.certificateBorder
+            };
+            console.log(apiProps);
             const response = await fetch(`${urls.basePdfUrl}certificate`, {
                 method: 'POST',
                 headers: defaultApiHeaders,
-                body: JSON.stringify(props),
+                body: JSON.stringify(apiProps),
             });
 
             const json = await response.json();
