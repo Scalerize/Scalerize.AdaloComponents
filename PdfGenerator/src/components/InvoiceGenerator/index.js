@@ -2,7 +2,6 @@ import {BaseButton} from "../../../BaseButton";
 import {componentsIds, defaultApiHeaders, urls} from "../../../../Shared/constants";
 
 const InvoiceGenerator = (props) => {
-    console.log(props);
     const getCompany = (company, prefix) => ({
         name: company[prefix + 'Name'],
         email: company[prefix + 'Email'],
