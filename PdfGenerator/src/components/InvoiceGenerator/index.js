@@ -2,6 +2,7 @@ import {BaseButton} from "../../../BaseButton";
 import {componentsIds, defaultApiHeaders, urls} from "../../../../Shared/constants";
 
 const InvoiceGenerator = (props) => {
+    console.log(props);
     const getCompany = (company, prefix) => ({
         name: company[prefix + 'Name'],
         email: company[prefix + 'Email'],
@@ -25,6 +26,13 @@ const InvoiceGenerator = (props) => {
                 id: props.id,
                 company: getCompany(props.company, 'company'),
                 client: getCompany(props.client, 'client'),
+                products: props.products.map(x => ({
+                    name: x.name,
+                    description: x.description,
+                    quantity: x.quantity,
+                    unitPrice: x.unitPrice,
+                    vatRate: x.vatRate,
+                })),
                 logoUrl: props.logoUrl,
                 clientId: props.clientId,
                 paymentTerms: props.paymentTerms,

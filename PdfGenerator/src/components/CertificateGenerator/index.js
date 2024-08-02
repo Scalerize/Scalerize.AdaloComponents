@@ -9,10 +9,13 @@ const CertificateGenerator = (props) => {
         generateDocument: async () => {
             var apiProps = {
                 name: props.name,
-                description: props.description, 
+                description: props.description,
                 border: props.certificateBorder,
-                signature: props.signature
-            }; 
+                signature: {
+                    ...props.signature,
+                    signatureUrl: props.signature.signatureUrl.uri
+                }
+            };
             const response = await fetch(`${urls.basePdfUrl}certificate`, {
                 method: 'POST',
                 headers: defaultApiHeaders,
