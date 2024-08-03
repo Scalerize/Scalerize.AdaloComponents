@@ -9,23 +9,25 @@
   "props": [
     {
       "name": "name",
-      "displayName": "Full Name",
-      "type": "text"
+      "displayName": "Certificate Full Name",
+      "type": "text",
+      "default": "John Doe"
     },
     {
       "name": "intro",
-      "displayName": "Introduction",
+      "displayName": "Certificate Introduction",
       "type": "text",
       "default": "This is to certify that"
     },
     {
       "name": "description",
-      "displayName": "Description",
-      "type": "text"
+      "displayName": "Certificate Description",
+      "type": "text",
+      "default": "has successfully completed the course"
     },
     {
       "name": "certificateBorder",
-      "displayName": "Border",
+      "displayName": "Certificate Border",
       "type": "object",
       "control": {
         "type": "border"
@@ -46,12 +48,14 @@
         {
           "name": "signatoryName",
           "displayName": "Full Name",
-          "type": "text"
+          "type": "text",
+          "default": "Jane Doe"
         },
         {
           "name": "role",
           "displayName": "Role",
-          "type": "text"
+          "type": "text",
+          "default": "Course Instructor"
         },
         {
           "name": "signatureUrl",
@@ -62,7 +66,7 @@
     },
     {
       "name": "secondSignature",
-      "displayName": "Second Signature", 
+      "displayName": "Second Signature",
       "props": [
         {
           "name": "enabled",

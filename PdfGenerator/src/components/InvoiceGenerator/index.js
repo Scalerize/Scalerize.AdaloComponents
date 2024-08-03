@@ -14,7 +14,7 @@ const InvoiceGenerator = (props) => {
             zipCode: company[prefix + 'ZipCode'],
         },
     })
-
+    
     const newProps = {
         ...props.button,
         _height: props._height,
@@ -26,7 +26,7 @@ const InvoiceGenerator = (props) => {
                 company: getCompany(props.company, 'company'),
                 client: getCompany(props.client, 'client'),
                 products: props.products.map(x => ({
-                    name: x.name,
+                    reference: x.reference,
                     description: x.description,
                     quantity: x.quantity,
                     unitPrice: x.unitPrice,

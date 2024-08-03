@@ -65,6 +65,41 @@
       "name": "products",
       "displayName": "Products",
       "type": "list"
+    },
+    {
+      "name": "reference",
+      "displayName": "Reference",
+      "role": "listItem",
+      "reference": "products",
+      "type": "text"
+    },
+    {
+      "name": "description",
+      "displayName": "Description",
+      "role": "listItem",
+      "reference": "products",
+      "type": "text"
+    },
+    {
+      "name": "quantity",
+      "displayName": "Quantity",
+      "role": "listItem",
+      "reference": "products",
+      "type": "number"
+    },
+    {
+      "name": "unitPrice",
+      "displayName": "Unit Price",
+      "role": "listItem",
+      "reference": "products",
+      "type": "number"
+    },
+    {
+      "name": "vatRate",
+      "displayName": "VAT Rate",
+      "role": "listItem",
+      "reference": "products",
+      "type": "number"
     }
   ],
   "childComponents": [
@@ -159,40 +194,7 @@
           "type": "text"
         }
       ]
-    },
-    {
-      "name": "productItem",
-      "displayName": "Product Lines",
-      "role": "listItem",
-      "reference": "products",
-      "props": [
-        {
-          "name": "reference",
-          "displayName": "Reference",
-          "type": "text"
-        },
-        {
-          "name": "description",
-          "displayName": "Description",
-          "type": "text"
-        },
-        {
-          "name": "quantity",
-          "displayName": "Quantity",
-          "type": "number"
-        },
-        {
-          "name": "unitPrice",
-          "displayName": "Unit Price",
-          "type": "number"
-        },
-        {
-          "name": "vatRate",
-          "displayName": "VAT Rate",
-          "type": "number"
-        }
-      ]
-    },
+    }, 
     {
       "name": "button",
       "displayName": "Button",

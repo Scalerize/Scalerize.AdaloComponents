@@ -3,10 +3,10 @@ import {componentsIds, defaultApiHeaders, urls} from "../../../../Shared/constan
 
 const CertificateGenerator = (props) => {
     const getSignature = (signature) => {
-        return signature && {
+        return signature && signature.enabled !== false && {
             ...signature,
             signatureUrl: signature.signatureUrl.uri
-        };
+        } || undefined;
     }
     const newProps = {
         ...props.button,
