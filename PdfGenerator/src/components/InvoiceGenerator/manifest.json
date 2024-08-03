@@ -68,35 +68,35 @@
     },
     {
       "name": "reference",
-      "displayName": "Reference",
+      "displayName": "Product References",
       "role": "listItem",
       "reference": "products",
       "type": "text"
     },
     {
       "name": "description",
-      "displayName": "Description",
+      "displayName": "Product Descriptions",
       "role": "listItem",
       "reference": "products",
       "type": "text"
     },
     {
       "name": "quantity",
-      "displayName": "Quantity",
+      "displayName": "Product Quantities",
       "role": "listItem",
       "reference": "products",
       "type": "number"
     },
     {
       "name": "unitPrice",
-      "displayName": "Unit Price",
+      "displayName": "Product Unit Prices",
       "role": "listItem",
       "reference": "products",
       "type": "number"
     },
     {
       "name": "vatRate",
-      "displayName": "VAT Rate",
+      "displayName": "Product VAT Rates",
       "role": "listItem",
       "reference": "products",
       "type": "number"
