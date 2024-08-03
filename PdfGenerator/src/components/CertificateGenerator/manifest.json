@@ -13,17 +13,23 @@
       "type": "text"
     },
     {
+      "name": "intro",
+      "displayName": "Introduction",
+      "type": "text",
+      "default": "This is to certify that"
+    },
+    {
       "name": "description",
       "displayName": "Description",
       "type": "text"
-    }, 
+    },
     {
       "name": "certificateBorder",
       "displayName": "Border",
       "type": "object",
       "control": {
         "type": "border"
-      }, 
+      },
       "default": {
         "borderColor": "@primary",
         "borderWidth": 2,
@@ -34,12 +40,38 @@
   ],
   "childComponents": [
     {
-      "name": "signature",
-      "displayName": "Signature",
+      "name": "firstSignature",
+      "displayName": "First Signature",
       "props": [
         {
           "name": "signatoryName",
-          "displayName": "Name",
+          "displayName": "Full Name",
+          "type": "text"
+        },
+        {
+          "name": "role",
+          "displayName": "Role",
+          "type": "text"
+        },
+        {
+          "name": "signatureUrl",
+          "displayName": "Signature Image",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "name": "secondSignature",
+      "displayName": "Second Signature", 
+      "props": [
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "name": "signatoryName",
+          "displayName": "Full Name",
           "type": "text"
         },
         {

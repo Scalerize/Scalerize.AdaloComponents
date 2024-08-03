@@ -2,19 +2,24 @@ import {BaseButton} from "../../../BaseButton";
 import {componentsIds, defaultApiHeaders, urls} from "../../../../Shared/constants";
 
 const CertificateGenerator = (props) => {
+    const getSignature = (signature) => {
+        return signature && {
+            ...signature,
+            signatureUrl: signature.signatureUrl.uri
+        };
+    }
     const newProps = {
         ...props.button,
         componentId: componentsIds.certificateGenerator,
         _height: props._height,
         generateDocument: async () => {
             var apiProps = {
+                intro: props.intro,
                 name: props.name,
                 description: props.description,
                 border: props.certificateBorder,
-                signature: {
-                    ...props.signature,
-                    signatureUrl: props.signature.signatureUrl.uri
-                }
+                firstSignature: getSignature(props.firstSignature),
+                secondSignature: getSignature(props.secondSignature)
             };
             const response = await fetch(`${urls.basePdfUrl}certificate`, {
                 method: 'POST',

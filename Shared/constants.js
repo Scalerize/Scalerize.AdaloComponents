@@ -1,6 +1,8 @@
-﻿export const urls = {
-    beacon: 'https://www.scalerize.fr/automation/webhook/4c7eb7a3-89ae-4bdb-9afd-199e36b177c8',
-    basePdfUrl: 'https://www.scalerize.fr/client-endpoints/scalerize/pdf/'
+﻿
+export const baseUrlDomain = 'https://1cfb-2a01-e0a-5f8-6f80-ac88-e632-c012-4617.ngrok-free.app/';
+export const urls = {
+    beacon: `${baseUrlDomain}automation/webhook/4c7eb7a3-89ae-4bdb-9afd-199e36b177c8`,
+    basePdfUrl: `${baseUrlDomain}client-endpoints/scalerize/pdf/`
 };
 export const environments = {
     develop: 'develop',
