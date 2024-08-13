@@ -1,5 +1,5 @@
 {
-  "displayName": "Accounting Document Generator",
+  "displayName": "Invoices & Quotes PDF Generator",
   "defaultWidth": 160,
   "defaultHeight": 36,
   "resizeX": true,
@@ -77,7 +77,7 @@
       "name": "description",
       "displayName": "Product Descriptions",
       "role": "listItem",
-      "reference": "products",
+      "reference": "products", 
       "type": "text"
     },
     {
@@ -105,7 +105,7 @@
   "childComponents": [
     {
       "name": "company",
-      "displayName": "Company Coordinates",
+      "displayName": "Company Address",
       "props": [
         {
           "name": "companyName",
@@ -151,7 +151,7 @@
     },
     {
       "name": "client",
-      "displayName": "Client Coordinates",
+      "displayName": "Client Address",
       "props": [
         {
           "name": "clientName",
