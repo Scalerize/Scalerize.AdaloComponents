@@ -57,7 +57,7 @@ const ContextMenu = (props) => {
     const menuItems = [];
     for (let i = 1; i <= 5; i++) {
         const item = props[`menuItem${i}`];
-        if (item && item.label) {
+        if (item && item.label && item.enabled) {
             menuItems.push(item);
         }
     }
@@ -76,7 +76,8 @@ const ContextMenu = (props) => {
                         onPress={closeMenu}
                     />
                     <View style={dynamicStyles.menuContainer}>
-                        {menuItems.filter(x => x.enabled).map((item, index) => (
+                        {menuItems
+                            .map((item, index) => (
                             <TouchableOpacity
                                 key={index}
                                 style={styles.menuItem}
