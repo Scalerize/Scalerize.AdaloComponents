@@ -1,8 +1,8 @@
 {
   "displayName": "Menu Contextuel",
-  "defaultWidth": 50,
-  "defaultHeight": 50,
-  "resizeX": true,
+  "defaultWidth": 24,
+  "defaultHeight": 24,
+  "resizeX": false,
   "resizeY": false,
   "components": "./index.js",
   "icon": "./thumbnail.png",
@@ -10,8 +10,8 @@
     {
       "name": "iconName",
       "displayName": "Nom de l'icône du déclencheur",
-      "type": "string",
-      "default": "menu"
+      "type": "icon",
+      "default": "more-vert"
     },
     {
       "name": "iconColor",
@@ -56,13 +56,13 @@
         {
           "name": "label",
           "displayName": "Libellé",
-          "type": "string",
+          "type": "text",
           "default": "Option 1"
         },
         {
           "name": "iconName",
           "displayName": "Icône",
-          "type": "string",
+          "type": "text",
           "default": "home"
         },
         {
@@ -90,13 +90,13 @@
         {
           "name": "label",
           "displayName": "Libellé",
-          "type": "string",
+          "type": "text",
           "default": "Option 2"
         },
         {
           "name": "iconName",
           "displayName": "Icône",
-          "type": "string",
+          "type": "text",
           "default": "settings"
         },
         {
@@ -124,13 +124,13 @@
         {
           "name": "label",
           "displayName": "Libellé",
-          "type": "string",
+          "type": "text",
           "default": "Option 3"
         },
         {
           "name": "iconName",
           "displayName": "Icône",
-          "type": "string",
+          "type": "text",
           "default": "info"
         },
         {
@@ -158,13 +158,13 @@
         {
           "name": "label",
           "displayName": "Libellé",
-          "type": "string",
+          "type": "text",
           "default": "Option 4"
         },
         {
           "name": "iconName",
           "displayName": "Icône",
-          "type": "string",
+          "type": "text",
           "default": "help"
         },
         {
@@ -192,13 +192,13 @@
         {
           "name": "label",
           "displayName": "Libellé",
-          "type": "string",
+          "type": "text",
           "default": "Option 5"
         },
         {
           "name": "iconName",
           "displayName": "Icône",
-          "type": "string",
+          "type": "text",
           "default": "logout"
         },
         {
