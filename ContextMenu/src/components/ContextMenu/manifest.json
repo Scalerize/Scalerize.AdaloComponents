@@ -1,5 +1,5 @@
 {
-  "displayName": "Menu Contextuel",
+  "displayName": "Context Menu",
   "defaultWidth": 24,
   "defaultHeight": 24,
   "resizeX": false,
@@ -8,42 +8,78 @@
   "icon": "./thumbnail.png",
   "props": [
     {
-      "name": "iconName",
-      "displayName": "Nom de l'icône du déclencheur",
-      "type": "icon",
-      "default": "more-vert"
-    },
-    {
-      "name": "iconColor",
-      "displayName": "Couleur de l'icône du déclencheur",
-      "type": "color",
-      "default": "#000000"
-    },
-    {
-      "name": "iconSize",
-      "displayName": "Taille de l'icône du déclencheur",
-      "type": "number",
-      "default": 24,
-      "control": {
-        "type": "slider",
-        "min": 12,
-        "max": 48
-      }
-    },
-    {
       "name": "backgroundColor",
-      "displayName": "Couleur de fond du menu",
+      "displayName": "Menu Background Color",
       "type": "color",
       "default": "#FFFFFF"
     },
     {
       "name": "textColor",
-      "displayName": "Couleur du texte",
+      "displayName": "Text Color",
       "type": "color",
       "default": "#000000"
+    },
+
+    {
+      "name": "menuBorderRadius",
+      "displayName": "Menu Border Radius",
+      "type": "number",
+      "default": 5,
+      "control": {
+        "type": "slider",
+        "min": 0,
+        "max": 20
+      }
+    },
+    {
+      "name": "menuShadowColor",
+      "displayName": "Menu Shadow Color",
+      "type": "color",
+      "default": "#00000033"
+    },
+    {
+      "name": "menuShadowOpacity",
+      "displayName": "Menu Shadow Opacity",
+      "type": "number",
+      "default": 1,
+      "control": {
+        "type": "slider",
+        "min": 1,
+        "max": 100,
+        "step": 1
+      }
     }
   ],
   "childComponents": [
+    {
+      "name": "icon",
+      "displayName": "Icon",
+      "props": [
+        {
+          "name": "iconName",
+          "displayName": "Trigger Icon Name",
+          "type": "icon",
+          "default": "more-vert"
+        },
+        {
+          "name": "iconColor",
+          "displayName": "Trigger Icon Color",
+          "type": "color",
+          "default": "#000000"
+        },
+        {
+          "name": "iconSize",
+          "displayName": "Trigger Icon Size",
+          "type": "number",
+          "default": 24,
+          "control": {
+            "type": "slider",
+            "min": 12,
+            "max": 48
+          }
+        }
+      ]
+    },
     {
       "name": "menuItem1",
       "displayName": "Menu Item 1",
@@ -55,19 +91,19 @@
         },
         {
           "name": "label",
-          "displayName": "Libellé",
+          "displayName": "Label",
           "type": "text",
           "default": "Option 1"
         },
         {
           "name": "iconName",
-          "displayName": "Icône",
+          "displayName": "Icon",
           "type": "text",
           "default": "home"
         },
         {
           "name": "iconColor",
-          "displayName": "Couleur de l'icône",
+          "displayName": "Icon Color",
           "type": "color",
           "default": "#000000"
         },
@@ -89,19 +125,19 @@
         },
         {
           "name": "label",
-          "displayName": "Libellé",
+          "displayName": "Label",
           "type": "text",
           "default": "Option 2"
         },
         {
           "name": "iconName",
-          "displayName": "Icône",
+          "displayName": "Icon",
           "type": "text",
           "default": "settings"
         },
         {
           "name": "iconColor",
-          "displayName": "Couleur de l'icône",
+          "displayName": "Icon Color",
           "type": "color",
           "default": "#000000"
         },
@@ -123,19 +159,19 @@
         },
         {
           "name": "label",
-          "displayName": "Libellé",
+          "displayName": "Label",
           "type": "text",
           "default": "Option 3"
         },
         {
           "name": "iconName",
-          "displayName": "Icône",
+          "displayName": "Icon",
           "type": "text",
           "default": "info"
         },
         {
           "name": "iconColor",
-          "displayName": "Couleur de l'icône",
+          "displayName": "Icon Color",
           "type": "color",
           "default": "#000000"
         },
@@ -157,19 +193,19 @@
         },
         {
           "name": "label",
-          "displayName": "Libellé",
+          "displayName": "Label",
           "type": "text",
           "default": "Option 4"
         },
         {
           "name": "iconName",
-          "displayName": "Icône",
+          "displayName": "Icon",
           "type": "text",
           "default": "help"
         },
         {
           "name": "iconColor",
-          "displayName": "Couleur de l'icône",
+          "displayName": "Icon Color",
           "type": "color",
           "default": "#000000"
         },
@@ -191,19 +227,19 @@
         },
         {
           "name": "label",
-          "displayName": "Libellé",
+          "displayName": "Label",
           "type": "text",
           "default": "Option 5"
         },
         {
           "name": "iconName",
-          "displayName": "Icône",
-          "type": "text",
+          "displayName": "Icon",
+          "type": "icon",
           "default": "logout"
         },
         {
           "name": "iconColor",
-          "displayName": "Couleur de l'icône",
+          "displayName": "Icon Color",
           "type": "color",
           "default": "#000000"
         },
