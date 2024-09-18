@@ -6,7 +6,6 @@ const ContextMenu = (props) => {
     const [menuVisible, setMenuVisible] = useState(false);
     const [offset, setOffset] = useState({x: 0, y: 0});
 
-    console.log(props);
     const handleLayout = (event) => {
         const {x, y} = event.nativeEvent.layout;
         setOffset({x, y});
@@ -30,6 +29,10 @@ const ContextMenu = (props) => {
     const iconName = props.icon?.iconName || 'menu';
     const iconColor = props.icon?.iconColor || '#000000';
     const iconSize = props.icon?.iconSize || 24;
+    
+    const isEditor = props.editor || false;
+    const showMenuOnEditor = isEditor &&
+        (props.openAccordion === 'root' || props.openAccordion?.startsWith('menuItem'));
 
     const dynamicStyles = StyleSheet.create({
         menuContainer: {
@@ -39,7 +42,6 @@ const ContextMenu = (props) => {
             shadowColor: props.menuShadowColor || '#000000',
             shadowOpacity:
                 props.menuShadowOpacity !== undefined ? (props.menuShadowOpacity / 100) : 0.1,
-
         },
         overlay: {
             ...styles.overlay,
@@ -67,21 +69,21 @@ const ContextMenu = (props) => {
             <TouchableOpacity onPress={toggleMenu}>
                 <Icon name={iconName} size={iconSize} color={iconColor}/>
             </TouchableOpacity>
-            {menuVisible && (
+            {(menuVisible || showMenuOnEditor) && (
                 <>
-                    <TouchableOpacity
+                    {!isEditor && <TouchableOpacity
                         style={dynamicStyles.overlay}
                         onLayout={handleLayout}
                         activeOpacity={1}
                         onPress={closeMenu}
-                    />
+                    /> }
                     <View style={dynamicStyles.menuContainer}>
                         {menuItems
                             .map((item, index) => (
                             <TouchableOpacity
                                 key={index}
                                 style={styles.menuItem}
-                                onPress={() => handleMenuItemPress(item.action)}
+                                onPress={() => !isEditor && handleMenuItemPress(item.action)}
                             >
                                 {item.iconName && (
                                     <Icon
