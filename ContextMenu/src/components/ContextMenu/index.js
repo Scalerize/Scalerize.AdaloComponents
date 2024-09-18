@@ -6,6 +6,7 @@ const ContextMenu = (props) => {
     const [menuVisible, setMenuVisible] = useState(false);
     const [offset, setOffset] = useState({x: 0, y: 0});
 
+    console.log(props);
     const handleLayout = (event) => {
         const {x, y} = event.nativeEvent.layout;
         setOffset({x, y});
@@ -34,6 +35,11 @@ const ContextMenu = (props) => {
         menuContainer: {
             ...styles.menuContainer,
             backgroundColor: props.backgroundColor || '#FFFFFF',
+            borderRadius: props.menuBorderRadius !== undefined ? props.menuBorderRadius : 5,
+            shadowColor: props.menuShadowColor || '#000000',
+            shadowOpacity:
+                props.menuShadowOpacity !== undefined ? props.menuShadowOpacity : 0.1,
+
         },
         overlay: {
             ...styles.overlay,
@@ -44,12 +50,7 @@ const ContextMenu = (props) => {
         },
         menuItemText: {
             ...styles.menuItemText,
-            color: props.textColor || '#000000',
-            borderRadius: props.menuBorderRadius !== undefined ? props.menuBorderRadius : 5,
-            shadowColor: props.menuShadowColor || '#000000',
-            shadowOpacity:
-                props.menuShadowOpacity !== undefined ? props.menuShadowOpacity : 0.1,
-
+            color: props.textColor || '#000000'
         },
     });
 
@@ -70,7 +71,7 @@ const ContextMenu = (props) => {
                 <>
                     <TouchableOpacity
                         style={dynamicStyles.overlay}
-						onLayout={handleLayout}
+                        onLayout={handleLayout}
                         activeOpacity={1}
                         onPress={closeMenu}
                     />

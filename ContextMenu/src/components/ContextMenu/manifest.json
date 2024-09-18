@@ -35,13 +35,13 @@
       "name": "menuShadowColor",
       "displayName": "Menu Shadow Color",
       "type": "color",
-      "default": "#00000033"
+      "default": "#000000"
     },
     {
       "name": "menuShadowOpacity",
       "displayName": "Menu Shadow Opacity",
       "type": "number",
-      "default": 1,
+      "default": 25,
       "control": {
         "type": "slider",
         "min": 1,
