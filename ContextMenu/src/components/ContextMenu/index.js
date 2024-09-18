@@ -38,7 +38,7 @@ const ContextMenu = (props) => {
             borderRadius: props.menuBorderRadius !== undefined ? props.menuBorderRadius : 5,
             shadowColor: props.menuShadowColor || '#000000',
             shadowOpacity:
-                props.menuShadowOpacity !== undefined ? props.menuShadowOpacity : 0.1,
+                props.menuShadowOpacity !== undefined ? (props.menuShadowOpacity / 100) : 0.1,
 
         },
         overlay: {
