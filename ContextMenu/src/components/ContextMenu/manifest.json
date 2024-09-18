@@ -1,0 +1,218 @@
+{
+  "displayName": "Menu Contextuel",
+  "defaultWidth": 50,
+  "defaultHeight": 50,
+  "resizeX": true,
+  "resizeY": false,
+  "components": "./index.js",
+  "icon": "./thumbnail.png",
+  "props": [
+    {
+      "name": "iconName",
+      "displayName": "Nom de l'icône du déclencheur",
+      "type": "string",
+      "default": "menu"
+    },
+    {
+      "name": "iconColor",
+      "displayName": "Couleur de l'icône du déclencheur",
+      "type": "color",
+      "default": "#000000"
+    },
+    {
+      "name": "iconSize",
+      "displayName": "Taille de l'icône du déclencheur",
+      "type": "number",
+      "default": 24,
+      "control": {
+        "type": "slider",
+        "min": 12,
+        "max": 48
+      }
+    },
+    {
+      "name": "backgroundColor",
+      "displayName": "Couleur de fond du menu",
+      "type": "color",
+      "default": "#FFFFFF"
+    },
+    {
+      "name": "textColor",
+      "displayName": "Couleur du texte",
+      "type": "color",
+      "default": "#000000"
+    }
+  ],
+  "childComponents": [
+    {
+      "name": "menuItem1",
+      "displayName": "Menu Item 1",
+      "props": [
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "name": "label",
+          "displayName": "Libellé",
+          "type": "string",
+          "default": "Option 1"
+        },
+        {
+          "name": "iconName",
+          "displayName": "Icône",
+          "type": "string",
+          "default": "home"
+        },
+        {
+          "name": "iconColor",
+          "displayName": "Couleur de l'icône",
+          "type": "color",
+          "default": "#000000"
+        },
+        {
+          "name": "action",
+          "displayName": "Action",
+          "type": "action"
+        }
+      ]
+    },
+    {
+      "name": "menuItem2",
+      "displayName": "Menu Item 2",
+      "props": [
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "name": "label",
+          "displayName": "Libellé",
+          "type": "string",
+          "default": "Option 2"
+        },
+        {
+          "name": "iconName",
+          "displayName": "Icône",
+          "type": "string",
+          "default": "settings"
+        },
+        {
+          "name": "iconColor",
+          "displayName": "Couleur de l'icône",
+          "type": "color",
+          "default": "#000000"
+        },
+        {
+          "name": "action",
+          "displayName": "Action",
+          "type": "action"
+        }
+      ]
+    },
+    {
+      "name": "menuItem3",
+      "displayName": "Menu Item 3",
+      "props": [
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "name": "label",
+          "displayName": "Libellé",
+          "type": "string",
+          "default": "Option 3"
+        },
+        {
+          "name": "iconName",
+          "displayName": "Icône",
+          "type": "string",
+          "default": "info"
+        },
+        {
+          "name": "iconColor",
+          "displayName": "Couleur de l'icône",
+          "type": "color",
+          "default": "#000000"
+        },
+        {
+          "name": "action",
+          "displayName": "Action",
+          "type": "action"
+        }
+      ]
+    },
+    {
+      "name": "menuItem4",
+      "displayName": "Menu Item 4",
+      "props": [
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "name": "label",
+          "displayName": "Libellé",
+          "type": "string",
+          "default": "Option 4"
+        },
+        {
+          "name": "iconName",
+          "displayName": "Icône",
+          "type": "string",
+          "default": "help"
+        },
+        {
+          "name": "iconColor",
+          "displayName": "Couleur de l'icône",
+          "type": "color",
+          "default": "#000000"
+        },
+        {
+          "name": "action",
+          "displayName": "Action",
+          "type": "action"
+        }
+      ]
+    },
+    {
+      "name": "menuItem5",
+      "displayName": "Menu Item 5",
+      "props": [
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "name": "label",
+          "displayName": "Libellé",
+          "type": "string",
+          "default": "Option 5"
+        },
+        {
+          "name": "iconName",
+          "displayName": "Icône",
+          "type": "string",
+          "default": "logout"
+        },
+        {
+          "name": "iconColor",
+          "displayName": "Couleur de l'icône",
+          "type": "color",
+          "default": "#000000"
+        },
+        {
+          "name": "action",
+          "displayName": "Action",
+          "type": "action"
+        }
+      ]
+    }
+  ]
+}

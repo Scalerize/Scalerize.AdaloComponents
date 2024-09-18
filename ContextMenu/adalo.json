@@ -1,0 +1,12 @@
+{
+  "displayName": "ContextMenu",
+  "components": [
+    {
+      "name": "ContextMenu",
+      "manifest": "./src/components/ContextMenu/manifest.json"
+    }
+  ],
+  "author": "",
+  "description": "",
+  "logo": "./example-logo.png"
+}
