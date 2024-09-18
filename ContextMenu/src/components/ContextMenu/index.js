@@ -76,7 +76,7 @@ const ContextMenu = (props) => {
                         onPress={closeMenu}
                     />
                     <View style={dynamicStyles.menuContainer}>
-                        {menuItems.map((item, index) => (
+                        {menuItems.filter(x => x.enabled).map((item, index) => (
                             <TouchableOpacity
                                 key={index}
                                 style={styles.menuItem}
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     menuContainer: {
         position: 'absolute',
         top: 50,
-        left: 0,
+        right: 0,
         backgroundColor: '#FFFFFF',
         borderRadius: 5,
         shadowRadius: 5,

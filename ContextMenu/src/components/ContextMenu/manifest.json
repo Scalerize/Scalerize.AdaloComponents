@@ -98,7 +98,7 @@
         {
           "name": "iconName",
           "displayName": "Icon",
-          "type": "text",
+          "type": "icon",
           "default": "home"
         },
         {
@@ -132,7 +132,7 @@
         {
           "name": "iconName",
           "displayName": "Icon",
-          "type": "text",
+          "type": "icon",
           "default": "settings"
         },
         {
@@ -166,7 +166,7 @@
         {
           "name": "iconName",
           "displayName": "Icon",
-          "type": "text",
+          "type": "icon",
           "default": "info"
         },
         {
@@ -200,7 +200,7 @@
         {
           "name": "iconName",
           "displayName": "Icon",
-          "type": "text",
+          "type": "icon",
           "default": "help"
         },
         {
