@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Platform, Dimensions} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {Portal} from '@gorhom/portal';
 
 const ContextMenu = (props) => {
     const [menuVisible, setMenuVisible] = useState(false);
@@ -29,7 +30,7 @@ const ContextMenu = (props) => {
     const iconName = props.icon?.iconName || 'menu';
     const iconColor = props.icon?.iconColor || '#000000';
     const iconSize = props.icon?.iconSize || 24;
-    
+
     const isEditor = props.editor || false;
     const showMenuOnEditor = isEditor &&
         (props.openAccordion === 'root' || props.openAccordion?.startsWith('menuItem'));
@@ -76,35 +77,37 @@ const ContextMenu = (props) => {
                         onLayout={handleLayout}
                         activeOpacity={1}
                         onPress={closeMenu}
-                    /> }
-                    <View style={dynamicStyles.menuContainer}>
-                        {menuItems
-                            .map((item, index) => (
-                            <TouchableOpacity
-                                key={index}
-                                style={styles.menuItem}
-                                onPress={() => !isEditor && handleMenuItemPress(item.action)}
-                            >
-                                {item.iconName && (
-                                    <Icon
-                                        name={item.iconName}
-                                        size={20}
-                                        color={
-                                            item.iconColor || props.textColor || '#000000'
-                                        }
-                                        style={styles.menuItemIcon}
-                                    />
-                                )}
-                                <Text
-                                    style={dynamicStyles.menuItemText}
-                                    numberOfLines={1}
-                                    ellipsizeMode="tail"
-                                >
-                                    {item.label}
-                                </Text>
-                            </TouchableOpacity>
-                        ))}
-                    </View>
+                    />}
+                    <Portal hostName="">
+                        <View style={dynamicStyles.menuContainer}>
+                            {menuItems
+                                .map((item, index) => (
+                                    <TouchableOpacity
+                                        key={index}
+                                        style={styles.menuItem}
+                                        onPress={() => !isEditor && handleMenuItemPress(item.action)}
+                                    >
+                                        {item.iconName && (
+                                            <Icon
+                                                name={item.iconName}
+                                                size={20}
+                                                color={
+                                                    item.iconColor || props.textColor || '#000000'
+                                                }
+                                                style={styles.menuItemIcon}
+                                            />
+                                        )}
+                                        <Text
+                                            style={dynamicStyles.menuItemText}
+                                            numberOfLines={1}
+                                            ellipsizeMode="tail"
+                                        >
+                                            {item.label}
+                                        </Text>
+                                    </TouchableOpacity>
+                                ))}
+                        </View>
+                    </Portal>
                 </>
             )}
         </View>
