@@ -10,9 +10,6 @@
     "login": "adalo login",
     "publish": "adalo publish"
   },
-  "dependencies": {
-    "@gorhom/portal": "^1.0.14"
-  },
   "devDependencies": {
     "@adalo/cli": "^1.0.0",
     "react": "18.2.0",
