@@ -1,0 +1,12 @@
+{
+  "displayName": "AutoComplete",
+  "components": [
+    {
+      "name": "AutoComplete",
+      "manifest": "./src/components/AutoComplete/manifest.json"
+    }
+  ],
+  "author": "",
+  "description": "",
+  "logo": "./example-logo.png"
+}
