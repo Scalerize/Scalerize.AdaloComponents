@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Platform, Dimensions} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const ContextMenu = (props) => {
@@ -37,6 +37,7 @@ const ContextMenu = (props) => {
     const dynamicStyles = StyleSheet.create({
         menuContainer: {
             ...styles.menuContainer,
+            position: isEditor ? 'fixed' : 'absolute',
             backgroundColor: props.backgroundColor || '#FFFFFF',
             borderRadius: props.menuBorderRadius !== undefined ? props.menuBorderRadius : 5,
             shadowColor: props.menuShadowColor || '#000000',
@@ -64,6 +65,27 @@ const ContextMenu = (props) => {
         }
     }
 
+
+    if(isEditor) {
+        useEffect(() => {
+            const style = document.createElement('style');
+            style.innerHTML = `
+          foreignObject:has(.context-menu-fixed-container) {
+            overflow: visible !important;
+          }
+          
+          .context-menu-fixed-container {
+            z-index: 1000;
+            margin-top: ${iconSize}px !important;
+          }
+        `;
+            document.head.appendChild(style);
+            return () => {
+                document.head.removeChild(style);
+            };
+        }, []);
+    }
+    
     return (
         <View style={styles.container}>
             <TouchableOpacity onPress={toggleMenu}>
@@ -77,7 +99,7 @@ const ContextMenu = (props) => {
                         activeOpacity={1}
                         onPress={closeMenu}
                     /> }
-                    <View style={dynamicStyles.menuContainer}>
+                    <View style={dynamicStyles.menuContainer} className="context-menu-fixed-container">
                         {menuItems
                             .map((item, index) => (
                             <TouchableOpacity
@@ -123,7 +145,6 @@ const styles = StyleSheet.create({
         zIndex: 999,
     },
     menuContainer: {
-        position: 'absolute',
         top: 50,
         right: 0,
         backgroundColor: '#FFFFFF',
