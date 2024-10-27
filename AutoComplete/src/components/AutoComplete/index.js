@@ -18,6 +18,7 @@ const AutoComplete = (props) => {
         editor,
         openAccordion,
         searchField,
+        suggestionsList,
         suggestionsOverlay
     } = props;
 
@@ -34,7 +35,7 @@ const AutoComplete = (props) => {
             )) ||
         (!editor && isFocused);
 
-    const data = editor ? generateFakeData() : suggestionsOverlay?.suggestionsList || [];
+    const data = editor ? generateFakeData() : suggestionsList || [];
     console.log(data);
 
     if (editor) {
@@ -197,6 +198,9 @@ const getShadowStyle = (shadow) => ({
 });
 
 const styles = StyleSheet.create({
+    wrapper: {
+        position: 'relative'
+    },
     searchField: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -213,9 +217,12 @@ const styles = StyleSheet.create({
     },
     textInput: {
         flex: 1,
+        outline: 'none'
     },
     suggestionsOverlay: {
-        zIndex: 1000,
+        position: 'absolute',
+        top: '50px',
+        width: '100%',
         maxHeight: 200,
         borderWidth: 1,
         backgroundColor: '#fff',

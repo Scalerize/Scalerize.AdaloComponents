@@ -7,6 +7,12 @@
   "components": "./index.js",
   "icon": "./thumbnail.png",
   "props": [
+    {
+      "name": "suggestionsList",
+      "displayName": "Suggestions list",
+      "type": "list",
+      "style": false
+    }
   ],
   "childComponents": [
     {
@@ -166,12 +172,6 @@
           },
           "default": 4,
           "style": true
-        },
-        {
-          "name": "suggestionsList",
-          "displayName": "Suggestions list",
-          "type": "list",
-          "style": false
         }
       ]
     },
