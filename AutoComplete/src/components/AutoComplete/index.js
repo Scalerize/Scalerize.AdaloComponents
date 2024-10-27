@@ -47,8 +47,8 @@ const AutoComplete = (props) => {
           }
           .context-menu-fixed-container {
             position: fixed;
-            margin-top: 50px !important;
-            width: 90%
+            top: 70px !important;
+            width: calc(100% - 40px) !important;
           }
         `;
             document.head.appendChild(style);
