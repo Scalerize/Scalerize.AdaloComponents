@@ -1,21 +1,352 @@
 {
-  "displayName": "AutoComplete",
+  "displayName": "Suggestion Box",
   "defaultWidth": 160,
-  "defaultHeight": 24,
+  "defaultHeight": 36,
+  "resizeX": true,
+  "resizeY": true,
   "components": "./index.js",
-  "icon": "./example-thumbnail.png",
-  "props": [
+  "icon": "./thumbnail.png",
+  "childComponents": [
     {
-      "name": "text",
-      "displayName": "Text",
-      "type": "text",
-      "default": "Happy Hacking"
+      "name": "searchField",
+      "displayName": "Search Field",
+      "props": [
+        {
+          "name": "border",
+          "displayName": "Border",
+          "type": "object",
+          "control": {
+            "type": "border"
+          },
+          "default": {
+            "borderColor": "@primary",
+            "borderWidth": 1,
+            "borderStyle": "solid"
+          },
+          "style": true
+        },
+        {
+          "name": "borderRadius",
+          "displayName": "Border Radius",
+          "type": "number",
+          "control": {
+            "type": "slider",
+            "min": 0,
+            "max": 18
+          },
+          "default": 4,
+          "style": true
+        },
+        {
+          "name": "backgroundColor",
+          "displayName": "Background Color",
+          "type": "color",
+          "default": "@white",
+          "style": true
+        },
+        {
+          "name": "leftIcon",
+          "displayName": "Left Icon",
+          "type": "icon",
+          "default": "search",
+          "style": true
+        },
+        {
+          "name": "textColor",
+          "displayName": "Text Color",
+          "type": "color",
+          "default": "@black",
+          "style": true
+        },
+        {
+          "name": "placeholderColor",
+          "displayName": "Placeholder Color",
+          "type": "color",
+          "default": "@gray",
+          "style": true
+        },
+        {
+          "name": "shadow",
+          "displayName": "Shadow",
+          "type": "object",
+          "control": {
+            "type": "shadow"
+          },
+          "default": {
+            "enabled": false,
+            "x": 0,
+            "y": 2,
+            "size": 4,
+            "color": "rgba(0, 0, 0, 0.2)"
+          },
+          "style": true
+        }
+      ]
     },
     {
-      "name": "color",
-      "displayName": "Color",
-      "type": "color",
-      "default": "#00A898"
+      "name": "suggestionsOverlay",
+      "displayName": "Suggestions Overlay",
+      "props": [
+        {
+          "name": "overlayType",
+          "displayName": "Overlay Type",
+          "type": "text",
+          "default": "wrap",
+          "control": {
+            "type": "menu",
+            "options": [
+              {
+                "label": "Wrap",
+                "value": "wrap"
+              },
+              {
+                "label": "Separated",
+                "value": "separated"
+              },
+              {
+                "label": "Attached",
+                "value": "attached"
+              }
+            ]
+          },
+          "style": true
+        },
+        {
+          "name": "shadow",
+          "displayName": "Shadow",
+          "type": "object",
+          "control": {
+            "type": "shadow"
+          },
+          "default": {
+            "enabled": false,
+            "x": 0,
+            "y": 2,
+            "size": 4,
+            "color": "rgba(0, 0, 0, 0.2)"
+          },
+          "style": true
+        },
+        {
+          "name": "border",
+          "displayName": "Border",
+          "type": "object",
+          "control": {
+            "type": "border"
+          },
+          "default": {
+            "borderColor": "@primary",
+            "borderWidth": 1,
+            "borderStyle": "solid"
+          },
+          "style": true
+        },
+        {
+          "name": "borderRadius",
+          "displayName": "Border Radius",
+          "type": "number",
+          "control": {
+            "type": "slider",
+            "min": 0,
+            "max": 18
+          },
+          "default": 4,
+          "style": true
+        },
+        {
+          "name": "suggestionsList",
+          "displayName": "Suggestions List",
+          "type": "list",
+          "style": false
+        }
+      ]
+    },
+    {
+      "name": "suggestion",
+      "displayName": "Suggestion",
+      "role": "listItem",
+      "reference": "suggestionsList",
+      "props": [
+        {
+          "name": "onSuggestionClick",
+          "type": "action",
+          "displayName": "On Suggestion Click",
+          "arguments": []
+        }
+      ]
+    },
+    {
+      "name": "leftElement",
+      "displayName": "Left Element",
+      "role": "listItem",
+      "reference": "suggestionsList",
+      "props": [
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "name": "type",
+          "displayName": "Type",
+          "type": "text",
+          "default": "icon",
+          "control": {
+            "type": "menu",
+            "options": [
+              {
+                "label": "Icon",
+                "value": "icon"
+              },
+              {
+                "label": "Image",
+                "value": "image"
+              }
+            ]
+          }
+        },
+        {
+          "name": "icon",
+          "displayName": "Icon",
+          "type": "icon",
+          "enabled": {
+            "type": "icon"
+          },
+          "default": "star",
+          "style": true
+        },
+        {
+          "name": "backgroundColor",
+          "displayName": "Icon Background Color",
+          "type": "color",
+          "enabled": {
+            "type": "icon"
+          },
+          "default": "@white",
+          "style": true
+        },
+        {
+          "name": "image",
+          "displayName": "Image",
+          "type": "image",
+          "enabled": {
+            "type": "image"
+          },
+          "style": true
+        }
+      ]
+    },
+    {
+      "name": "title",
+      "displayName": "Title",
+      "role": "listItem",
+      "reference": "suggestionsList",
+      "props": [
+        {
+          "name": "content",
+          "displayName": "Title Content",
+          "type": "text",
+          "default": "Title",
+          "style": false
+        },
+        {
+          "name": "color",
+          "displayName": "Title Color",
+          "type": "color",
+          "default": "@black",
+          "style": true
+        }
+      ]
+    },
+    {
+      "name": "subtitle",
+      "displayName": "Subtitle",
+      "role": "listItem",
+      "reference": "suggestionsList",
+      "props": [
+        {
+          "name": "content",
+          "displayName": "Subtitle Content",
+          "type": "text",
+          "default": "Subtitle",
+          "style": false
+        },
+        {
+          "name": "color",
+          "displayName": "Subtitle Color",
+          "type": "color",
+          "default": "@gray",
+          "style": true
+        }
+      ]
+    },
+    {
+      "name": "rightButton",
+      "displayName": "Right Button",
+      "role": "listItem",
+      "reference": "suggestionsList",
+      "props": [
+        {
+          "name": "type",
+          "displayName": "Type",
+          "type": "text",
+          "default": "icon",
+          "control": {
+            "type": "menu",
+            "options": [
+              {
+                "label": "Text Button",
+                "value": "text"
+              },
+              {
+                "label": "Icon Button",
+                "value": "icon"
+              }
+            ]
+          },
+          "style": true
+        },
+        {
+          "name": "text",
+          "displayName": "Button Text",
+          "type": "text",
+          "enabled": {
+            "type": "text"
+          },
+          "default": "Click Here",
+          "style": true
+        },
+        {
+          "name": "icon",
+          "displayName": "Button Icon",
+          "type": "icon",
+          "enabled": {
+            "type": "icon"
+          },
+          "default": "arrow_forward",
+          "style": true
+        },
+        {
+          "name": "foregroundColor",
+          "displayName": "Foreground Color",
+          "type": "color",
+          "default": "@primary",
+          "style": true
+        },
+        {
+          "name": "backgroundColor",
+          "displayName": "Background Color",
+          "type": "color",
+          "default": "@white",
+          "style": true
+        },
+        {
+          "name": "onClick",
+          "type": "action",
+          "displayName": "On Button Click",
+          "arguments": []
+        }
+      ]
     }
   ]
 }
