@@ -52,10 +52,8 @@ const AutoComplete = (props) => {
                     },
                 ]}
             >
-                {/* Left Icon */}
                 {searchField?.leftIcon && (
                     <View style={styles.leftIcon}>
-                        {/* Replace with your Icon component */}
                         <Icon name={searchField.leftIcon} size={24} color={searchField?.textColor}/>
                     </View>
                 )}
