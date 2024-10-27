@@ -1,5 +1,5 @@
 {
-  "displayName": "ContextMenu",
+  "displayName": "Context Menu",
   "components": [
     {
       "name": "ContextMenu",
@@ -8,7 +8,7 @@
   ],
   "author": "Scalerize",
   "description": "A highly configurable Context menu component.",
-  "price": 20,
+  "price": 19,
   "demoAppURL": "https://previewer.adalo.com/d51df6a9-57ae-41b7-ad5d-502e0035a7c2",
   "supportURL": "https://www.scalerize.fr/solutions/composants-adalo",
   "logo": "./logo.png"

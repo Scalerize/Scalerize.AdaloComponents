@@ -77,6 +77,7 @@ const ContextMenu = (props) => {
           .context-menu-fixed-container {
             z-index: 1000;
             margin-top: ${iconSize}px !important;
+            right: 20px;
           }
         `;
             document.head.appendChild(style);
