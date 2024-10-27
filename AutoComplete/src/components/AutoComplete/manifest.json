@@ -226,6 +226,17 @@
           "style": true
         },
         {
+          "name": "foregroundColor",
+          "displayName": "Icon Foreground Color",
+          "type": "color",
+          "enabled": {
+            "type": "icon"
+          },
+          "default": "@black",
+          "style": true
+        },
+        
+        {
           "name": "image",
           "displayName": "Image",
           "type": "image",
