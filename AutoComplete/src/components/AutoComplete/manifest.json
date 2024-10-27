@@ -1,16 +1,30 @@
 {
   "displayName": "Suggestion Box",
   "defaultWidth": 160,
-  "defaultHeight": 36,
+  "defaultHeight": 40,
   "resizeX": true,
-  "resizeY": true,
+  "resizeY": false,
   "components": "./index.js",
   "icon": "./thumbnail.png",
+  "props": [
+  ],
   "childComponents": [
     {
       "name": "searchField",
       "displayName": "Search Field",
       "props": [
+        {
+          "name": "search",
+          "displayName": "Search",
+          "type": "text",
+          "role": "formValue"
+        },
+        {
+          "name": "placeholder",
+          "displayName": "Placeholder",
+          "type": "text",
+          "default": "Search"
+        },
         {
           "name": "border",
           "displayName": "Border",
@@ -19,7 +33,7 @@
             "type": "border"
           },
           "default": {
-            "borderColor": "@primary",
+            "borderColor": "#bbbbbb",
             "borderWidth": 1,
             "borderStyle": "solid"
           },
@@ -41,7 +55,7 @@
           "name": "backgroundColor",
           "displayName": "Background Color",
           "type": "color",
-          "default": "@white",
+          "default": "#ffffff",
           "style": true
         },
         {
@@ -55,14 +69,14 @@
           "name": "textColor",
           "displayName": "Text Color",
           "type": "color",
-          "default": "@black",
+          "default": "#000000",
           "style": true
         },
         {
           "name": "placeholderColor",
           "displayName": "Placeholder Color",
           "type": "color",
-          "default": "@gray",
+          "default": "#e0e0e0",
           "style": true
         },
         {
@@ -73,7 +87,7 @@
             "type": "shadow"
           },
           "default": {
-            "enabled": false,
+            "enabled": true,
             "x": 0,
             "y": 2,
             "size": 4,
@@ -89,7 +103,7 @@
       "props": [
         {
           "name": "overlayType",
-          "displayName": "Overlay Type",
+          "displayName": "Overlay type",
           "type": "text",
           "default": "wrap",
           "control": {
@@ -119,7 +133,7 @@
             "type": "shadow"
           },
           "default": {
-            "enabled": false,
+            "enabled": true,
             "x": 0,
             "y": 2,
             "size": 4,
@@ -135,7 +149,7 @@
             "type": "border"
           },
           "default": {
-            "borderColor": "@primary",
+            "borderColor": "#ffffff00",
             "borderWidth": 1,
             "borderStyle": "solid"
           },
@@ -143,7 +157,7 @@
         },
         {
           "name": "borderRadius",
-          "displayName": "Border Radius",
+          "displayName": "Border radius",
           "type": "number",
           "control": {
             "type": "slider",
@@ -155,7 +169,7 @@
         },
         {
           "name": "suggestionsList",
-          "displayName": "Suggestions List",
+          "displayName": "Suggestions list",
           "type": "list",
           "style": false
         }
@@ -172,23 +186,10 @@
           "type": "action",
           "displayName": "On Suggestion Click",
           "arguments": []
-        }
-      ]
-    },
-    {
-      "name": "leftElement",
-      "displayName": "Left Element",
-      "role": "listItem",
-      "reference": "suggestionsList",
-      "props": [
-        {
-          "name": "enabled",
-          "type": "boolean",
-          "default": true
         },
         {
-          "name": "type",
-          "displayName": "Type",
+          "name": "leftType",
+          "displayName": "Left content type",
           "type": "text",
           "default": "icon",
           "control": {
@@ -201,105 +202,76 @@
               {
                 "label": "Image",
                 "value": "image"
+              },
+              {
+                "label": "None",
+                "value": "none"
               }
             ]
           }
         },
         {
-          "name": "icon",
-          "displayName": "Icon",
+          "name": "leftIcon",
+          "displayName": "Left icon",
           "type": "icon",
           "enabled": {
-            "type": "icon"
+            "leftType": "icon"
           },
-          "default": "star",
-          "style": true
+          "default": "star"
         },
         {
-          "name": "backgroundColor",
-          "displayName": "Icon Background Color",
+          "name": "leftBackgroundColor",
+          "displayName": "Icon background",
           "type": "color",
           "enabled": {
-            "type": "icon"
+            "leftType": "icon"
           },
-          "default": "@white",
-          "style": true
+          "default": "@secondary"
         },
         {
-          "name": "foregroundColor",
-          "displayName": "Icon Foreground Color",
+          "name": "leftForegroundColor",
+          "displayName": "Icon foreground",
           "type": "color",
           "enabled": {
-            "type": "icon"
+            "leftType": "icon"
           },
-          "default": "@black",
-          "style": true
+          "default": "@primary"
         },
-        
         {
-          "name": "image",
-          "displayName": "Image",
+          "name": "leftImage",
+          "displayName": "Left image",
           "type": "image",
           "enabled": {
-            "type": "image"
-          },
-          "style": true
-        }
-      ]
-    },
-    {
-      "name": "title",
-      "displayName": "Title",
-      "role": "listItem",
-      "reference": "suggestionsList",
-      "props": [
-        {
-          "name": "content",
-          "displayName": "Title Content",
-          "type": "text",
-          "default": "Title",
-          "style": false
+            "leftType": "image"
+          }
         },
         {
-          "name": "color",
-          "displayName": "Title Color",
-          "type": "color",
-          "default": "@black",
-          "style": true
-        }
-      ]
-    },
-    {
-      "name": "subtitle",
-      "displayName": "Subtitle",
-      "role": "listItem",
-      "reference": "suggestionsList",
-      "props": [
-        {
-          "name": "content",
-          "displayName": "Subtitle Content",
+          "name": "titleContent",
+          "displayName": "Title",
           "type": "text",
-          "default": "Subtitle",
-          "style": false
+          "default": "Title"
         },
         {
-          "name": "color",
-          "displayName": "Subtitle Color",
+          "name": "titleColor",
+          "displayName": "Title color",
           "type": "color",
-          "default": "@gray",
-          "style": true
-        }
-      ]
-    },
-    {
-      "name": "rightButton",
-      "displayName": "Right Button",
-      "role": "listItem",
-      "reference": "suggestionsList",
-      "props": [
+          "default": "@primary"
+        },
         {
-          "name": "type",
-          "displayName": "Type",
+          "name": "subtitleContent",
+          "displayName": "Subtitle",
+          "type": "text",
+          "default": "Subtitle"
+        },
+        {
+          "name": "subtitleColor",
+          "displayName": "Subtitle color",
+          "type": "color",
+          "default": "@primary"
+        },
+        {
+          "name": "buttonType",
+          "displayName": "Right button type",
           "type": "text",
           "default": "icon",
           "control": {
@@ -312,47 +284,46 @@
               {
                 "label": "Icon Button",
                 "value": "icon"
+              },
+              {
+                "label": "None",
+                "value": "none"
               }
             ]
-          },
-          "style": true
+          }
         },
         {
-          "name": "text",
-          "displayName": "Button Text",
+          "name": "buttonText",
+          "displayName": "Right button text",
           "type": "text",
           "enabled": {
-            "type": "text"
+            "buttonType": "text"
           },
-          "default": "Click Here",
-          "style": true
+          "default": "Click Here"
         },
         {
-          "name": "icon",
-          "displayName": "Button Icon",
+          "name": "buttonIcon",
+          "displayName": "Right button icon",
           "type": "icon",
           "enabled": {
-            "type": "icon"
+            "buttonType": "icon"
           },
-          "default": "arrow_forward",
-          "style": true
+          "default": "arrow_forward"
         },
         {
-          "name": "foregroundColor",
-          "displayName": "Foreground Color",
+          "name": "buttonForegroundColor",
+          "displayName": "Right button foreground",
           "type": "color",
-          "default": "@primary",
-          "style": true
+          "default": "@primary"
         },
         {
-          "name": "backgroundColor",
-          "displayName": "Background Color",
+          "name": "buttonBckgroundColor",
+          "displayName": "Right button background",
           "type": "color",
-          "default": "@white",
-          "style": true
+          "default": "@secondary"
         },
         {
-          "name": "onClick",
+          "name": "buttonOnClick",
           "type": "action",
           "displayName": "On Button Click",
           "arguments": []

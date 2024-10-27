@@ -1,5 +1,5 @@
 // SuggestionBox.js
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
     View,
     TextInput,
@@ -11,17 +11,14 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+
 const AutoComplete = (props) => {
+    console.log(props);
     const {
         editor,
         openAccordion,
         searchField,
-        suggestionsOverlay,
-        suggestion,
-        leftElement,
-        title,
-        subtitle,
-        rightButton,
+        suggestionsOverlay
     } = props;
 
     const [searchText, setSearchText] = useState('');
@@ -37,12 +34,36 @@ const AutoComplete = (props) => {
             )) ||
         (!editor && isFocused);
 
+    const data = editor ? generateFakeData() : suggestionsOverlay?.suggestionsList || [];
+    console.log(data);
+
+    if (editor) {
+        useEffect(() => {
+            const style = document.createElement('style');
+            style.innerHTML = `
+          foreignObject:has(.context-menu-fixed-container) {
+            overflow: visible !important;
+          }
+          .context-menu-fixed-container {
+            position: fixed;
+            margin-top: 50px !important;
+            width: 90%
+          }
+        `;
+            document.head.appendChild(style);
+            return () => {
+                document.head.removeChild(style);
+            };
+        }, []);
+    }
+
     return (
         <View>
             <View
                 style={[
                     styles.searchField,
                     {
+                        borderStyle: searchField?.border?.borderStyle,
                         borderColor: searchField?.border?.borderColor,
                         borderWidth: searchField?.border?.borderWidth,
                         borderRadius: searchField?.borderRadius,
@@ -59,7 +80,7 @@ const AutoComplete = (props) => {
                 )}
                 <TextInput
                     style={[styles.textInput, {color: searchField?.textColor}]}
-                    placeholder="Search"
+                    placeholder={searchField?.placeholder}
                     placeholderTextColor={searchField?.placeholderColor}
                     value={searchText}
                     onChangeText={setSearchText}
@@ -70,9 +91,11 @@ const AutoComplete = (props) => {
 
             {shouldDisplayOverlay && (
                 <View
+                    className="context-menu-fixed-container"
                     style={[
                         styles.suggestionsOverlay,
                         {
+                            borderStyle: suggestionsOverlay?.border?.borderStyle,
                             borderColor: suggestionsOverlay?.border?.borderColor,
                             borderWidth: suggestionsOverlay?.border?.borderWidth,
                             borderRadius: suggestionsOverlay?.borderRadius,
@@ -81,56 +104,52 @@ const AutoComplete = (props) => {
                     ]}
                 >
                     <FlatList
-                        data={suggestionsOverlay?.suggestionsList}
+                        data={data}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({item}) => (
-                            <TouchableOpacity onPress={suggestion?.onSuggestionClick}>
+                            <TouchableOpacity onPress={item.suggestion?.onSuggestionClick}>
                                 <View style={styles.suggestionItem}>
-                                    {leftElement?.enabled && (
+                                    {item.suggestion?.leftType !== 'none' && (
                                         <View style={styles.leftElement}>
-                                            {leftElement.type === 'icon' ? (
-                                                <View style={{backgroundColor: leftElement?.backgroundColor}}>
-                                                    <Icon name={leftElement.icon} size={24} color={leftElement.foregroundColor}/>
+                                            {item.suggestion?.leftType === 'icon' ? (
+                                                <View
+                                                    style={[styles.leftIconWrapper, {backgroundColor: item.suggestion?.leftBackgroundColor}]}>
+                                                    <Icon name={item.suggestion?.leftIcon} size={24}
+                                                          color={item.suggestion?.leftForegroundColor}/>
                                                 </View>
                                             ) : (
-                                                <Image source={{uri: leftElement.image}} style={styles.leftImage}/>
+                                                <Image source={{uri: item.suggestion?.leftImage}}
+                                                       style={styles.leftImage}/>
                                             )}
                                         </View>
                                     )}
 
                                     <View style={styles.textContainer}>
-                                        <Text style={[styles.titleText, {color: title?.color}]}>
-                                            {title?.content || item.title}
+                                        <Text style={[styles.titleText, {color: item.suggestion?.titleColor}]}>
+                                            {item.suggestion?.titleContent}
                                         </Text>
-                                        {subtitle?.enabled && (
-                                            <Text style={[styles.subtitleText, {color: subtitle?.color}]}>
-                                                {subtitle?.content || item.subtitle}
-                                            </Text>
-                                        )}
+                                        <Text style={[styles.subtitleText, {color: item.suggestion?.subtitleColor}]}>
+                                            {item.suggestion?.subtitleContent}
+                                        </Text>
                                     </View>
 
-                                    {rightButton?.enabled && (
-                                        <TouchableOpacity onPress={rightButton?.onClick} style={styles.rightButton}>
-                                            {rightButton.type === 'icon' ? (
-                                                <View
-                                                    style={{
-                                                        backgroundColor: rightButton?.backgroundColor,
-                                                    }}
-                                                >
+                                    {item.suggestion?.buttonType !== 'none' && (
+                                        <TouchableOpacity onPress={item.suggestion?.buttonOnClick}
+                                                          style={[styles.rightButton,
+                                                              {backgroundColor: item.suggestion?.buttonBackgroundColor}]}>
+                                            {item.suggestion?.buttonType === 'icon' ? (
                                                     <Icon
-                                                        name={rightButton.icon}
+                                                        name={item.suggestion.buttonIcon}
                                                         size={24}
-                                                        color={rightButton?.foregroundColor}
+                                                        color={item.suggestion?.buttonForegroundColor}
                                                     />
-                                                </View>
                                             ) : (
                                                 <Text
                                                     style={{
-                                                        color: rightButton?.foregroundColor,
-                                                        backgroundColor: rightButton?.backgroundColor,
+                                                        color: item.suggestion?.buttonForegroundColor
                                                     }}
                                                 >
-                                                    {rightButton.text}
+                                                    {item.suggestion?.buttonText}
                                                 </Text>
                                             )}
                                         </TouchableOpacity>
@@ -145,6 +164,27 @@ const AutoComplete = (props) => {
     );
 };
 
+const generateFakeData = () => {
+    const itemGenerator = (i) => ({
+        suggestion: {
+            titleContent: `Title ${i}`,
+            titleColor: '#000',
+            subtitleContent: `Subtitle ${i}`,
+            subtitleColor: '#666',
+            leftType: 'icon',
+            leftIcon: 'search',
+            leftBackgroundColor: '#e0e0e0',
+            leftForegroundColor: '#fff',
+            onSuggestionClick: () => alert(`Suggestion ${i} clicked`),
+            buttonType: 'icon',
+            buttonIcon: 'close',
+            buttonBackgroundColor: '#fff',
+            buttonForegroundColor: '#ddd',
+            buttonOnClick: () => alert(`Button ${i} clicked`),
+        },
+    });
+    return Array.from({length: 3}, (_, i) => itemGenerator(i));
+}
 const getShadowStyle = (shadow) => ({
     shadowColor: shadow.color || '#000',
     shadowOffset: {
@@ -167,10 +207,15 @@ const styles = StyleSheet.create({
     leftIcon: {
         marginRight: 8,
     },
+    leftIconWrapper: {
+        padding: 4,
+        borderRadius: 4,
+    },
     textInput: {
         flex: 1,
     },
     suggestionsOverlay: {
+        zIndex: 1000,
         maxHeight: 200,
         borderWidth: 1,
         backgroundColor: '#fff',
@@ -191,7 +236,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     titleText: {
-        fontSize: 16,
+        fontSize: 16
     },
     subtitleText: {
         fontSize: 12,
@@ -199,6 +244,7 @@ const styles = StyleSheet.create({
     },
     rightButton: {
         marginLeft: 10,
+        borderRadius: 4
     },
 });
 
