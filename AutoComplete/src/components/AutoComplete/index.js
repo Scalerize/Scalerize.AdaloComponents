@@ -14,7 +14,6 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 const defaultFunctionGenerator = () => async () => { };
 
 const AutoComplete = (props) => {
-    console.log(props);
     const {
         editor,
         openAccordion,
@@ -23,9 +22,13 @@ const AutoComplete = (props) => {
         suggestionsOverlay
     } = props;
 
-    const [searchText, setSearchText] = useState('');
+    const [searchText, setSearchText] = useState(searchField.search);
     const [isFocused, setIsFocused] = useState(false);
     const [currentAction, setCurrentAction] = useState(defaultFunctionGenerator);
+    
+    if(searchText !== searchField.search.value) {
+        setSearchText(searchField.search.value);
+    }
 
     const shouldDisplayOverlay =
         (editor &&
@@ -38,7 +41,6 @@ const AutoComplete = (props) => {
         (!editor && isFocused);
 
     const data = editor ? generateFakeData() : suggestionsList || [];
-    console.log(data);
 
     if (editor) {
         useEffect(() => {
@@ -71,6 +73,11 @@ const AutoComplete = (props) => {
             setCurrentAction(defaultFunctionGenerator);
         }, 100);
     }
+    
+    function onSearchChange() {
+        setSearchText(searchField.search.value);
+        searchField.search.onChange();
+    }
 
     return (
         <View>
@@ -97,7 +104,7 @@ const AutoComplete = (props) => {
                     placeholder={searchField?.placeholder}
                     placeholderTextColor={searchField?.placeholderColor}
                     value={searchText}
-                    onChangeText={setSearchText}
+                    onChangeText={() => onSearchChange()}
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => handleBlur()}
                 />
@@ -215,7 +222,8 @@ const getShadowStyle = (shadow) => ({
 
 const styles = StyleSheet.create({
     wrapper: {
-        position: 'relative'
+        position: 'relative',
+        zIndex: 1000
     },
     searchField: {
         flexDirection: 'row',
