@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+const defaultFunctionGenerator = () => async () => { };
 
 const AutoComplete = (props) => {
     console.log(props);
@@ -24,6 +25,7 @@ const AutoComplete = (props) => {
 
     const [searchText, setSearchText] = useState('');
     const [isFocused, setIsFocused] = useState(false);
+    const [currentAction, setCurrentAction] = useState(defaultFunctionGenerator);
 
     const shouldDisplayOverlay =
         (editor &&
@@ -58,6 +60,18 @@ const AutoComplete = (props) => {
         }, []);
     }
 
+    function executeAction(action) {
+        setCurrentAction(action);
+    }
+
+    async function handleBlur() {
+        setTimeout(async () => {
+            setIsFocused(false);
+            await currentAction();
+            setCurrentAction(defaultFunctionGenerator);
+        }, 100);
+    }
+
     return (
         <View>
             <View
@@ -69,7 +83,6 @@ const AutoComplete = (props) => {
                         borderWidth: searchField?.border?.borderWidth,
                         borderRadius: searchField?.borderRadius,
                         backgroundColor: searchField?.backgroundColor,
-                        // Add shadow styles if enabled
                         ...(searchField?.shadow?.enabled ? getShadowStyle(searchField.shadow) : {}),
                     },
                 ]}
@@ -86,7 +99,7 @@ const AutoComplete = (props) => {
                     value={searchText}
                     onChangeText={setSearchText}
                     onFocus={() => setIsFocused(true)}
-                    onBlur={() => setIsFocused(false)}
+                    onBlur={() => handleBlur()}
                 />
             </View>
 
@@ -108,49 +121,52 @@ const AutoComplete = (props) => {
                         data={data}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({item}) => (
-                            <TouchableOpacity onPress={item.suggestion?.onSuggestionClick}>
+                            <TouchableOpacity onPress={() => executeAction(item.suggestion?.onSuggestionClick)}>
                                 <View style={styles.suggestionItem}>
-                                    {item.suggestion?.leftType !== 'none' && (
+                                    {suggestionsOverlay?.leftType !== 'none' && (
                                         <View style={styles.leftElement}>
-                                            {item.suggestion?.leftType === 'icon' ? (
+                                            {suggestionsOverlay?.leftType === 'icon' ? (
                                                 <View
-                                                    style={[styles.leftIconWrapper, {backgroundColor: item.suggestion?.leftBackgroundColor}]}>
-                                                    <Icon name={item.suggestion?.leftIcon} size={24}
-                                                          color={item.suggestion?.leftForegroundColor}/>
+                                                    style={[styles.leftIconWrapper, {
+                                                        backgroundColor: suggestionsOverlay?.leftBackgroundColor,
+                                                        borderRadius: suggestionsOverlay?.leftBorderRadius
+                                                    }]}>
+                                                    <Icon name={suggestionsOverlay?.leftIcon} size={24}
+                                                          color={suggestionsOverlay?.leftForegroundColor}/>
                                                 </View>
                                             ) : (
-                                                <Image source={{uri: item.suggestion?.leftImage}}
+                                                <Image source={{uri: suggestionsOverlay?.leftImage}}
                                                        style={styles.leftImage}/>
                                             )}
                                         </View>
                                     )}
 
                                     <View style={styles.textContainer}>
-                                        <Text style={[styles.titleText, {color: item.suggestion?.titleColor}]}>
+                                        <Text style={[styles.titleText, {color: suggestionsOverlay.titleColor}]}>
                                             {item.suggestion?.titleContent}
                                         </Text>
-                                        <Text style={[styles.subtitleText, {color: item.suggestion?.subtitleColor}]}>
+                                        <Text style={[styles.subtitleText, {color: suggestionsOverlay?.subtitleColor}]}>
                                             {item.suggestion?.subtitleContent}
                                         </Text>
                                     </View>
 
-                                    {item.suggestion?.buttonType !== 'none' && (
-                                        <TouchableOpacity onPress={item.suggestion?.buttonOnClick}
+                                    {suggestionsOverlay?.buttonType !== 'none' && (
+                                        <TouchableOpacity onPress={() => executeAction(item.suggestion?.buttonOnClick)}
                                                           style={[styles.rightButton,
-                                                              {backgroundColor: item.suggestion?.buttonBackgroundColor}]}>
-                                            {item.suggestion?.buttonType === 'icon' ? (
-                                                    <Icon
-                                                        name={item.suggestion.buttonIcon}
-                                                        size={24}
-                                                        color={item.suggestion?.buttonForegroundColor}
-                                                    />
+                                                              {backgroundColor: suggestionsOverlay?.buttonBackgroundColor}]}>
+                                            {suggestionsOverlay?.buttonType === 'icon' ? (
+                                                <Icon
+                                                    name={suggestionsOverlay?.buttonIcon}
+                                                    size={24}
+                                                    color={suggestionsOverlay?.buttonForegroundColor}
+                                                />
                                             ) : (
                                                 <Text
                                                     style={{
-                                                        color: item.suggestion?.buttonForegroundColor
+                                                        color: suggestionsOverlay?.buttonForegroundColor
                                                     }}
                                                 >
-                                                    {item.suggestion?.buttonText}
+                                                    {suggestionsOverlay?.buttonText}
                                                 </Text>
                                             )}
                                         </TouchableOpacity>
@@ -213,7 +229,6 @@ const styles = StyleSheet.create({
     },
     leftIconWrapper: {
         padding: 4,
-        borderRadius: 4,
     },
     textInput: {
         flex: 1,
@@ -251,6 +266,7 @@ const styles = StyleSheet.create({
     },
     rightButton: {
         marginLeft: 10,
+        padding: 4,
         borderRadius: 4
     },
 });
