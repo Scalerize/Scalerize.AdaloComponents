@@ -38,6 +38,7 @@ const InvoiceGenerator = (props) => {
                 bankDetails: props.bankDetails,
                 bottomNotes: props.bottomNotes,
                 footerNotes: props.footerNotes,
+                currency: props.currency || 'USD'
             };
             const response = await fetch(`${urls.basePdfUrl}accounting-document`, {
                 method: 'POST',

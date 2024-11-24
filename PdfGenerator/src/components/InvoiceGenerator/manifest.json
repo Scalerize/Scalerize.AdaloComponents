@@ -62,6 +62,121 @@
       "type": "text"
     },
     {
+      "name": "currency",
+        "displayName": "Currency",
+        "type": "text",
+        "default": "USD",
+        "control": {
+          "type": "menu",
+          "options": [
+            {
+              "value": "USD",
+              "label": "$"
+            },
+            {
+              "value": "EUR",
+              "label": "€"
+            },
+            {
+              "value": "GBP",
+              "label": "£"
+            },
+            {
+              "value": "JPY",
+              "label": "¥"
+            },
+            {
+              "value": "AUD",
+              "label": "A$"
+            },
+            {
+              "value": "CAD",
+              "label": "C$"
+            },
+            {
+              "value": "CHF",
+              "label": "CHF"
+            },
+            {
+              "value": "CNY",
+              "label": "¥"
+            },
+            {
+              "value": "INR",
+              "label": "₹"
+            },
+            {
+              "value": "RUB",
+              "label": "₽"
+            },
+            {
+              "value": "BRL",
+              "label": "R$"
+            },
+            {
+              "value": "ZAR",
+              "label": "R"
+            },
+            {
+              "value": "MXN",
+              "label": "$"
+            },
+            {
+              "value": "KRW",
+              "label": "₩"
+            },
+            {
+              "value": "SGD",
+              "label": "S$"
+            },
+            {
+              "value": "HKD",
+              "label": "HK$"
+            },
+            {
+              "value": "NZD",
+              "label": "NZ$"
+            },
+            {
+              "value": "TRY",
+              "label": "₺"
+            },
+            {
+              "value": "SEK",
+              "label": "kr"
+            },
+            {
+              "value": "NOK",
+              "label": "kr"
+            },
+            {
+              "value": "DKK",
+              "label": "kr"
+            },
+            {
+              "value": "THB",
+              "label": "฿"
+            },
+            {
+              "value": "IDR",
+              "label": "Rp"
+            },
+            {
+              "value": "PLN",
+              "label": "zł"
+            },
+            {
+              "value": "MYR",
+              "label": "RM"
+            },
+            {
+              "value": "PHP",
+              "label": "₱"
+            }
+          ]
+        }
+    },
+    {
       "name": "products",
       "displayName": "Products",
       "type": "list"
