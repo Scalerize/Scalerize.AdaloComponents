@@ -28,9 +28,9 @@ const InvoiceGenerator = (props) => {
                 products: props.products.map(x => ({
                     reference: x.reference,
                     description: x.description,
-                    quantity: x.quantity,
-                    unitPrice: x.unitPrice,
-                    vatRate: x.vatRate,
+                    quantity: x.quantity == null ? 1 : x.quantity,
+                    unitPrice: x.unitPrice || 0,
+                    vatRate: x.vatRate || 0,
                 })),
                 logoUrl: props.logoUrl,
                 clientId: props.clientId,
