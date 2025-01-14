@@ -84,7 +84,7 @@ function App(): React.JSX.Element {
               icon={{iconName: 'more'}}
               menuItem1={{
                 label: 'Option 1',
-                iconName: 'broken-image',
+                iconName: 'ab-testing',
                 onPress: () => {
                   console.log('Option 1 pressed');
                 },
@@ -92,7 +92,7 @@ function App(): React.JSX.Element {
               }}
               menuItem2={{
                 label: 'Option 2',
-                iconName: 'broken-image',
+                iconName: 'ab-testing',
                 onPress: () => {
                   console.log('Option 2 pressed');
                 },

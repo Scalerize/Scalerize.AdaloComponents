@@ -6,12 +6,18 @@ import {
   StyleSheet,
   Modal,
   TouchableWithoutFeedback,
+  Platform
 } from 'react-native';
-import Icon from '@react-native-vector-icons/material-design-icons';
-
+ 
+const Icon = Platform.select({
+  web: () => require('react-native-vector-icons/MaterialIcons').default,
+  default:() => require('@react-native-vector-icons/material-design-icons').default,
+});
 const spacing = 10;
 
+
 const ContextMenu = props => {
+  console.log(props);
   const [menuVisible, setMenuVisible] = useState(false);
   const [iconLayout, setIconLayout] = useState(null);
   const iconRef = useRef(null);
@@ -62,7 +68,7 @@ const ContextMenu = props => {
           : 0.1,
       transform: [
         {translateX: iconLayout?.pageX || 0},
-        {translateY: iconLayout?.pageY + iconLayout?.height + spacing || 0},
+        {translateY: (iconLayout?.pageY + iconLayout?.height + spacing) || 0},
       ],
     },
     menuItemText: {
@@ -109,7 +115,7 @@ const ContextMenu = props => {
         <Icon name={iconName} size={iconSize} color={iconColor} />
       </TouchableOpacity>
       <Modal
-        visible={menuVisible}
+        visible={showMenuOnEditor || menuVisible}
         transparent={true}
         animationType="fade"
         onRequestClose={closeMenu}>
