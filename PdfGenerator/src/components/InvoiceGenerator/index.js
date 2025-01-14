@@ -1,5 +1,5 @@
 import {BaseButton} from "../../../BaseButton";
-import {componentsIds, defaultApiHeaders, urls} from "../../../../Shared/constants";
+import {componentsIds, defaultApiHeaders, urls} from "../../../Shared/constants";
 
 const InvoiceGenerator = (props) => {
     const getCompany = (company, prefix) => ({
