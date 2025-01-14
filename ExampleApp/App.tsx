@@ -77,25 +77,28 @@ function App(): React.JSX.Element {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <ContextMenu
-           menuItems={[
-            {
-              label: 'Option 1',
-              onPress: () => {
-                console.log('Option 1 pressed');
-              },
-            },
-            {
-              label: 'Option 2',
-              onPress: () => {
-                console.log('Option 2 pressed');
-              },
-            },
-          ]}
-          />
           <Section title="Step One">
             Edit <Text style={styles.highlight}>App.tsx</Text> to change this
             screen and then come back to see your edits.
+            <ContextMenu
+              icon={{iconName: 'more'}}
+              menuItem1={{
+                label: 'Option 1',
+                iconName: 'broken-image',
+                onPress: () => {
+                  console.log('Option 1 pressed');
+                },
+                enabled: true,
+              }}
+              menuItem2={{
+                label: 'Option 2',
+                iconName: 'broken-image',
+                onPress: () => {
+                  console.log('Option 2 pressed');
+                },
+                enabled: true,
+              }}
+            />
           </Section>
           <Section title="See Your Changes">
             <ReloadInstructions />
