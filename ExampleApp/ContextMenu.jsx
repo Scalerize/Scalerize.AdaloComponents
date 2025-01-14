@@ -109,7 +109,7 @@ const ContextMenu = props => {
         <Icon name={iconName} size={iconSize} color={iconColor} />
       </TouchableOpacity>
       <Modal
-        visible={menuVisible}
+        visible={showMenuOnEditor || menuVisible}
         transparent={true}
         animationType="fade"
         onRequestClose={closeMenu}>
