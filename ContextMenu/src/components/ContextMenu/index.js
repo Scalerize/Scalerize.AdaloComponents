@@ -12,23 +12,6 @@ import {
 
 import Icon from '@react-native-vector-icons/material-icons';
 
-const getDimensions = Platform.select({
-  web: (setLayout, ref) => {
-    let rect = ref?.current?.getBoundingClientRect?.();
-    rect &&
-      setLayout({
-        width: rect.width,
-        height: rect.height,
-        pageX: rect.left,
-        pageY: rect.top,
-      });
-  },
-  default: (setLayout, ref) =>
-    ref?.current?.measure((x, y, width, height, pageX, pageY) => {
-      setLayout({pageX, pageY, width, height});
-    }),
-});
-
 const EDGE_MARGIN = 20;
 const SPACING_Y = 10;
 
@@ -40,6 +23,23 @@ const ContextMenu = props => {
   const iconRef = useRef(null);
   const menuRef = useRef(null);
 
+  const getDimensions = Platform.select({
+    web: (setLayout, ref) => {
+      let rect = ref?.current?.getBoundingClientRect?.();
+      rect &&
+        setLayout({
+          width: rect.width,
+          height: rect.height,
+          pageX: rect.left,
+          pageY: rect.top,
+        });
+    },
+    default: (setLayout, ref) =>
+      ref?.current?.measure((x, y, width, height, pageX, pageY) => {
+        setLayout({pageX, pageY, width, height});
+      }),
+  });
+  
   const measureIcon = () => getDimensions(setIconLayout, iconRef);
   const measureMenu = () => getDimensions(setMenuSize, menuRef);
 
