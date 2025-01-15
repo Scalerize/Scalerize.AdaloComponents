@@ -26,7 +26,7 @@ const getDimensions = Platform.select({
     }),
 });
 
-const spacing = {x: -100, y: -10};
+const spacing = {x: -100, y: Platform.select({native: 10, default: -10})};
 
 const ContextMenu = (props) => {
   const [menuVisible, setMenuVisible] = useState(false);
