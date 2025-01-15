@@ -1,26 +1,39 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
-  Modal,
   TouchableWithoutFeedback,
-} from 'react-native';
-import Icon from '@react-native-vector-icons/material-design-icons';
+  Platform,
+  Modal,
+} from "react-native";
 
-const spacing = 10;
+import Icon from "@react-native-vector-icons/material-icons";
 
-const ContextMenu = props => {
+const getDimensions = Platform.select({
+  web: (e, setLayout) =>
+    e &&
+    setLayout({
+      width: e.nativeEvent.layout.width,
+      height: e.nativeEvent.layout.height,
+      pageX: e.nativeEvent.layout.left,
+      pageY: e.nativeEvent.layout.top,
+    }),
+  default: (_, setLayout, ref) =>
+    ref?.current?.measure((x, y, width, height, pageX, pageY) => {
+      setLayout({ pageX, pageY, width, height });
+    }),
+});
+
+const spacing = {x: -100, y: -10};
+
+const ContextMenu = (props) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [iconLayout, setIconLayout] = useState(null);
   const iconRef = useRef(null);
 
-  const measureIcon = () => {
-    iconRef.current?.measure((x, y, width, height, pageX, pageY) => {
-      setIconLayout({pageX, pageY, width, height});
-    });
-  };
+  const measureIcon = (e) => getDimensions(e, setIconLayout, iconRef);
 
   const toggleMenu = () => {
     measureIcon();
@@ -31,43 +44,43 @@ const ContextMenu = props => {
     setMenuVisible(false);
   };
 
-  const handleMenuItemPress = action => {
+  const handleMenuItemPress = (action) => {
     setMenuVisible(false);
-    if (action && typeof action === 'function') {
+    if (action && typeof action === "function") {
       action();
     }
   };
 
-  const iconName = props.icon?.iconName || 'menu';
-  const iconColor = props.icon?.iconColor || '#000000';
+  const iconName = props.icon?.iconName || "menu";
+  const iconColor = props.icon?.iconColor || "#000000";
   const iconSize = props.icon?.iconSize || 24;
 
   const isEditor = props.editor || false;
   const showMenuOnEditor =
     isEditor &&
-    (props.openAccordion === 'root' ||
-      props.openAccordion?.startsWith('menuItem'));
+    (props.openAccordion === "root" ||
+      props.openAccordion?.startsWith("menuItem"));
 
   const dynamicStyles = StyleSheet.create({
     menuContainer: {
       ...styles.menuContainer,
-      position: isEditor ? 'fixed' : 'absolute',
-      backgroundColor: props.backgroundColor || '#FFFFFF',
+      position: isEditor ? "fixed" : "absolute",
+      backgroundColor: props.backgroundColor || "#FFFFFF",
       borderRadius:
         props.menuBorderRadius !== undefined ? props.menuBorderRadius : 5,
-      shadowColor: props.menuShadowColor || '#000000',
+      shadowColor: props.menuShadowColor || "#000000",
       shadowOpacity:
         props.menuShadowOpacity !== undefined
           ? props.menuShadowOpacity / 100
           : 0.1,
-      transform: [
-        {translateX: iconLayout?.pageX || 0},
-        {translateY: iconLayout?.pageY + iconLayout?.height + spacing || 0},
+      transform: (iconLayout || undefined) && [
+        { translateX: iconLayout.pageX + spacing.x },
+        { translateY: iconLayout.pageY + iconLayout.height + spacing.y },
       ],
     },
     menuItemText: {
       ...styles.menuItemText,
-      color: props.textColor || '#000000',
+      color: props.textColor || "#000000",
     },
   });
 
@@ -81,7 +94,7 @@ const ContextMenu = props => {
 
   if (isEditor) {
     useEffect(() => {
-      const style = document.createElement('style');
+      const style = document.createElement("style");
       style.innerHTML = `
           foreignObject:has(.context-menu-fixed-container) {
             overflow: visible !important;
@@ -105,65 +118,75 @@ const ContextMenu = props => {
       <TouchableOpacity
         ref={iconRef}
         onPress={toggleMenu}
-        onLayout={() => measureIcon()}>
+        onLayout={measureIcon} 
+      >
         <Icon name={iconName} size={iconSize} color={iconColor} />
       </TouchableOpacity>
-      <Modal
-        visible={showMenuOnEditor || menuVisible}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={closeMenu}>
-        {!isEditor && (
-          <TouchableWithoutFeedback onPress={closeMenu} style={styles.overlay}>
-            <View style={styles.overlay} />
-          </TouchableWithoutFeedback>
-        )}
-        <View
-          style={dynamicStyles.menuContainer}
-          className="context-menu-fixed-container">
-          {menuItems.map((item, index) => (
-            <TouchableOpacity
-              key={index}
-              style={styles.menuItem}
-              onPress={() => !isEditor && handleMenuItemPress(item.action)}>
-              {item.iconName && (
-                <Icon
-                  name={item.iconName}
-                  size={20}
-                  color={item.iconColor || props.textColor || '#000000'}
-                  style={styles.menuItemIcon}
-                />
-              )}
-              <Text style={dynamicStyles.menuItemText} numberOfLines={1}>
-                {item.label}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </Modal>
+
+      {(!isEditor || showMenuOnEditor) && (
+        <Modal
+          visible={showMenuOnEditor || menuVisible}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={closeMenu}
+        >
+          {!isEditor && (
+            <TouchableWithoutFeedback
+              onPress={closeMenu}
+              style={styles.overlay}
+            >
+              <View style={styles.overlay}></View>
+            </TouchableWithoutFeedback>
+          )}
+          <View
+            style={dynamicStyles.menuContainer}
+            className="context-menu-fixed-container"
+          >
+            {menuItems.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.menuItem}
+                onPress={() => !isEditor && handleMenuItemPress(item.action)}
+              >
+                {item.iconName && (
+                  <Icon
+                    name={item.iconName}
+                    size={20}
+                    color={item.iconColor || props.textColor || "#000000"}
+                    style={styles.menuItemIcon}
+                  />
+                )}
+                <Text style={dynamicStyles.menuItemText} numberOfLines={1}>
+                  {item.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </Modal>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    position: 'relative',
+    position: "relative",
   },
   overlay: {
-    position: 'absolute',
-    inset: 0
+    position: "absolute",
+    inset: 0,
   },
   menuContainer: {
-    backgroundColor: '#FFFFFF',
+    position: "fixed",
+    backgroundColor: "#FFFFFF",
     borderRadius: 5,
     shadowRadius: 5,
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     zIndex: 1000,
-    position: 'absolute',
   },
   menuItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     padding: 10,
   },
   menuItemIcon: {
