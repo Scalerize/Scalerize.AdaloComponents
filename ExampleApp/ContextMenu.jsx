@@ -14,7 +14,7 @@ import Icon from '@react-native-vector-icons/material-icons';
 
 const getDimensions = Platform.select({
   web: (setLayout, ref) => {
-    let rect = ref?.current?.getBoundingClientRect();
+    let rect = ref?.current?.getBoundingClientRect?.();
     rect &&
       setLayout({
         width: rect.width,
@@ -30,8 +30,7 @@ const getDimensions = Platform.select({
 });
 
 const EDGE_MARGIN = 20;
-const Y_FACTOR = Platform.select({web: -1, default: 1});
-const SPACING_Y = Y_FACTOR * 10;
+const SPACING_Y = 10;
 
 
 const ContextMenu = props => {
@@ -66,16 +65,15 @@ const ContextMenu = props => {
     const rightAlignedPosition = iconLayout.pageX + iconLayout.width;
     const leftAlignedPosition = iconLayout.pageX - menuSize.width;
 
-    // Check right overflow
     if (rightAlignedPosition + menuSize.width + EDGE_MARGIN > windowWidth) {
       return 'left';
     }
-    // Check left overflow
+
     if (leftAlignedPosition < EDGE_MARGIN) {
       return 'right';
     }
 
-    return 'right'; // Default alignment
+    return 'right';
   };
 
   const iconName = props.icon?.iconName || 'menu';
@@ -109,7 +107,7 @@ const ContextMenu = props => {
                     iconLayout,
                     menuSize,
                     Dimensions.get('window').width,
-                  ) === 'right'
+                  ) === 'left'
                     ? iconLayout.pageX + iconLayout.width - menuSize.width
                     : iconLayout.pageX,
               },
