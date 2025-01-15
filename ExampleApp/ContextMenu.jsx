@@ -7,33 +7,42 @@ import {
   TouchableWithoutFeedback,
   Platform,
   Modal,
+  Dimensions,
 } from 'react-native';
 
 import Icon from '@react-native-vector-icons/material-icons';
 
 const getDimensions = Platform.select({
-  web: (e, setLayout) =>
-    e &&
-    setLayout({
-      width: e.nativeEvent.layout.width,
-      height: e.nativeEvent.layout.height,
-      pageX: e.nativeEvent.layout.left,
-      pageY: e.nativeEvent.layout.top,
-    }),
-  default: (_, setLayout, ref) =>
+  web: (setLayout, ref) => {
+    let rect = ref?.current?.getBoundingClientRect();
+    rect &&
+      setLayout({
+        width: rect.width,
+        height: rect.height,
+        pageX: rect.left,
+        pageY: rect.top,
+      });
+  },
+  default: (setLayout, ref) =>
     ref?.current?.measure((x, y, width, height, pageX, pageY) => {
       setLayout({pageX, pageY, width, height});
     }),
 });
 
-const spacing = {x: -100, y: Platform.select({native: 10, default: -10})};
+const EDGE_MARGIN = 20;
+const Y_FACTOR = Platform.select({web: -1, default: 1});
+const SPACING_Y = Y_FACTOR * 10;
+
 
 const ContextMenu = props => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [iconLayout, setIconLayout] = useState(null);
+  const [menuSize, setMenuSize] = useState(null);
   const iconRef = useRef(null);
+  const menuRef = useRef(null);
 
-  const measureIcon = e => getDimensions(e, setIconLayout, iconRef);
+  const measureIcon = () => getDimensions(setIconLayout, iconRef);
+  const measureMenu = () => getDimensions(setMenuSize, menuRef);
 
   const toggleMenu = () => {
     measureIcon();
@@ -49,6 +58,24 @@ const ContextMenu = props => {
     if (action && typeof action === 'function') {
       action();
     }
+  };
+
+  const getMenuAlignment = (iconLayout, menuSize, windowWidth) => {
+    if (!iconLayout || !menuSize) return 'right';
+
+    const rightAlignedPosition = iconLayout.pageX + iconLayout.width;
+    const leftAlignedPosition = iconLayout.pageX - menuSize.width;
+
+    // Check right overflow
+    if (rightAlignedPosition + menuSize.width + EDGE_MARGIN > windowWidth) {
+      return 'left';
+    }
+    // Check left overflow
+    if (leftAlignedPosition < EDGE_MARGIN) {
+      return 'right';
+    }
+
+    return 'right'; // Default alignment
   };
 
   const iconName = props.icon?.iconName || 'menu';
@@ -73,10 +100,22 @@ const ContextMenu = props => {
         props.menuShadowOpacity !== undefined
           ? props.menuShadowOpacity / 100
           : 0.1,
-      transform: (iconLayout || undefined) && [
-        {translateX: iconLayout.pageX + spacing.x},
-        {translateY: iconLayout.pageY + iconLayout.height + spacing.y},
-      ],
+      transform:
+        iconLayout && menuSize
+          ? [
+              {
+                translateX:
+                  getMenuAlignment(
+                    iconLayout,
+                    menuSize,
+                    Dimensions.get('window').width,
+                  ) === 'right'
+                    ? iconLayout.pageX + iconLayout.width - menuSize.width
+                    : iconLayout.pageX,
+              },
+              {translateY: iconLayout.pageY + iconLayout.height + SPACING_Y },
+            ]
+          : [],
     },
     menuItemText: {
       ...styles.menuItemText,
@@ -113,6 +152,23 @@ const ContextMenu = props => {
     }, []);
   }
 
+  useEffect(() => {
+    const handleResize = () => {
+      measureIcon();
+      if (menuVisible) {
+        setTimeout(measureMenu, 0);
+      }
+    };
+
+    if (Platform.OS === 'web') {
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    } else {
+      const subscription = Dimensions.addEventListener('change', handleResize);
+      return () => subscription.remove();
+    }
+  }, [menuVisible]);
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -137,6 +193,8 @@ const ContextMenu = props => {
           )}
           <View
             style={dynamicStyles.menuContainer}
+            ref={menuRef}
+            onLayout={measureMenu}
             className="context-menu-fixed-container">
             {menuItems.map((item, index) => (
               <TouchableOpacity
