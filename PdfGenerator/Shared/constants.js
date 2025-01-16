@@ -19,4 +19,6 @@ export const componentsIds = {
     slider: 1,
     invoiceGenerator: 2,
     certificateGenerator: 3,
+    contextMenu: 4,
+    screenGenerator: 5,
 };
