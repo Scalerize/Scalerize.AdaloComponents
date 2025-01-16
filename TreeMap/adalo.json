@@ -1,0 +1,12 @@
+{
+  "displayName": "TreeMap Chart",
+  "components": [
+    {
+      "name": "TreeMapChart",
+      "manifest": "./src/components/TreeMapChart/manifest.json"
+    }
+  ],
+  "author": "",
+  "description": "",
+  "logo": "./example-logo.png"
+}

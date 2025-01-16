@@ -1,0 +1,12 @@
+{
+  "displayName": "Date Range Picker",
+  "components": [
+    {
+      "name": "DateRangePicker",
+      "manifest": "./src/components/DateRangePicker/manifest.json"
+    }
+  ],
+  "author": "",
+  "description": "",
+  "logo": "./example-logo.png"
+}

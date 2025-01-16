@@ -1,0 +1,12 @@
+{
+  "displayName": "Appointment Scheduler",
+  "components": [
+    {
+      "name": "AppointmentScheduler",
+      "manifest": "./src/components/AppointmentScheduler/manifest.json"
+    }
+  ],
+  "author": "",
+  "description": "",
+  "logo": "./example-logo.png"
+}

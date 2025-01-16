@@ -1,0 +1,12 @@
+{
+  "displayName": "Diagram",
+  "components": [
+    {
+      "name": "Diagram",
+      "manifest": "./src/components/Diagram/manifest.json"
+    }
+  ],
+  "author": "",
+  "description": "",
+  "logo": "./example-logo.png"
+}

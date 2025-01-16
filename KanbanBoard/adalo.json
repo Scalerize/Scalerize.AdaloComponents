@@ -1,0 +1,12 @@
+{
+  "displayName": "Kanban Board",
+  "components": [
+    {
+      "name": "KanbanBoard",
+      "manifest": "./src/components/KanbanBoard/manifest.json"
+    }
+  ],
+  "author": "",
+  "description": "",
+  "logo": "./example-logo.png"
+}

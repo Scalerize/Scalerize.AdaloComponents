@@ -1,0 +1,12 @@
+{
+  "displayName": "Advanced Map",
+  "components": [
+    {
+      "name": "AdvancedMap",
+      "manifest": "./src/components/AdvancedMap/manifest.json"
+    }
+  ],
+  "author": "",
+  "description": "",
+  "logo": "./example-logo.png"
+}
