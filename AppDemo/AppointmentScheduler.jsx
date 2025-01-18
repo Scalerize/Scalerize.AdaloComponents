@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, useEffect } from "react-native";
 import Icon from "@react-native-vector-icons/material-icons";
 
 /**
@@ -13,18 +13,23 @@ import Icon from "@react-native-vector-icons/material-icons";
  * The `onSchedule` action is triggered whenever a valid time slot is selected.
  */
 const AppointmentScheduler = (props) => {
-  const today = new Date();
-  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
-  const [currentYear, setCurrentYear] = useState(today.getFullYear());
-  const [selectedDay, setSelectedDay] = useState(null);
-  const [selectedTime, setSelectedTime] = useState(null);
+  console.log("props", props);
 
   const {
     hourRangeStart,
     hourRangeEnd,
     appointmentDuration,
     reservedAppointments,
+    editor,
   } = props;
+
+  const today = new Date();
+  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
+  const [currentYear, setCurrentYear] = useState(today.getFullYear());
+  const [selectedDay, setSelectedDay] = useState(
+    editor ? today.getDate() : null
+  );
+  const [selectedTime, setSelectedTime] = useState(null);
 
   // ========== Calendar Computations ==========
 
@@ -117,7 +122,7 @@ const AppointmentScheduler = (props) => {
     if (hourRangeEnd < hourRangeStart) return [];
 
     const slots = [];
-    if(!selectedDay) return slots;
+    if (!selectedDay) return slots;
 
     let current = hourRangeStart * 60; // start in minutes from midnight
     const end = hourRangeEnd * 60;
@@ -126,9 +131,15 @@ const AppointmentScheduler = (props) => {
       slots.push(current);
       current += appointmentDuration;
     }
+
     return slots;
   }, [hourRangeStart, hourRangeEnd, appointmentDuration, selectedDay]);
 
+  useEffect(() => {
+    if (editor) {
+      setSelectedTime(timeSlots.length > 0 ? timeSlots[0] : null);
+    }
+  }, [hourRangeStart, hourRangeEnd, appointmentDuration])
   /**
    * Convert minutes-from-midnight to a readable HH:mm (12-hour or 24-hour).
    * Example: 540 -> "9:00 AM".
@@ -316,6 +327,7 @@ const AppointmentScheduler = (props) => {
             ? props.timeSelectorSection?.timeSlotSelectedBackgroundColor ??
               "#2196F3"
             : props.timeSelectorSection?.timeSlotBackgroundColor ?? "#FFFFFF";
+
           const textColor = isSelected
             ? props.timeSelectorSection?.timeSlotSelectedTextColor ?? "#FFFFFF"
             : props.timeSelectorSection?.timeSlotTextColor ?? "#000000";
@@ -335,7 +347,10 @@ const AppointmentScheduler = (props) => {
               disabled={reserved}
               onPress={() => onTimeSlotPress(slot)}
             >
-              <Text style={[styles.timeSlotText, { color: textColor }]}>
+              <Text
+                numberOfLines={1}
+                style={[styles.timeSlotText, { color: textColor }]}
+              >
                 {formatTime(slot)}
                 {reserved ? " (Reserved)" : ""}
               </Text>
@@ -362,7 +377,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 6,
+    marginBottom: 12,
   },
   monthHeaderText: {
     fontWeight: "bold",
@@ -377,8 +392,8 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 4,
-    marginBottom: 4,
+    paddingTop: 8,
+    paddingBottom: 8,
   },
   dayText: {
     fontSize: 14,
@@ -398,7 +413,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   timeSlotText: {
-    fontSize: 14,
+    fontSize: 12,
   },
 });
 

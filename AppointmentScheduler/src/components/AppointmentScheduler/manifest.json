@@ -50,8 +50,8 @@
     },
     {
       "name": "dateTime",
-      "type": "text",
-      "displayName": "Date & Time",
+      "type": "date",
+      "displayName": "Reserved Appointment DateTime",
       "role": "listItem",
       "reference": "reservedAppointments"
     },
@@ -148,7 +148,7 @@
           "control": {
             "type": "slider",
             "min": 0,
-            "max": 10
+            "max": 100
           },
           "style": true
         }

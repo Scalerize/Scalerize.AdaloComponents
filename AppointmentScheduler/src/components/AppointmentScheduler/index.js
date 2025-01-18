@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from "@react-native-vector-icons/material-icons";
 
@@ -20,13 +20,15 @@ const AppointmentScheduler = (props) => {
     hourRangeEnd,
     appointmentDuration,
     reservedAppointments,
-    editor
+    editor,
   } = props;
 
   const today = new Date();
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
-  const [selectedDay, setSelectedDay] = useState(editor ? today.getDate() : null);
+  const [selectedDay, setSelectedDay] = useState(
+    editor ? today.getDate() : null
+  );
   const [selectedTime, setSelectedTime] = useState(null);
 
   // ========== Calendar Computations ==========
@@ -120,7 +122,7 @@ const AppointmentScheduler = (props) => {
     if (hourRangeEnd < hourRangeStart) return [];
 
     const slots = [];
-    if(!selectedDay) return slots;
+    if (!selectedDay) return slots;
 
     let current = hourRangeStart * 60; // start in minutes from midnight
     const end = hourRangeEnd * 60;
@@ -129,9 +131,15 @@ const AppointmentScheduler = (props) => {
       slots.push(current);
       current += appointmentDuration;
     }
+
     return slots;
   }, [hourRangeStart, hourRangeEnd, appointmentDuration, selectedDay]);
 
+  useEffect(() => {
+    if (editor) {
+      setSelectedTime(timeSlots.length > 0 ? timeSlots[0] : null);
+    }
+  }, [hourRangeStart, hourRangeEnd, appointmentDuration])
   /**
    * Convert minutes-from-midnight to a readable HH:mm (12-hour or 24-hour).
    * Example: 540 -> "9:00 AM".
@@ -316,7 +324,8 @@ const AppointmentScheduler = (props) => {
 
           // Dynamic style for selected or reserved time slot
           const backgroundColor = isSelected
-            ? props.timeSelectorSection?.timeSlotSelectedBackgroundColor ?? "#2196F3"
+            ? props.timeSelectorSection?.timeSlotSelectedBackgroundColor ??
+              "#2196F3"
             : props.timeSelectorSection?.timeSlotBackgroundColor ?? "#FFFFFF";
 
           const textColor = isSelected
@@ -338,7 +347,10 @@ const AppointmentScheduler = (props) => {
               disabled={reserved}
               onPress={() => onTimeSlotPress(slot)}
             >
-              <Text style={[styles.timeSlotText, { color: textColor }]}>
+              <Text
+                numberOfLines={1}
+                style={[styles.timeSlotText, { color: textColor }]}
+              >
                 {formatTime(slot)}
                 {reserved ? " (Reserved)" : ""}
               </Text>
@@ -380,8 +392,8 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingTop: 4,
-    paddingBottom: 4,
+    paddingTop: 8,
+    paddingBottom: 8,
   },
   dayText: {
     fontSize: 14,
@@ -399,13 +411,9 @@ const styles = StyleSheet.create({
     width: "23%",
     padding: 8,
     justifyContent: "center",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
-    fontSize: 12
   },
   timeSlotText: {
-    fontSize: 14,
+    fontSize: 12,
   },
 });
 
