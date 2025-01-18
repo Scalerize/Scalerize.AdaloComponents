@@ -9,7 +9,7 @@ import {
     Image,
     StyleSheet,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '@react-native-vector-icons/material-icons';
 
 const defaultFunctionGenerator = () => async () => { };
 
