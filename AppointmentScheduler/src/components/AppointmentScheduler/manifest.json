@@ -46,13 +46,14 @@
     {
       "name": "reservedAppointments",
       "displayName": "Reserved Appointments",
-      "type": "list",
-      "subProperties": [
-        {
-          "name": "dateTime",
-          "type": "text"
-        }
-      ]
+      "type": "list"
+    },
+    {
+      "name": "dateTime",
+      "type": "text",
+      "displayName": "Date & Time",
+      "role": "listItem",
+      "reference": "reservedAppointments"
     },
     {
       "name": "onSchedule",
@@ -69,31 +70,29 @@
           "name": "calendarBackgroundColor",
           "displayName": "Calendar Background Color",
           "type": "color",
-          "default": "#FFFFFF"
+          "default": "#FFFFFF",
+          "style": true
         },
         {
           "name": "dayTextColor",
           "displayName": "Day Text Color",
           "type": "color",
-          "default": "#000000"
+          "default": "#000000",
+          "style": true
         },
         {
           "name": "daySelectedBackgroundColor",
           "displayName": "Selected Day Background Color",
           "type": "color",
-          "default": "#2196F3"
+          "default": "@primary",
+          "style": true
         },
         {
           "name": "daySelectedTextColor",
           "displayName": "Selected Day Text Color",
           "type": "color",
-          "default": "#FFFFFF"
-        },
-        {
-          "name": "todayHighlightColor",
-          "displayName": "Today Highlight Color",
-          "type": "color",
-          "default": "#FF5722"
+          "default": "#FFFFFF",
+          "style": true
         },
         {
           "name": "dayBorderRadius",
@@ -103,8 +102,9 @@
           "control": {
             "type": "slider",
             "min": 0,
-            "max": 10
-          }
+            "max": 100
+          },
+          "style": true
         }
       ]
     },
@@ -116,25 +116,29 @@
           "name": "timeSlotBackgroundColor",
           "displayName": "Time Slot Background Color",
           "type": "color",
-          "default": "#FFFFFF"
+          "default": "#FFFFFF",
+          "style": true
         },
         {
           "name": "timeSlotTextColor",
           "displayName": "Time Slot Text Color",
           "type": "color",
-          "default": "#000000"
+          "default": "#000000",
+          "style": true
         },
         {
           "name": "timeSlotSelectedBackgroundColor",
           "displayName": "Selected Time Slot Background Color",
           "type": "color",
-          "default": "#2196F3"
+          "default": "@primary",
+          "style": true
         },
         {
           "name": "timeSlotSelectedTextColor",
           "displayName": "Selected Time Slot Text Color",
           "type": "color",
-          "default": "#FFFFFF"
+          "default": "#FFFFFF",
+          "style": true
         },
         {
           "name": "timeSlotBorderRadius",
@@ -145,7 +149,8 @@
             "type": "slider",
             "min": 0,
             "max": 10
-          }
+          },
+          "style": true
         }
       ]
     }

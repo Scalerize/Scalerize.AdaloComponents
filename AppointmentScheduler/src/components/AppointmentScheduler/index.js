@@ -13,18 +13,21 @@ import Icon from "@react-native-vector-icons/material-icons";
  * The `onSchedule` action is triggered whenever a valid time slot is selected.
  */
 const AppointmentScheduler = (props) => {
-  const today = new Date();
-  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
-  const [currentYear, setCurrentYear] = useState(today.getFullYear());
-  const [selectedDay, setSelectedDay] = useState(null);
-  const [selectedTime, setSelectedTime] = useState(null);
+  console.log("props", props);
 
   const {
     hourRangeStart,
     hourRangeEnd,
     appointmentDuration,
     reservedAppointments,
+    editor
   } = props;
+
+  const today = new Date();
+  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
+  const [currentYear, setCurrentYear] = useState(today.getFullYear());
+  const [selectedDay, setSelectedDay] = useState(editor ? today.getDate() : null);
+  const [selectedTime, setSelectedTime] = useState(null);
 
   // ========== Calendar Computations ==========
 
@@ -313,9 +316,9 @@ const AppointmentScheduler = (props) => {
 
           // Dynamic style for selected or reserved time slot
           const backgroundColor = isSelected
-            ? props.timeSelectorSection?.timeSlotSelectedBackgroundColor ??
-              "#2196F3"
+            ? props.timeSelectorSection?.timeSlotSelectedBackgroundColor ?? "#2196F3"
             : props.timeSelectorSection?.timeSlotBackgroundColor ?? "#FFFFFF";
+
           const textColor = isSelected
             ? props.timeSelectorSection?.timeSlotSelectedTextColor ?? "#FFFFFF"
             : props.timeSelectorSection?.timeSlotTextColor ?? "#000000";
@@ -362,7 +365,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 6,
+    marginBottom: 12,
   },
   monthHeaderText: {
     fontWeight: "bold",
@@ -377,8 +380,8 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 4,
-    marginBottom: 4,
+    paddingTop: 4,
+    paddingBottom: 4,
   },
   dayText: {
     fontSize: 14,
@@ -396,6 +399,10 @@ const styles = StyleSheet.create({
     width: "23%",
     padding: 8,
     justifyContent: "center",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+    fontSize: 12
   },
   timeSlotText: {
     fontSize: 14,
