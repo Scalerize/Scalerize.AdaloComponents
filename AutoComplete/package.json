@@ -11,12 +11,13 @@
     "publish": "adalo publish"
   },
   "devDependencies": {
-    "@adalo/cli": "^1.0.0",
-    "react": "^16.14.0",
-    "react-art": "^16.13.1",
-    "react-dom": "^16.14.0",
-    "react-native-web": "^0.9.13",
+    "@adalo/cli": "^1.0.2",
     "@react-native-vector-icons/material-icons": "^0.0.1",
-    "@react-native-vector-icons/common": "11.0.0"
+    "@react-native-vector-icons/common": "11.0.0",
+    "react": "18.2.0",
+    "react-art": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-native": "0.74.3", 
+    "react-native-web": "0.19.12"
   }
 }
