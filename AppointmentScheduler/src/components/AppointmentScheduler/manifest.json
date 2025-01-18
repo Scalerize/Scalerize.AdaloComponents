@@ -56,6 +56,13 @@
       "reference": "reservedAppointments"
     },
     {
+      "name": "selectedSlot",
+      "displayName": "Selected slot",
+      "type": "date",
+      "default": 0,
+      "role": "autosaveInput"
+    },
+    {
       "name": "onSchedule",
       "displayName": "On Schedule",
       "type": "action"

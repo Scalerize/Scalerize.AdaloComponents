@@ -196,12 +196,10 @@ const AppointmentScheduler = (props) => {
 
     // Trigger the Adalo action.
     // Often you might pass parameters to the action; here we simply call it.
+    props.selectedSlot.onChange(scheduleDate.toISOString());
+
     if (props.onSchedule) {
-      props.onSchedule({
-        scheduledDateTime: scheduleDate.toISOString(),
-        // If your Adalo setup supports passing arguments,
-        // you can pass more data here
-      });
+      props.onSchedule();
     }
   };
 
