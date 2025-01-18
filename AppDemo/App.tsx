@@ -5,8 +5,7 @@
  * @format
  */
 
-import React from 'react';
-import ContextMenu from './ContextMenu';
+import React from 'react'; 
 import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
@@ -19,12 +18,11 @@ import {
 } from 'react-native';
 
 import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
+  Colors, 
+  Header
 } from 'react-native/Libraries/NewAppScreen';
+
+import AppointmentScheduler from './AppointmentScheduler';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -77,25 +75,7 @@ function App(): React.JSX.Element {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-            <ContextMenu
-              icon={{iconName: 'more'}}
-              menuItem1={{
-                label: 'Option 1',
-                iconName: 'dots-three-horizontal',
-                onPress: () => {
-                  console.log('Option 1 pressed');
-                },
-                enabled: true,
-              }}
-              menuItem2={{
-                label: 'Option 2',
-                iconName: 'search',
-                onPress: () => {
-                  console.log('Option 2 pressed');
-                },
-                enabled: true,
-              }}
-            />
+          <AppointmentScheduler hourRangeStart={7} hourRangeEnd={18} appointmentDuration={60}/>
         </View>
       </ScrollView>
     </SafeAreaView>
