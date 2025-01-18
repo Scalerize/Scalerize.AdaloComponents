@@ -22,8 +22,7 @@ import {
   Header
 } from 'react-native/Libraries/NewAppScreen';
 
-import AppointmentScheduler from './AppointmentScheduler';
-
+import UniversalBarcodeGenerator from './Components/UniversalBarcodeGenerator';
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
@@ -75,7 +74,7 @@ function App(): React.JSX.Element {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <AppointmentScheduler hourRangeStart={7} hourRangeEnd={18} appointmentDuration={60}/>
+          <UniversalBarcodeGenerator barcodeType="QR Code"/>
         </View>
       </ScrollView>
     </SafeAreaView>

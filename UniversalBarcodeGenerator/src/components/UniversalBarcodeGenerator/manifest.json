@@ -1,0 +1,65 @@
+{
+  "displayName": "Universal Barcode Generator",
+  "defaultWidth": 200,
+  "defaultHeight": 200,
+  "resizeX": true,
+  "resizeY": true,
+  "components": "./index.js",
+  "icon": "./thumbnail.png",
+  "props": [
+    {
+      "name": "barcodeValue",
+      "displayName": "Barcode Value",
+      "type": "text",
+      "default": "123456789012"
+    },
+    {
+      "name": "barcodeType",
+      "displayName": "Barcode Type",
+      "type": "text",
+      "options": [
+        { "label": "EAN-8", "value": "EAN-8" },
+        { "label": "EAN-13", "value": "EAN-13" },
+        { "label": "UPC-A", "value": "UPC-A" },
+        { "label": "UPC-E", "value": "UPC-E" },
+        { "label": "Code 128", "value": "Code 128" },
+        { "label": "Code 128A", "value": "Code 128A" },
+        { "label": "Code 128B", "value": "Code 128B" },
+        { "label": "Code 128C", "value": "Code 128C" },
+        { "label": "Code 93", "value": "Code 93" },
+        { "label": "Code 32", "value": "Code 32" },
+        { "label": "Codabar", "value": "Codabar" },
+        { "label": "Code39", "value": "Code39" },
+        { "label": "Code 39 Extended", "value": "Code 39 Extended" },
+        { "label": "QR Code", "value": "QR Code" },
+        { "label": "Data Matrix", "value": "Data Matrix" }
+      ],
+      "default": "QR Code"
+    },
+    {
+      "name": "showText",
+      "displayName": "Show Text",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "foregroundColor",
+      "displayName": "Foreground Color",
+      "type": "color",
+      "default": "#000000"
+    },
+    {
+      "name": "backgroundColor",
+      "displayName": "Background Color",
+      "type": "color",
+      "default": "#FFFFFF"
+    },
+    {
+      "name": "extraMargin",
+      "displayName": "Extra Margin",
+      "type": "number",
+      "default": 4,
+      "description": "Padding in the barcode image. Useful for scanning reliability."
+    }
+  ]
+}

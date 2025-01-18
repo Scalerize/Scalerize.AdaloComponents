@@ -1,0 +1,12 @@
+{
+  "displayName": "Universal Bar Code Generator",
+  "components": [
+    {
+      "name": "UniversalBarcodeGenerator",
+      "manifest": "./src/components/UniversalBarcodeGenerator/manifest.json"
+    }
+  ],
+  "author": "",
+  "description": "",
+  "logo": "./example-logo.png"
+}

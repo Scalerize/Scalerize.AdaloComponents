@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, useEffect } from "react-native";
+import React, { useState, useMemo, useEffect } from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from "@react-native-vector-icons/material-icons";
 
 /**
@@ -196,12 +196,10 @@ const AppointmentScheduler = (props) => {
 
     // Trigger the Adalo action.
     // Often you might pass parameters to the action; here we simply call it.
+    props.selectedSlot.onChange(scheduleDate.toISOString());
+
     if (props.onSchedule) {
-      props.onSchedule({
-        scheduledDateTime: scheduleDate.toISOString(),
-        // If your Adalo setup supports passing arguments,
-        // you can pass more data here
-      });
+      props.onSchedule();
     }
   };
 
