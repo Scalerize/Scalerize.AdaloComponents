@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { View, Image, StyleSheet } from 'react-native';
-import BwipJS from 'bwip-js';
-import { Buffer } from 'buffer';
+import React, {useEffect, useState} from 'react';
+import {View, Image, StyleSheet, Text} from 'react-native';
+import bwipjs from '@bwip-js/react-native';
 
 const BARCODE_MAP = {
   'EAN-8': 'ean8',
@@ -13,48 +12,44 @@ const BARCODE_MAP = {
   'Code 128B': 'code128',
   'Code 128C': 'code128',
   'Code 93': 'code93',
-  'Code 32': 'code32',     
-  'Codabar': 'codabar',
-  'Code39': 'code39',
+  'Code 32': 'code32',
+  Codabar: 'codabar',
+  Code39: 'code39',
   'Code 39 Extended': 'code39ext',
+  ISBN: 'isbn',
   'QR Code': 'qrcode',
-  'Data Matrix': 'datamatrix'
+  'Data Matrix': 'datamatrix',
 };
 
-const UniversalBarcodeGenerator = (props) => {
-  const [barcodeUri, setBarcodeUri] = useState(null);
+const UniversalBarcodeGenerator = props => {
+  const [barcode, setBarcode] = useState(null);
 
   const bcid = BARCODE_MAP[props.barcodeType] || 'code128';
-  let scale = 3;
-
   useEffect(() => {
     try {
-      BwipJS.toBuffer(
-        {
+      bwipjs
+        .toDataURL({
           bcid: bcid,
           text: props.barcodeValue || '',
-          scale: scale,
-          backgroundcolor: props.backgroundColor.replace('#', ''), 
-          barcolor: props.foregroundColor.replace('#', ''),
+          scale: 1,
+          backgroundcolor: (props.backgroundColor || '#FFFFFF').replace(
+            '#',
+            '',
+          ),
+          barcolor: (props.foregroundColor || '#000000').replace('#', ''),
           includetext: !!props.showText,
-          textcolor: props.foregroundColor.replace('#', ''),
-          padding: props.extraMargin || 4
-        },
-        (err, png) => {
-          if (err) {
-            console.error('Barcode generation error:', err);
-            setBarcodeUri(null);
-          } else {
-            // Convert from buffer to base64
-            const base64 = Buffer.from(png).toString('base64');
-            const uri = `data:image/png;base64,${base64}`;
-            setBarcodeUri(uri);
-          }
-        }
-      );
+          textcolor: (props.foregroundColor || '#000000').replace('#', ''),
+          includetext: false,
+          guardwhitespace: true,
+          height: props.height || 100,
+          width: props.width || 100,
+        })
+        .then(barcode => {
+          setBarcode(barcode);
+        });
     } catch (error) {
       console.error('Exception in barcode generation:', error);
-      setBarcodeUri(null);
+      setBarcode(null);
     }
   }, [
     bcid,
@@ -63,27 +58,27 @@ const UniversalBarcodeGenerator = (props) => {
     props.foregroundColor,
     props.showText,
     props.extraMargin,
-    scale
+    props.height,
+    props.width,
   ]);
 
-  if (!barcodeUri) {
-    return (
-      <View style={[styles.container, { backgroundColor: props.backgroundColor }]}>
-        <Image
-          style={styles.placeholder}
-          source={require('./placeholder.png')} 
-        />
-      </View>
-    );
-  }
-
   return (
-    <View style={[styles.container, { backgroundColor: props.backgroundColor }]}>
-      <Image
-        source={{ uri: barcodeUri }}
-        style={styles.barcodeImage}
-        resizeMode="contain"
-      />
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: props.backgroundColor,
+          width: props.width,
+          height: props.height,
+        },
+      ]}>
+      {barcode && (
+        <Image
+          source={{uri: barcode.uri}}
+          style={[styles.barcodeImage]}
+          resizeMode="contain"
+        />
+      )}
     </View>
   );
 };
@@ -91,16 +86,11 @@ const UniversalBarcodeGenerator = (props) => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    height: '100%'
+    height: '100%',
   },
   barcodeImage: {
     width: '100%',
-    height: '100%'
-  },
-  placeholder: {
-    width: '100%',
     height: '100%',
-    tintColor: '#cccccc'
   }
 });
 

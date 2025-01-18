@@ -16,6 +16,6 @@
     "react-art": "^16.13.1",
     "react-dom": "^16.14.0",
     "react-native-web": "^0.9.13",
-    "bwip-js": "4.5.1"
+    "@bwip-js/react-native": "^4.5.1"
   }
 }

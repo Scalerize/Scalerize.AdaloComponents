@@ -32,15 +32,10 @@
         { "label": "Code39", "value": "Code39" },
         { "label": "Code 39 Extended", "value": "Code 39 Extended" },
         { "label": "QR Code", "value": "QR Code" },
-        { "label": "Data Matrix", "value": "Data Matrix" }
+        { "label": "Data Matrix", "value": "Data Matrix" },
+        { "label": "ISBN", "value": "ISBN" }
       ],
       "default": "QR Code"
-    },
-    {
-      "name": "showText",
-      "displayName": "Show Text",
-      "type": "boolean",
-      "default": true
     },
     {
       "name": "foregroundColor",
@@ -53,13 +48,6 @@
       "displayName": "Background Color",
       "type": "color",
       "default": "#FFFFFF"
-    },
-    {
-      "name": "extraMargin",
-      "displayName": "Extra Margin",
-      "type": "number",
-      "default": 4,
-      "description": "Padding in the barcode image. Useful for scanning reliability."
     }
   ]
 }
