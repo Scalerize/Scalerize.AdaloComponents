@@ -220,7 +220,6 @@ const UniversalBarcodeGenerator = (props) => {
       });
   }, [bcid, props.barcodeValue, props.backgroundColor, props.foregroundColor]);
 
-  console.log(props);
   return (
     <View
       style={{
