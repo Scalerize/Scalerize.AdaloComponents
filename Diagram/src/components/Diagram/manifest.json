@@ -1,21 +1,207 @@
 {
-  "displayName": "Diagram",
-  "defaultWidth": 160,
-  "defaultHeight": 24,
+  "displayName": "Diagram Component",
+  "defaultWidth": 400,
+  "defaultHeight": 300,
+  "resizeX": true,
+  "resizeY": true,
   "components": "./index.js",
-  "icon": "./example-thumbnail.png",
+  "icon": "./thumbnail.png",
   "props": [
     {
-      "name": "text",
-      "displayName": "Text",
+      "name": "diagramOrientation",
+      "displayName": "Diagram Orientation",
       "type": "text",
-      "default": "Happy Hacking"
+      "default": "LR",
+      "options": ["LR", "RL", "TB", "BT"]
     },
     {
-      "name": "color",
-      "displayName": "Color",
-      "type": "color",
-      "default": "#00A898"
+      "name": "nodeWidth",
+      "displayName": "Node Width",
+      "type": "number",
+      "default": 100
+    },
+    {
+      "name": "nodeHeight",
+      "displayName": "Node Height",
+      "type": "number",
+      "default": 60
+    },
+    {
+      "name": "horizontalSpacing",
+      "displayName": "Horizontal Spacing",
+      "type": "number",
+      "default": 60
+    },
+    {
+      "name": "verticalSpacing",
+      "displayName": "Vertical Spacing",
+      "type": "number",
+      "default": 60
+    },
+    {
+      "name": "nodeCollection",
+      "displayName": "Nodes Collection",
+      "type": "list",
+      "props": [
+        {
+          "name": "nodeId",
+          "displayName": "Node ID",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "name": "borderRadius",
+          "displayName": "Node Border Radius",
+          "type": "number",
+          "default": 10
+        },
+        {
+          "name": "color",
+          "displayName": "Node Fill Color",
+          "type": "color",
+          "default": "#FFFFFF"
+        },
+        {
+          "name": "borderColor",
+          "displayName": "Node Border Color",
+          "type": "color",
+          "default": "#000000"
+        },
+        {
+          "name": "borderThickness",
+          "displayName": "Node Border Thickness",
+          "type": "number",
+          "default": 2
+        },
+        {
+          "name": "innerFormBorderColor",
+          "displayName": "Inner Form Border Color",
+          "type": "color",
+          "default": "#CCCCCC"
+        },
+        {
+          "name": "innerFormColor",
+          "displayName": "Inner Form Fill Color",
+          "type": "color",
+          "default": "#FFFFFF"
+        },
+        {
+          "name": "innerFormBorderRadius",
+          "displayName": "Inner Form Border Radius",
+          "type": "number",
+          "default": 5
+        },
+        {
+          "name": "innerFormBorderThickness",
+          "displayName": "Inner Form Border Thickness",
+          "type": "number",
+          "default": 1
+        },
+        {
+          "name": "rotation",
+          "displayName": "Rotation (degrees)",
+          "type": "number",
+          "default": 0
+        },
+        {
+          "name": "legendType",
+          "displayName": "Legend Type",
+          "type": "text",
+          "default": "inside",
+          "options": ["inside", "outside-simple", "outside-block"]
+        },
+        {
+          "name": "legendText",
+          "displayName": "Legend Text",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "name": "legendColor",
+          "displayName": "Legend Text Color",
+          "type": "color",
+          "default": "#000000"
+        },
+        {
+          "name": "legendBorderColor",
+          "displayName": "Legend Border Color",
+          "type": "color",
+          "default": "#000000"
+        },
+        {
+          "name": "legendBorderThickness",
+          "displayName": "Legend Border Thickness",
+          "type": "number",
+          "default": 1
+        },
+        {
+          "name": "legendBorderRadius",
+          "displayName": "Legend Border Radius",
+          "type": "number",
+          "default": 3
+        },
+        {
+          "name": "legendFillColor",
+          "displayName": "Legend Fill Color",
+          "type": "color",
+          "default": "#FFFFFF"
+        }
+      ]
+    },
+    {
+      "name": "edgeCollection",
+      "displayName": "Edges Collection",
+      "type": "list",
+      "props": [
+        {
+          "name": "fromNodeId",
+          "displayName": "From Node ID",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "name": "toNodeId",
+          "displayName": "To Node ID",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "name": "thickness",
+          "displayName": "Edge Thickness",
+          "type": "number",
+          "default": 2
+        },
+        {
+          "name": "color",
+          "displayName": "Edge Color",
+          "type": "color",
+          "default": "#000000"
+        },
+        {
+          "name": "dotted",
+          "displayName": "Dotted Edge",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "name": "arrow",
+          "displayName": "Arrow at End",
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "name": "curved",
+          "displayName": "Use 90° Angles",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "name": "edgeText",
+          "displayName": "Edge Label Text",
+          "type": "text",
+          "default": ""
+        }
+      ]
     }
   ]
 }

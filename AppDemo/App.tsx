@@ -15,8 +15,8 @@ import {
 } from 'react-native';
 
 import {Colors, Header} from 'react-native/Libraries/NewAppScreen';
-
-import UniversalBarcodeGenerator from './Components/UniversalBarcodeGenerator';
+ 
+import Diagram from './Components/Diagram';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -39,7 +39,7 @@ function App(): React.JSX.Element {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <UniversalBarcodeGenerator barcodeType="QR Code" barcodeValue="9735940564824" height={250} width={250}/>
+          <Diagram />
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -10,6 +10,9 @@
     "login": "adalo login",
     "publish": "adalo publish"
   },
+  "dependencies": {
+    "react-native-svg": "^15.11.1"
+  },
   "devDependencies": {
     "@adalo/cli": "^1.0.2",
     "react": "^16.14.0",
