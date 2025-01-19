@@ -8,7 +8,7 @@ export const diagramTestProps = {
     nodeCollection: [
       {
         nodeId: "A",
-        borderRadius: 100,
+        borderRadius: 0,
         color: "red",
         borderColor: "#000000",
         borderThickness: 2,
@@ -16,7 +16,7 @@ export const diagramTestProps = {
         innerFormColor: "#FFFFFF00",
         innerFormBorderRadius: 100,
         innerFormBorderThickness: 0,
-        rotation: 0,
+        rotation: 45,
         legendType: "inside",          // "inside", "outside-simple", or "outside-block"
         legendText: "A",
         legendColor: "#000",

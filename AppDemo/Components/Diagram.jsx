@@ -1,12 +1,12 @@
-import React, { useMemo } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, {useMemo} from 'react';
+import {View, StyleSheet} from 'react-native';
 import Svg, {
   Defs,
   Marker,
   Polygon,
   Rect,
   Path,
-  Text as SvgText
+  Text as SvgText,
 } from 'react-native-svg';
 
 // d3-force to compute node positions
@@ -17,7 +17,7 @@ import {
   forceCenter,
   forceCollide,
   forceX,
-  forceY
+  forceY,
 } from 'd3-force';
 
 /**
@@ -39,22 +39,33 @@ function colorToId(color) {
  *   { nodesData, linksData }
  *   where each node has { id, x, y }
  */
-function computeForceLayout(nodeCollection, edgeCollection, width, height, orientation) {
+function computeForceLayout(
+  nodeCollection,
+  edgeCollection,
+  width,
+  height,
+  orientation,
+) {
   // Create data arrays in d3-compatible format
-  const nodesData = nodeCollection.map((node) => ({
-    id: node.nodeId
+  const nodesData = nodeCollection.map(node => ({
+    id: node.nodeId,
     // d3-force will add x, y, vx, vy, etc.
   }));
-  const linksData = edgeCollection.map((edge) => ({
+  const linksData = edgeCollection.map(edge => ({
     // "source" and "target" must match node IDs
     source: edge.fromNodeId,
-    target: edge.toNodeId
+    target: edge.toNodeId,
   }));
 
   // Set up the simulation
   const simulation = forceSimulation(nodesData)
     .force('charge', forceManyBody().strength(-120)) // negative => repels
-    .force('link', forceLink(linksData).id((d) => d.id).distance(120))
+    .force(
+      'link',
+      forceLink(linksData)
+        .id(d => d.id)
+        .distance(120),
+    )
     .force('collide', forceCollide(50)) // keep nodes from overlapping
     .force('center', forceCenter(width / 2, height / 2));
 
@@ -77,13 +88,13 @@ function computeForceLayout(nodeCollection, edgeCollection, width, height, orien
   }
 
   // At this point, each node in nodesData has x and y
-  return { nodesData, linksData };
+  return {nodesData, linksData};
 }
 
 /**
  * Main Diagram component
  */
-const Diagram = (props) => {
+const Diagram = props => {
   const {
     // Overall diagram bounding size (from Adalo or user props)
     _width = 800,
@@ -100,17 +111,17 @@ const Diagram = (props) => {
 
     // Collections
     nodeCollection = [],
-    edgeCollection = []
+    edgeCollection = [],
   } = props;
 
   // 1) Run a force-directed layout to compute node positions
-  const { nodesData, linksData } = useMemo(() => {
+  const {nodesData, linksData} = useMemo(() => {
     return computeForceLayout(
       nodeCollection,
       edgeCollection,
       _width,
       _height,
-      diagramOrientation
+      diagramOrientation,
     );
   }, [nodeCollection, edgeCollection, _width, _height, diagramOrientation]);
 
@@ -118,14 +129,14 @@ const Diagram = (props) => {
   //    We'll also store original node config so we can style each node
   const nodeMap = useMemo(() => {
     const map = {};
-    nodesData.forEach((nodeD) => {
+    nodesData.forEach(nodeD => {
       // Find matching config in nodeCollection
-      const config = nodeCollection.find((n) => n.nodeId === nodeD.id);
+      const config = nodeCollection.find(n => n.nodeId === nodeD.id);
       if (config) {
         map[nodeD.id] = {
           ...config, // borderRadius, color, etc.
           x: nodeD.x,
-          y: nodeD.y
+          y: nodeD.y,
         };
       }
     });
@@ -134,11 +145,13 @@ const Diagram = (props) => {
 
   // 3) Figure out bounding box so we can set the SVG's viewBox
   //    We look for min/max X/Y among all nodes
-  const { minX, maxX, minY, maxY } = useMemo(() => {
-    let minXVal = Infinity, maxXVal = -Infinity;
-    let minYVal = Infinity, maxYVal = -Infinity;
+  const {minX, maxX, minY, maxY} = useMemo(() => {
+    let minXVal = Infinity,
+      maxXVal = -Infinity;
+    let minYVal = Infinity,
+      maxYVal = -Infinity;
 
-    nodesData.forEach((nodeD) => {
+    nodesData.forEach(nodeD => {
       if (nodeD.x < minXVal) minXVal = nodeD.x;
       if (nodeD.x > maxXVal) maxXVal = nodeD.x;
       if (nodeD.y < minYVal) minYVal = nodeD.y;
@@ -151,14 +164,14 @@ const Diagram = (props) => {
       minX: minXVal - pad,
       maxX: maxXVal + pad,
       minY: minYVal - pad,
-      maxY: maxYVal + pad
+      maxY: maxYVal + pad,
     };
   }, [nodesData]);
 
   // 4) We need to define <Marker> elements for each unique edge color if arrow=true
   //    so each arrow can match the edge color.
   const uniqueEdgeColors = Array.from(
-    new Set(edgeCollection.filter((e) => e.arrow).map((e) => e.color || '#000000'))
+    new Set(edgeCollection.filter(e => e.arrow).map(e => e.color || '#000000')),
   );
 
   // 5) Render Edges
@@ -172,7 +185,7 @@ const Diagram = (props) => {
         dotted = false,
         arrow = true,
         curved = false,
-        edgeText
+        edgeText,
       } = edge;
       // If either node is missing in the map, skip
       if (!nodeMap[fromNodeId] || !nodeMap[toNodeId]) return null;
@@ -243,11 +256,10 @@ const Diagram = (props) => {
               />
               <SvgText
                 x={midX}
-                y={midY + (labelFontSize * 0.35)} // center text vertically
+                y={midY + labelFontSize * 0.35} // center text vertically
                 fill={color}
                 fontSize={labelFontSize}
-                textAnchor="middle"
-              >
+                textAnchor="middle">
                 {edgeText}
               </SvgText>
             </>
@@ -282,7 +294,7 @@ const Diagram = (props) => {
         legendBorderColor = '#000000',
         legendBorderThickness = 1,
         legendBorderRadius = 3,
-        legendFillColor = '#ffffff'
+        legendFillColor = '#ffffff',
       } = config;
 
       const cx = nodeD.x;
@@ -306,7 +318,8 @@ const Diagram = (props) => {
       let legendElement = null;
       if (legendText) {
         // Decide the legend position depending on orientation + legendType
-        const isHorizontal = diagramOrientation === 'LR' || diagramOrientation === 'RL';
+        const isHorizontal =
+          diagramOrientation === 'LR' || diagramOrientation === 'RL';
 
         if (legendType === 'inside') {
           // Text in the center
@@ -316,9 +329,7 @@ const Diagram = (props) => {
               y={cy + 4}
               fill={legendColor}
               fontSize="12"
-              textAnchor="middle"
-              transform={rotationTransform}
-            >
+              textAnchor="middle">
               {legendText}
             </SvgText>
           );
@@ -333,8 +344,7 @@ const Diagram = (props) => {
                 y={y - 5} // a little gap above
                 fill={legendColor}
                 fontSize="12"
-                textAnchor="middle"
-              >
+                textAnchor="middle">
                 {legendText}
               </SvgText>
             );
@@ -345,8 +355,7 @@ const Diagram = (props) => {
                 x={x + nodeWidth + 5}
                 y={cy + 4} // center vertically
                 fill={legendColor}
-                fontSize="12"
-              >
+                fontSize="12">
                 {legendText}
               </SvgText>
             );
@@ -379,8 +388,7 @@ const Diagram = (props) => {
                   y={blockY + blockHeight / 2 + 4}
                   fill={legendColor}
                   fontSize="12"
-                  textAnchor="middle"
-                >
+                  textAnchor="middle">
                   {legendText}
                 </SvgText>
               </>
@@ -407,8 +415,7 @@ const Diagram = (props) => {
                   y={blockY + blockHeight / 2 + 4}
                   fill={legendColor}
                   fontSize="12"
-                  textAnchor="middle"
-                >
+                  textAnchor="middle">
                   {legendText}
                 </SvgText>
               </>
@@ -449,17 +456,11 @@ const Diagram = (props) => {
         </React.Fragment>
       );
     });
-  }, [
-    nodeMap,
-    nodesData,
-    diagramOrientation,
-    nodeWidth,
-    nodeHeight
-  ]);
+  }, [nodeMap, nodesData, diagramOrientation, nodeWidth, nodeHeight]);
 
   // 7) Build Markers in <Defs> for each arrow color
   //    (arrow heads with fill = that color)
-  const arrowMarkers = uniqueEdgeColors.map((c) => {
+  const arrowMarkers = uniqueEdgeColors.map(c => {
     const markerId = `arrowMarker_${colorToId(c)}`;
     return (
       <Marker
@@ -471,8 +472,7 @@ const Diagram = (props) => {
         markerWidth="6"
         markerHeight="6"
         orient="auto"
-        markerUnits="strokeWidth"
-      >
+        markerUnits="strokeWidth">
         {/* A simple triangle shape for arrowhead */}
         <Polygon points="0,0 10,5 0,10" fill={c} />
       </Marker>
@@ -482,14 +482,10 @@ const Diagram = (props) => {
   return (
     <View style={styles.container}>
       <Svg
-        width="300"
-        height="600"
-        // The viewBox ensures all nodes/edges fit the visible area
-        viewBox={`${minX} ${minY} ${maxX - minX} ${maxY - minY}`}
-      >
-        <Defs>
-          {arrowMarkers}
-        </Defs>
+        width={_width}
+        height={_height}
+        viewBox={`${minX} ${minY} ${maxX - minX} ${maxY - minY}`}>
+        <Defs>{arrowMarkers}</Defs>
         {/* Edges first (so nodes are on top) */}
         {edgeElements}
         {/* Nodes on top */}
@@ -501,8 +497,8 @@ const Diagram = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });
 
 export default Diagram;
