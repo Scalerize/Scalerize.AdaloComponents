@@ -1,15 +1,15 @@
 {
-  "displayName": "Suggestion Box",
-  "components": [
-    {
-      "name": "AutoComplete",
-      "manifest": "./src/components/AutoComplete/manifest.json"
-    }
-  ],
+  "displayName": "Autocomplete Suggestion Box",
   "author": "Scalerize",
   "description": "A simple and highly configurable suggestion box component for Adalo. Can handle search autocomplete, suggestions, and more.",
   "price": 29,
   "demoAppURL": "https://previewer.adalo.com/d51df6a9-57ae-41b7-ad5d-502e0035a7c2",
   "supportURL": "https://www.scalerize.fr/solutions/composants-adalo",
-  "logo": "./logo.png"
+  "logo": "./logo.png",
+  "components": [
+    {
+      "name": "AutoComplete",
+      "manifest": "./src/components/AutoComplete/manifest.json"
+    }
+  ]
 }

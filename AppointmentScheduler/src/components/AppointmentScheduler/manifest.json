@@ -1,7 +1,7 @@
 {
   "displayName": "Appointment Scheduler",
   "defaultWidth": 350,
-  "defaultHeight": 420,
+  "defaultHeight": 460,
   "resizeX": true,
   "resizeY": true,
   "components": "./index.js",
@@ -60,12 +60,19 @@
       "displayName": "Selected slot",
       "type": "date",
       "default": 0,
+      "hidden": true,
       "role": "autosaveInput"
     },
     {
       "name": "onSchedule",
       "displayName": "On Schedule",
-      "type": "action"
+      "type": "action",
+      "arguments": [
+        {
+          "type": "date",
+          "displayName": "Selected slot date & time"
+        }
+      ]
     }
   ],
   "childComponents": [

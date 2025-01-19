@@ -199,7 +199,7 @@ const AppointmentScheduler = (props) => {
     props.selectedSlot.onChange(scheduleDate.toISOString());
 
     if (props.onSchedule) {
-      props.onSchedule();
+      props.onSchedule(scheduleDate.toISOString());
     }
   };
 
@@ -400,6 +400,7 @@ const styles = StyleSheet.create({
     borderRadius: "50%",
     width: 4,
     height: 4,
+    marginTop: 2,
     backgroundColor: "black",
   },
   timeSlotItem: {
