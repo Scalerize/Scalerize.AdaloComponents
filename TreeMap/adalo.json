@@ -1,12 +1,15 @@
 {
-  "displayName": "TreeMap Chart",
+  "displayName": "TreeMap Chart", 
+  "author": "Scalerize",
+  "price": 59,
+  "demoAppURL": "https://previewer.adalo.com/d51df6a9-57ae-41b7-ad5d-502e0035a7c2?target=e02rtwo1rz7rwtlnes5doyhgf&params=%7B%7D",
+  "supportURL": "https://www.scalerize.fr/solutions/composants-adalo",
+  "logo": "./logo.png",
   "components": [
     {
       "name": "TreeMapChart",
       "manifest": "./src/components/TreeMapChart/manifest.json"
     }
   ],
-  "author": "",
-  "description": "",
-  "logo": "./example-logo.png"
+  "description": ""
 }
