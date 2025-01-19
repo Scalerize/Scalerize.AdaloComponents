@@ -63,18 +63,18 @@ function computeForceLayout(nodeCollection, edgeCollection, width, height, orien
   // If user wants a predominantly L-R layout, apply forceX
   // If user wants a predominantly T-B layout, apply forceY
   if (orientation === 'LR' || orientation === 'RL') {
-    // Nudges nodes horizontally around center
-    simulation.force('orientAxis', forceX(width / 2));
+    // Align all nodes around the same Y coordinate
+    simulation.force('orientAxis', forceY(height / 2).strength(0.5));
   } else if (orientation === 'TB' || orientation === 'BT') {
-    // Nudges nodes vertically around center
-    simulation.force('orientAxis', forceY(height / 2));
+    // Align all nodes around the same X coordinate
+    simulation.force('orientAxis', forceX(width / 2).strength(0.5));
   }
 
   // Stop automatic simulation so we can run it synchronously
   simulation.stop();
 
   // Tick enough times to let the layout stabilize (tweak as needed)
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 200; i++) {
     simulation.tick();
   }
 
@@ -485,7 +485,7 @@ const Diagram = (props) => {
     <View style={styles.container}>
       <Svg
         width="300"
-        height="300"
+        height="600"
         // The viewBox ensures all nodes/edges fit the visible area
         viewBox={`${minX} ${minY} ${maxX - minX} ${maxY - minY}`}
       >
