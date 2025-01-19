@@ -11,7 +11,11 @@
     "publish": "adalo publish"
   },
   "dependencies": {
-    "react-native-svg": "^15.11.1"
+    "react-native-svg": "^15.11.1",
+    "d3-force": "^3.0.0",
+    "d3-dispatch": "^3.0.1",
+    "d3-quadtree": "^3.0.1",
+    "d3-timer": "^3.0.1"
   },
   "devDependencies": {
     "@adalo/cli": "^1.0.2",
