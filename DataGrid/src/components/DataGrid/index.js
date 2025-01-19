@@ -102,7 +102,7 @@ const DataGrid = (props) => {
     }
 
     function getColumns() {
-        return !!isEditor
+        return !!isEditor && !rowsMeta
             ? editorData.columns
             : propsColumns
             ?.map(x => x?.['Column Definition'])
