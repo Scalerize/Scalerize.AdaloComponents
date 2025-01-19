@@ -1,5 +1,6 @@
 ﻿import {useState, useEffect, memo} from 'react';
-import {DataTable, Icon} from 'react-native-paper';
+import {DataTable} from 'react-native-paper';
+import Icon from '@react-native-vector-icons/material-icons';
 import {DateTime} from 'luxon';
 import {Text, View, Linking, Image, StyleSheet} from 'react-native';
 import {editorData} from "./editor-data";
@@ -42,8 +43,8 @@ const Cell = memo(({type, value}) => {
     } else if (type === 'boolean') {
         return <View style={style}>
             {value
-                ? <Icon size={16} source="check"></Icon>
-                : <Icon size={16} source="close"></Icon>
+                ? <Icon size={16} name="check"></Icon>
+                : <Icon size={16} name="close"></Icon>
             }
         </View>
     }

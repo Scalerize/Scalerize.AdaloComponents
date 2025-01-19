@@ -17,6 +17,113 @@
       "name": "rows",
       "displayName": "Rows",
       "type": "list"
+    },
+    {
+      "name": "borderColor",
+      "displayName": "Border Color",
+      "type": "color",
+      "style": true,
+      "default": "rgba(224, 224, 224, 1)"
+    },
+    {
+      "name": "borderThickness",
+      "displayName": "Border Thickness",
+      "type": "number",
+      "control": {
+        "type": "slider",
+        "min": 0,
+        "max": 10
+      },
+      "style": true,
+      "default": 1
+    },
+    {
+      "name": "backgroundColor",
+      "displayName": "Background Color",
+      "type": "color",
+      "style": true,
+      "default": "rgba(0, 0, 0, 0)"
+    },
+    {
+      "name": "headerBackgroundColor",
+      "displayName": "Header Background Color",
+      "type": "color",
+      "style": true,
+      "default": "rgba(0, 0, 0, 0)"
+    },
+    {
+      "name": "foregroundColor",
+      "displayName": "Text Color",
+      "type": "color",
+      "default": "rgba(0, 0, 0, 0.87)",
+      "style": true
+    },
+    {
+      "name": "borderType",
+      "displayName": "Border Type",
+      "type": "text",
+      "default": "rows",
+      "style": true,
+      "control": {
+        "type": "menu",
+        "options": [
+          {
+            "value": "rows",
+            "label": "Horizontal"
+          },
+          {
+            "value": "rows-and-cols",
+            "label": "Horizontal and vertical"
+          }
+        ]
+      }
+    },
+    {
+      "name": "stripped",
+      "displayName": "Stripped",
+      "type": "boolean",
+      "default": false,
+      "style": true
+    },
+    {
+      "name": "tableHeight",
+      "displayName": "Table Height",
+      "type": "text",
+      "default": "auto",
+      "style": true,
+      "control": {
+        "type": "menu",
+        "options": [
+          {
+            "value": "auto",
+            "label": "Auto"
+          },
+          {
+            "value": "manual",
+            "label": "Component Height"
+          }
+        ]
+      }
+    },
+    {
+      "name": "density",
+      "displayName": "Density",
+      "type": "text",
+      "default": "standard",
+      "style": true,
+      "control": {
+        "type": "menu",
+        "options": [
+          {
+            "value": "compact",
+            "label": "Compact"
+          },
+          {
+            "value": "standard",
+            "label": "Standard"
+          }
+        ]
+      }
     }
   ],
   "childComponents": [
@@ -42,109 +149,6 @@
           "type": "number",
           "default": 200,
           "helpText": "To divide the space equally between all columns, put 0"
-        }
-      ]
-    },
-    {
-      "name": "Style",
-      "props": [
-        {
-          "name": "borderColor",
-          "displayName": "Border Color",
-          "type": "color",
-          "default": "rgba(224, 224, 224, 1)"
-        },
-        {
-          "name": "borderThickness",
-          "displayName": "Border Thickness",
-          "type": "number",
-          "control": {
-            "type": "slider",
-            "min": 0,
-            "max": 10
-          },
-          "default": 1
-        },
-        {
-          "name": "backgroundColor",
-          "displayName": "Background Color",
-          "type": "color",
-          "default": "rgba(0, 0, 0, 0)"
-        },
-        {
-          "name": "headerBackgroundColor",
-          "displayName": "Header Background Color",
-          "type": "color",
-          "default": "rgba(0, 0, 0, 0)"
-        },
-        {
-          "name": "foregroundColor",
-          "displayName": "Text Color",
-          "type": "color",
-          "default": "rgba(0, 0, 0, 0.87)"
-        },
-        {
-          "name": "borderType",
-          "displayName": "Border Type",
-          "type": "text",
-          "default": "rows",
-          "control": {
-            "type": "menu",
-            "options": [
-              {
-                "value": "rows",
-                "label": "Horizontal"
-              },
-              {
-                "value": "rows-and-cols",
-                "label": "Horizontal and vertical"
-              }
-            ]
-          }
-        },
-        {
-          "name": "stripped",
-          "displayName": "Stripped",
-          "type": "boolean",
-          "default": false
-        },
-        {
-          "name": "tableHeight",
-          "displayName": "Table Height",
-          "type": "text",
-          "default": "auto",
-          "control": {
-            "type": "menu",
-            "options": [
-              {
-                "value": "auto",
-                "label": "Auto"
-              },
-              {
-                "value": "manual",
-                "label": "Component Height"
-              }
-            ]
-          }
-        },
-        {
-          "name": "density",
-          "displayName": "Density",
-          "type": "text",
-          "default": "standard",
-          "control": {
-            "type": "menu",
-            "options": [
-              {
-                "value": "compact",
-                "label": "Compact"
-              },
-              {
-                "value": "standard",
-                "label": "Standard"
-              }
-            ]
-          }
         }
       ]
     }
