@@ -17,6 +17,7 @@ import {
 import {Colors, Header} from 'react-native/Libraries/NewAppScreen';
  
 import Diagram from './Components/Diagram';
+import { diagramTestProps } from './data/diagram-data';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -39,7 +40,7 @@ function App(): React.JSX.Element {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <Diagram />
+          <Diagram {...diagramTestProps} />
         </View>
       </ScrollView>
     </SafeAreaView>
