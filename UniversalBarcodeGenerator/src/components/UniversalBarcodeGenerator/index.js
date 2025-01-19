@@ -92,25 +92,25 @@ const UniversalBarcodeGenerator = (props) => {
       case "ean13":
         return "123456789012";
       case "ean14":
-        return "1234567890123";
+        return "00123456789012345678";
       case "upca":
         return "12345678901";
       case "upce":
         return "1234567";
       case "sscc18":
-        return "012345678000045678";
+        return "000123456789012345";
       case "isbn":
-        return "9782123456803";
+        return "9783161484100";
       case "ismn":
-        return "9782123456803";
+        return "9790000000003";
       case "issn":
-        return "9782123456803";
+        return "9771234567003";
       case "itf14":
         return "1234567890123";
       case "code128":
         return "123456789012";
       case "gs1-128":
-        return "0012345678901234";
+        return "(01)12345678901231";
       case "code93":
         return "123456789012";
       case "code93ext":
@@ -144,19 +144,19 @@ const UniversalBarcodeGenerator = (props) => {
       case "ultracode":
         return "Hello World";
       case "databaromni":
-        return "123456789012345678";
+        return "(01)12345678901231";
       case "databarlimited":
-        return "123456789012345678";
+        return "(01)12345678901231";
       case "databarexpanded":
-        return "123456789012345678";
+        return "(01)12345678901231";
       case "databarstacked":
-        return "123456789012345678";
+        return "(01)12345678901231";
       case "onecode":
-        return "012345678912345678";
+        return "00123456789012345678";
       case "postnet":
-        return "0123456789";
+        return "12345678901";
       case "planet":
-        return "0123456789";
+        return "01234567890";
       case "royalmail":
         return "AB123456789GB";
       case "auspost":
@@ -166,7 +166,7 @@ const UniversalBarcodeGenerator = (props) => {
       case "kix":
         return "KIX12345678901234567890";
       case "code32":
-        return "12345678901234567890";
+        return "12345678";
       case "pzn":
         return "1234567";
       case "pharmacode":
