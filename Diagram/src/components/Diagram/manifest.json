@@ -41,7 +41,20 @@
     {
       "name": "nodeCollection",
       "displayName": "Nodes Collection",
-      "type": "list",
+      "type": "list"
+    },
+    {
+      "name": "edgeCollection",
+      "displayName": "Edges Collection",
+      "type": "list"
+    }
+  ],
+  "childComponents":[
+    {
+      "name": "nodeCollection",
+      "displayName": "Nodes Collection",
+      "role": "listItem",
+      "reference": "nodeCollection",
       "props": [
         {
           "name": "nodeId",
@@ -53,60 +66,70 @@
           "name": "borderRadius",
           "displayName": "Node Border Radius",
           "type": "number",
+          "style": true,
           "default": 10
         },
         {
           "name": "color",
           "displayName": "Node Fill Color",
           "type": "color",
+          "style": true,
           "default": "#FFFFFF"
         },
         {
           "name": "borderColor",
           "displayName": "Node Border Color",
           "type": "color",
+          "style": true,
           "default": "#000000"
         },
         {
           "name": "borderThickness",
           "displayName": "Node Border Thickness",
           "type": "number",
+          "style": true,
           "default": 2
         },
         {
           "name": "innerFormBorderColor",
           "displayName": "Inner Form Border Color",
           "type": "color",
+          "style": true,
           "default": "#CCCCCC"
         },
         {
           "name": "innerFormColor",
           "displayName": "Inner Form Fill Color",
           "type": "color",
+          "style": true,
           "default": "#FFFFFF"
         },
         {
           "name": "innerFormBorderRadius",
           "displayName": "Inner Form Border Radius",
           "type": "number",
+          "style": true,
           "default": 5
         },
         {
           "name": "innerFormBorderThickness",
           "displayName": "Inner Form Border Thickness",
           "type": "number",
+          "style": true,
           "default": 1
         },
         {
           "name": "rotation",
           "displayName": "Rotation (degrees)",
           "type": "number",
+          "style": true,
           "default": 0
         },
         {
           "name": "legendType",
           "displayName": "Legend Type",
           "type": "text",
+          "style": true,
           "default": "inside",
           "options": ["inside", "outside-simple", "outside-block"]
         },
@@ -120,30 +143,35 @@
           "name": "legendColor",
           "displayName": "Legend Text Color",
           "type": "color",
+          "style": true,
           "default": "#000000"
         },
         {
           "name": "legendBorderColor",
           "displayName": "Legend Border Color",
           "type": "color",
+          "style": true,
           "default": "#000000"
         },
         {
           "name": "legendBorderThickness",
           "displayName": "Legend Border Thickness",
           "type": "number",
+          "style": true,
           "default": 1
         },
         {
           "name": "legendBorderRadius",
           "displayName": "Legend Border Radius",
           "type": "number",
+          "style": true,
           "default": 3
         },
         {
           "name": "legendFillColor",
           "displayName": "Legend Fill Color",
           "type": "color",
+          "style": true,
           "default": "#FFFFFF"
         }
       ]
@@ -151,7 +179,8 @@
     {
       "name": "edgeCollection",
       "displayName": "Edges Collection",
-      "type": "list",
+      "role": "listItem",
+      "reference": "edgeCollection",
       "props": [
         {
           "name": "fromNodeId",
@@ -169,24 +198,28 @@
           "name": "thickness",
           "displayName": "Edge Thickness",
           "type": "number",
+          "style": true,
           "default": 2
         },
         {
           "name": "color",
           "displayName": "Edge Color",
           "type": "color",
+          "style": true,
           "default": "#000000"
         },
         {
           "name": "dotted",
           "displayName": "Dotted Edge",
           "type": "boolean",
+          "style": true,
           "default": false
         },
         {
           "name": "arrow",
           "displayName": "Arrow at End",
           "type": "boolean",
+          "style": true,
           "default": true
         },
         {
