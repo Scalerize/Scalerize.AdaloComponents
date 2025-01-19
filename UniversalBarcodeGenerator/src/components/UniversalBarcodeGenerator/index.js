@@ -98,19 +98,19 @@ const UniversalBarcodeGenerator = (props) => {
       case "upce":
         return "1234567";
       case "sscc18":
-        return "123456789012345678";
+        return "012345678000045678";
       case "isbn":
-        return "9781234567890";
+        return "9782123456803";
       case "ismn":
-        return "9791234567890";
+        return "9782123456803";
       case "issn":
-        return "9771234567890";
+        return "9782123456803";
       case "itf14":
         return "1234567890123";
       case "code128":
         return "123456789012";
       case "gs1-128":
-        return "(01)12345678901234";
+        return "0012345678901234";
       case "code93":
         return "123456789012";
       case "code93ext":
