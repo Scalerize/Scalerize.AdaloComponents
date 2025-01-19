@@ -1,341 +1,498 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import Svg, { Path, Rect, Text as SvgText, Defs, Marker, Polygon } from 'react-native-svg';
+import { View, StyleSheet } from 'react-native';
+import Svg, {
+  Defs,
+  Marker,
+  Polygon,
+  Rect,
+  Path,
+  Text as SvgText
+} from 'react-native-svg';
+
+// d3-force to compute node positions
+import {
+  forceSimulation,
+  forceManyBody,
+  forceLink,
+  forceCenter,
+  forceCollide,
+  forceX,
+  forceY
+} from 'd3-force';
 
 /**
- * A helper function to build a simple layout for nodes given
- * the orientation, spacing, and container size. 
- * 
- * This example uses a naive linear layout:
- *  - LR (Left to Right) or RL (Right to Left) will lay nodes horizontally.
- *  - TB (Top to Bottom) or BT (Bottom to Top) will lay nodes vertically.
+ * Utility: convert color string to an ID-safe string (for marker IDs).
+ * Example: "#FF0000" -> "_FF0000"
  */
-function computeNodePositions({
-  nodeCollection,
-  orientation,
-  nodeWidth,
-  nodeHeight,
-  horizontalSpacing,
-  verticalSpacing
-}) {
-  // We'll store x/y in an array of { nodeId, x, y }
-  let positions = [];
-  
-  // For a simple layout, place each node in a single line.
-  // You could compute a more complex layout in a real scenario.
-  nodeCollection.forEach((node, idx) => {
-    let x = 0;
-    let y = 0;
-
-    // For simplicity, we just place each node at an equal offset from the previous.
-    if (orientation === 'LR') {
-      x = idx * (nodeWidth + horizontalSpacing);
-      y = 0;
-    } else if (orientation === 'RL') {
-      // We'll invert the index, but typically you'd measure the entire width first.
-      // For a simple approach, we do the same as LR, then you might flip it later in the drawing.
-      x = idx * (nodeWidth + horizontalSpacing);
-      y = 0;
-    } else if (orientation === 'TB') {
-      x = 0;
-      y = idx * (nodeHeight + verticalSpacing);
-    } else if (orientation === 'BT') {
-      // same logic as TB for a naive layout
-      x = 0;
-      y = idx * (nodeHeight + verticalSpacing);
-    }
-
-    positions.push({
-      nodeId: node.nodeId,
-      x,
-      y
-    });
-  });
-
-  return positions;
+function colorToId(color) {
+  return color.replace(/[^a-zA-Z0-9]+/g, '_');
 }
 
 /**
- * Build a path (string in SVG d= syntax) for edges.
- * If "curved" is false, we draw a simple line from (x1,y1) to (x2,y2).
- * If "curved" is true (i.e. 90° angles), we do a simple L-shaped path.
+ * Runs a synchronous force simulation to obtain node positions.
+ * @param {Array} nodeCollection - array of node configs from props
+ * @param {Array} edgeCollection - array of edge configs from props
+ * @param {Number} width         - approximate bounding width for the layout
+ * @param {Number} height        - approximate bounding height for the layout
+ * @param {String} orientation   - "LR", "RL", "TB", or "BT"
+ * @returns {Object} An object with:
+ *   { nodesData, linksData }
+ *   where each node has { id, x, y }
  */
-function buildEdgePath(x1, y1, x2, y2, curved) {
-  if (!curved) {
-    // Straight line
-    return `M${x1},${y1} L${x2},${y2}`;
-  } else {
-    // 90° angled path: We'll do a midpoint turn
-    // For instance, if we go horizontally then vertically:
-    const midX = x2;
-    const midY = y1;
-    return `M${x1},${y1} L${midX},${midY} L${x2},${y2}`;
+function computeForceLayout(nodeCollection, edgeCollection, width, height, orientation) {
+  // Create data arrays in d3-compatible format
+  const nodesData = nodeCollection.map((node) => ({
+    id: node.nodeId
+    // d3-force will add x, y, vx, vy, etc.
+  }));
+  const linksData = edgeCollection.map((edge) => ({
+    // "source" and "target" must match node IDs
+    source: edge.fromNodeId,
+    target: edge.toNodeId
+  }));
+
+  // Set up the simulation
+  const simulation = forceSimulation(nodesData)
+    .force('charge', forceManyBody().strength(-120)) // negative => repels
+    .force('link', forceLink(linksData).id((d) => d.id).distance(120))
+    .force('collide', forceCollide(50)) // keep nodes from overlapping
+    .force('center', forceCenter(width / 2, height / 2));
+
+  // If user wants a predominantly L-R layout, apply forceX
+  // If user wants a predominantly T-B layout, apply forceY
+  if (orientation === 'LR' || orientation === 'RL') {
+    // Align all nodes around the same Y coordinate
+    simulation.force('orientAxis', forceY(height / 2).strength(0.5));
+  } else if (orientation === 'TB' || orientation === 'BT') {
+    // Align all nodes around the same X coordinate
+    simulation.force('orientAxis', forceX(width / 2).strength(0.5));
   }
+
+  // Stop automatic simulation so we can run it synchronously
+  simulation.stop();
+
+  // Tick enough times to let the layout stabilize (tweak as needed)
+  for (let i = 0; i < 200; i++) {
+    simulation.tick();
+  }
+
+  // At this point, each node in nodesData has x and y
+  return { nodesData, linksData };
 }
 
 /**
- * The main Diagram component
+ * Main Diagram component
  */
 const Diagram = (props) => {
   const {
-    diagramOrientation,
-    nodeWidth,
-    nodeHeight,
-    horizontalSpacing,
-    verticalSpacing,
+    // Overall diagram bounding size (from Adalo or user props)
+    _width = 800,
+    _height = 600,
+
+    // Orientation can be "LR", "RL", "TB", or "BT"
+    diagramOrientation = 'LR',
+
+    // Node sizing
+    nodeWidth = 100,
+    nodeHeight = 60,
+
+    backgroundColor = '#ffffff',
+
+    // Collections
     nodeCollection = [],
     edgeCollection = []
   } = props;
 
-  // 1) Compute node positions
-  const positions = useMemo(() => {
-    return computeNodePositions({
+  // 1) Run a force-directed layout to compute node positions
+  const { nodesData, linksData } = useMemo(() => {
+    return computeForceLayout(
       nodeCollection,
-      orientation: diagramOrientation,
-      nodeWidth,
-      nodeHeight,
-      horizontalSpacing,
-      verticalSpacing
-    });
-  }, [nodeCollection, diagramOrientation, nodeWidth, nodeHeight, horizontalSpacing, verticalSpacing]);
+      edgeCollection,
+      _width,
+      _height,
+      diagramOrientation
+    );
+  }, [nodeCollection, edgeCollection, _width, _height, diagramOrientation]);
 
-  // Convert node positions to a map for easy retrieval
-  const positionMap = useMemo(() => {
-    let map = {};
-    positions.forEach(pos => {
-      map[pos.nodeId] = pos;
+  // 2) Build a map from nodeId -> { x, y, ...nodeProps }
+  //    We'll also store original node config so we can style each node
+  const nodeMap = useMemo(() => {
+    const map = {};
+    nodesData.forEach((nodeD) => {
+      // Find matching config in nodeCollection
+      const config = nodeCollection.find((n) => n.nodeId === nodeD.id);
+      if (config) {
+        map[nodeD.id] = {
+          ...config, // borderRadius, color, etc.
+          x: nodeD.x,
+          y: nodeD.y
+        };
+      }
     });
     return map;
-  }, [positions]);
+  }, [nodesData, nodeCollection]);
 
-  // 2) Determine total needed width/height to wrap all nodes
-  //    so the SVG or container can adapt
-  const { maxX, maxY } = useMemo(() => {
-    let maxXVal = 0;
-    let maxYVal = 0;
-    positions.forEach((pos) => {
-      const right = pos.x + nodeWidth;
-      const bottom = pos.y + nodeHeight;
-      if (right > maxXVal) maxXVal = right;
-      if (bottom > maxYVal) maxYVal = bottom;
+  // 3) Figure out bounding box so we can set the SVG's viewBox
+  //    We look for min/max X/Y among all nodes
+  const { minX, maxX, minY, maxY } = useMemo(() => {
+    let minXVal = Infinity, maxXVal = -Infinity;
+    let minYVal = Infinity, maxYVal = -Infinity;
+
+    nodesData.forEach((nodeD) => {
+      if (nodeD.x < minXVal) minXVal = nodeD.x;
+      if (nodeD.x > maxXVal) maxXVal = nodeD.x;
+      if (nodeD.y < minYVal) minYVal = nodeD.y;
+      if (nodeD.y > maxYVal) maxYVal = nodeD.y;
     });
-    return { maxX: maxXVal + horizontalSpacing, maxY: maxYVal + verticalSpacing };
-  }, [positions, nodeWidth, nodeHeight, horizontalSpacing, verticalSpacing]);
 
-  // 3) Prepare rendering
-  // We build each node as an SVG <Rect> or any shape, plus edges as <Path>.
-  // We'll store them in arrays to render in the Svg block.
+    // Pad on each side to ensure the nodes/edges are fully visible
+    const pad = 100;
+    return {
+      minX: minXVal - pad,
+      maxX: maxXVal + pad,
+      minY: minYVal - pad,
+      maxY: maxYVal + pad
+    };
+  }, [nodesData]);
 
-  // 3a) Render edges
-  const edgeElements = edgeCollection.map((edge, idx) => {
-    const { fromNodeId, toNodeId, thickness, color, dotted, arrow, curved, edgeText } = edge;
-    // If either node is missing in the position map, skip
-    if (!positionMap[fromNodeId] || !positionMap[toNodeId]) {
-      return null;
-    }
+  // 4) We need to define <Marker> elements for each unique edge color if arrow=true
+  //    so each arrow can match the edge color.
+  const uniqueEdgeColors = Array.from(
+    new Set(edgeCollection.filter((e) => e.arrow).map((e) => e.color || '#000000'))
+  );
 
-    const fromPos = positionMap[fromNodeId];
-    const toPos = positionMap[toNodeId];
+  // 5) Render Edges
+  const edgeElements = useMemo(() => {
+    return edgeCollection.map((edge, idx) => {
+      const {
+        fromNodeId,
+        toNodeId,
+        thickness = 2,
+        color = '#000000',
+        dotted = false,
+        arrow = true,
+        curved = false,
+        edgeText
+      } = edge;
+      // If either node is missing in the map, skip
+      if (!nodeMap[fromNodeId] || !nodeMap[toNodeId]) return null;
 
-    // We will connect the center of each node
-    const x1 = fromPos.x + nodeWidth / 2;
-    const y1 = fromPos.y + nodeHeight / 2;
-    const x2 = toPos.x + nodeWidth / 2;
-    const y2 = toPos.y + nodeHeight / 2;
+      const fromPos = nodeMap[fromNodeId];
+      const toPos = nodeMap[toNodeId];
 
-    const pathD = buildEdgePath(x1, y1, x2, y2, curved);
+      // We'll connect the center of each node
+      const x1 = fromPos.x;
+      const y1 = fromPos.y;
+      const x2 = toPos.x;
+      const y2 = toPos.y;
 
-    // For a dotted line, we can set strokeDasharray
-    const dashArray = dotted ? [4, 4] : null;
+      // Build path: straight vs. 90° angle
+      let pathD = '';
+      if (!curved) {
+        // Straight line
+        pathD = `M${x1},${y1} L${x2},${y2}`;
+      } else {
+        // L-shaped path
+        const midX = x2;
+        const midY = y1;
+        pathD = `M${x1},${y1} L${midX},${midY} L${x2},${y2}`;
+      }
 
-    // Edge label: We'll position it at the midpoint of the path
-    const midX = (x1 + x2) / 2;
-    const midY = (y1 + y2) / 2;
+      // Dotted line => dash array
+      const dashArray = dotted ? [4, 4] : null;
 
-    return (
-      <React.Fragment key={`edge-${idx}`}>
-        <Path
-          d={pathD}
-          stroke={color}
-          strokeWidth={thickness}
-          fill="none"
-          strokeDasharray={dashArray}
-          markerEnd={arrow ? "url(#arrowMarker)" : undefined}
-        />
-        {edgeText ? (
-          <SvgText
-            x={midX}
-            y={midY - 5} // shift up a bit for better visibility
-            fill={color}
-            fontSize="12"
-            textAnchor="middle"
-          >
-            {edgeText}
-          </SvgText>
-        ) : null}
-      </React.Fragment>
-    );
-  });
+      // For arrow, reference a marker with ID = "arrowMarker_<colorToId>"
+      const arrowId = `arrowMarker_${colorToId(color)}`;
 
-  // 3b) Render nodes
-  const nodeElements = nodeCollection.map((node, idx) => {
-    const {
-      nodeId,
-      borderRadius,
-      color,
-      borderColor,
-      borderThickness,
-      innerFormBorderColor,
-      innerFormColor,
-      innerFormBorderRadius,
-      innerFormBorderThickness,
-      rotation,
-      legendType,
-      legendText,
-      legendColor,
-      legendBorderColor,
-      legendBorderThickness,
-      legendBorderRadius,
-      legendFillColor
-    } = node;
-    const pos = positionMap[nodeId];
-    if (!pos) return null; // if we can't find a position, skip
+      // For edge label background, measure approximate text width:
+      const labelFontSize = 12;
+      const labelPadding = 4;
+      const labelWidth = edgeText ? edgeText.length * 7 + labelPadding : 0;
+      const labelHeight = edgeText ? labelFontSize + labelPadding : 0;
 
-    const { x, y } = pos;
+      // Midpoint for text
+      const midX = (x1 + x2) / 2;
+      const midY = (y1 + y2) / 2;
 
-    // We'll define a group transform for rotation around the node center
-    const cx = x + nodeWidth / 2;
-    const cy = y + nodeHeight / 2;
-    const rotationTransform = `rotate(${rotation}, ${cx}, ${cy})`;
+      return (
+        <React.Fragment key={`edge-${idx}`}>
+          {/* The line path */}
+          <Path
+            d={pathD}
+            stroke={color}
+            strokeWidth={thickness}
+            strokeDasharray={dashArray}
+            fill="none"
+            // If arrow is true, attach the relevant marker
+            markerEnd={arrow ? `url(#${arrowId})` : undefined}
+          />
 
-    // We define inner form as an optional border inside the main node
-    // Let's keep it simple and place it inside with 4px offset, for example
-    const innerOffset = 4;
-    const innerWidth = nodeWidth - innerOffset * 2;
-    const innerHeight = nodeHeight - innerOffset * 2;
+          {/* Edge label (if any) */}
+          {edgeText ? (
+            <>
+              {/* A rect behind the text to ensure readability */}
+              <Rect
+                x={midX - labelWidth / 2}
+                y={midY - labelHeight / 2 - 2} // shift up slightly
+                width={labelWidth}
+                height={labelHeight}
+                fill={backgroundColor}
+                // Slight corner rounding
+                rx={3}
+                ry={3}
+              />
+              <SvgText
+                x={midX}
+                y={midY + (labelFontSize * 0.35)} // center text vertically
+                fill={color}
+                fontSize={labelFontSize}
+                textAnchor="middle"
+              >
+                {edgeText}
+              </SvgText>
+            </>
+          ) : null}
+        </React.Fragment>
+      );
+    });
+  }, [edgeCollection, nodeMap, backgroundColor]);
 
-    // Legend logic
-    let legendElement = null;
-    if (legendText) {
-      if (legendType === 'inside') {
-        // Place text in the center of the node
-        legendElement = (
-          <SvgText
-            x={cx}
-            y={cy + 4} // small shift for vertical alignment
-            fill={legendColor}
-            fontSize="12"
-            textAnchor="middle"
-          >
-            {legendText}
-          </SvgText>
-        );
-      } else if (legendType === 'outside-simple') {
-        // Place text below the node
-        legendElement = (
-          <SvgText
-            x={cx}
-            y={y + nodeHeight + 14}
-            fill={legendColor}
-            fontSize="12"
-            textAnchor="middle"
-          >
-            {legendText}
-          </SvgText>
-        );
-      } else if (legendType === 'outside-block') {
-        // A rectangle plus text below the node
-        const legendBoxWidth = nodeWidth;
-        const legendBoxHeight = 30;
-        const legendBoxX = x;
-        const legendBoxY = y + nodeHeight + 5; // small margin
+  // 6) Render Nodes
+  const nodeElements = useMemo(() => {
+    return nodesData.map((nodeD, idx) => {
+      const config = nodeMap[nodeD.id];
+      if (!config) return null; // no config, skip
 
-        legendElement = (
-          <React.Fragment>
-            <Rect
-              x={legendBoxX}
-              y={legendBoxY}
-              width={legendBoxWidth}
-              height={legendBoxHeight}
-              fill={legendFillColor}
-              stroke={legendBorderColor}
-              strokeWidth={legendBorderThickness}
-              rx={legendBorderRadius}
-              ry={legendBorderRadius}
-            />
+      const {
+        nodeId,
+        borderRadius = 10,
+        color = '#ffffff',
+        borderColor = '#000000',
+        borderThickness = 2,
+        innerFormBorderColor = '#cccccc',
+        innerFormColor = '#ffffff',
+        innerFormBorderRadius = 5,
+        innerFormBorderThickness = 1,
+        rotation = 0,
+
+        // Legend
+        legendType = 'inside', // "inside", "outside-simple", "outside-block"
+        legendText = '',
+        legendColor = '#000000',
+        legendBorderColor = '#000000',
+        legendBorderThickness = 1,
+        legendBorderRadius = 3,
+        legendFillColor = '#ffffff'
+      } = config;
+
+      const cx = nodeD.x;
+      const cy = nodeD.y;
+
+      // We'll place the main rect so that (cx, cy) is the center
+      const x = cx - nodeWidth / 2;
+      const y = cy - nodeHeight / 2;
+
+      // Rotation transform (center = node center)
+      const rotationTransform = `rotate(${rotation}, ${cx}, ${cy})`;
+
+      // Inner form rect (slightly smaller, offset by 4 px)
+      const innerOffset = 4;
+      const innerRectX = x + innerOffset;
+      const innerRectY = y + innerOffset;
+      const innerRectW = nodeWidth - innerOffset * 2;
+      const innerRectH = nodeHeight - innerOffset * 2;
+
+      // Render legend (if any)
+      let legendElement = null;
+      if (legendText) {
+        // Decide the legend position depending on orientation + legendType
+        const isHorizontal = diagramOrientation === 'LR' || diagramOrientation === 'RL';
+
+        if (legendType === 'inside') {
+          // Text in the center
+          legendElement = (
             <SvgText
-              x={legendBoxX + legendBoxWidth / 2}
-              y={legendBoxY + legendBoxHeight / 2 + 4}
+              x={cx}
+              y={cy + 4}
               fill={legendColor}
               fontSize="12"
               textAnchor="middle"
+              transform={rotationTransform}
             >
               {legendText}
             </SvgText>
-          </React.Fragment>
-        );
-      }
-    }
+          );
+        } else if (legendType === 'outside-simple') {
+          // For LR/RL => text above
+          // For TB/BT => text to the right
+          if (isHorizontal) {
+            // Above the node
+            legendElement = (
+              <SvgText
+                x={cx}
+                y={y - 5} // a little gap above
+                fill={legendColor}
+                fontSize="12"
+                textAnchor="middle"
+              >
+                {legendText}
+              </SvgText>
+            );
+          } else {
+            // TB/BT => to the right
+            legendElement = (
+              <SvgText
+                x={x + nodeWidth + 5}
+                y={cy + 4} // center vertically
+                fill={legendColor}
+                fontSize="12"
+              >
+                {legendText}
+              </SvgText>
+            );
+          }
+        } else if (legendType === 'outside-block') {
+          // For LR/RL => block above
+          // For TB/BT => block to the right
+          const blockWidth = nodeWidth;
+          const blockHeight = 28;
 
+          if (isHorizontal) {
+            // Above
+            const blockX = x;
+            const blockY = y - blockHeight - 5; // margin above
+            legendElement = (
+              <>
+                <Rect
+                  x={blockX}
+                  y={blockY}
+                  width={blockWidth}
+                  height={blockHeight}
+                  fill={legendFillColor}
+                  stroke={legendBorderColor}
+                  strokeWidth={legendBorderThickness}
+                  rx={legendBorderRadius}
+                  ry={legendBorderRadius}
+                />
+                <SvgText
+                  x={blockX + blockWidth / 2}
+                  y={blockY + blockHeight / 2 + 4}
+                  fill={legendColor}
+                  fontSize="12"
+                  textAnchor="middle"
+                >
+                  {legendText}
+                </SvgText>
+              </>
+            );
+          } else {
+            // TB/BT => block to the right
+            const blockX = x + nodeWidth + 5;
+            const blockY = cy - blockHeight / 2; // center vertically
+            legendElement = (
+              <>
+                <Rect
+                  x={blockX}
+                  y={blockY}
+                  width={blockWidth}
+                  height={blockHeight}
+                  fill={legendFillColor}
+                  stroke={legendBorderColor}
+                  strokeWidth={legendBorderThickness}
+                  rx={legendBorderRadius}
+                  ry={legendBorderRadius}
+                />
+                <SvgText
+                  x={blockX + blockWidth / 2}
+                  y={blockY + blockHeight / 2 + 4}
+                  fill={legendColor}
+                  fontSize="12"
+                  textAnchor="middle"
+                >
+                  {legendText}
+                </SvgText>
+              </>
+            );
+          }
+        }
+      }
+
+      return (
+        <React.Fragment key={`node-${nodeId}`}>
+          {/* Outer rect */}
+          <Rect
+            x={x}
+            y={y}
+            width={nodeWidth}
+            height={nodeHeight}
+            fill={color}
+            stroke={borderColor}
+            strokeWidth={borderThickness}
+            rx={borderRadius}
+            ry={borderRadius}
+            transform={rotationTransform}
+          />
+          {/* Inner rect */}
+          <Rect
+            x={innerRectX}
+            y={innerRectY}
+            width={innerRectW}
+            height={innerRectH}
+            fill={innerFormColor}
+            stroke={innerFormBorderColor}
+            strokeWidth={innerFormBorderThickness}
+            rx={innerFormBorderRadius}
+            ry={innerFormBorderRadius}
+            transform={rotationTransform}
+          />
+          {legendElement}
+        </React.Fragment>
+      );
+    });
+  }, [
+    nodeMap,
+    nodesData,
+    diagramOrientation,
+    nodeWidth,
+    nodeHeight
+  ]);
+
+  // 7) Build Markers in <Defs> for each arrow color
+  //    (arrow heads with fill = that color)
+  const arrowMarkers = uniqueEdgeColors.map((c) => {
+    const markerId = `arrowMarker_${colorToId(c)}`;
     return (
-      <React.Fragment key={`node-${idx}`}>
-        <Rect
-          x={x}
-          y={y}
-          width={nodeWidth}
-          height={nodeHeight}
-          fill={color}
-          stroke={borderColor}
-          strokeWidth={borderThickness}
-          rx={borderRadius}
-          ry={borderRadius}
-          transform={rotationTransform}
-        />
-        {/* Inner form */}
-        <Rect
-          x={x + innerOffset}
-          y={y + innerOffset}
-          width={innerWidth}
-          height={innerHeight}
-          fill={innerFormColor}
-          stroke={innerFormBorderColor}
-          strokeWidth={innerFormBorderThickness}
-          rx={innerFormBorderRadius}
-          ry={innerFormBorderRadius}
-          transform={rotationTransform}
-        />
-        {legendElement}
-      </React.Fragment>
+      <Marker
+        key={markerId}
+        id={markerId}
+        viewBox="0 0 10 10"
+        refX="10"
+        refY="5"
+        markerWidth="6"
+        markerHeight="6"
+        orient="auto"
+        markerUnits="strokeWidth"
+      >
+        {/* A simple triangle shape for arrowhead */}
+        <Polygon points="0,0 10,5 0,10" fill={c} />
+      </Marker>
     );
   });
 
   return (
-    <View style={styles.wrapper}>
-      {/* 
-        We use an SVG with a Defs for the arrow marker (if used),
-        then we place nodeElements and edgeElements inside
-      */}
+    <View style={styles.container}>
       <Svg
-        width="100%"
-        height="100%"
-        viewBox={`0 0 ${Math.max(1, maxX)} ${Math.max(1, maxY)}`}
+        width="300"
+        height="600"
+        // The viewBox ensures all nodes/edges fit the visible area
+        viewBox={`${minX} ${minY} ${maxX - minX} ${maxY - minY}`}
       >
         <Defs>
-          <Marker
-            id="arrowMarker"
-            viewBox="0 0 10 10"
-            refX="10"
-            refY="5"
-            markerWidth="6"
-            markerHeight="6"
-            orient="auto"
-          >
-            <Polygon points="0,0 10,5 0,10" fill="#000000" />
-          </Marker>
+          {arrowMarkers}
         </Defs>
-        {/* Draw edges under nodes */}
+        {/* Edges first (so nodes are on top) */}
         {edgeElements}
-        {/* Draw nodes on top */}
+        {/* Nodes on top */}
         {nodeElements}
       </Svg>
     </View>
@@ -343,9 +500,8 @@ const Diagram = (props) => {
 };
 
 const styles = StyleSheet.create({
-  wrapper: {
-    width: '100%',
-    height: '100%'
+  container: {
+    flex: 1
   }
 });
 
