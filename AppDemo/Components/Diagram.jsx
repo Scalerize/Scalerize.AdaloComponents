@@ -1,11 +1,18 @@
-import React, { useMemo } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import Svg, { Path, Rect, Text as SvgText, Defs, Marker, Polygon } from 'react-native-svg';
+import React, {useMemo, useState} from 'react';
+import {View, Text, StyleSheet} from 'react-native';
+import Svg, {
+  Path,
+  Rect,
+  Text as SvgText,
+  Defs,
+  Marker,
+  Polygon,
+} from 'react-native-svg';
 
 /**
  * A helper function to build a simple layout for nodes given
- * the orientation, spacing, and container size. 
- * 
+ * the orientation, spacing, and container size.
+ *
  * This example uses a naive linear layout:
  *  - LR (Left to Right) or RL (Right to Left) will lay nodes horizontally.
  *  - TB (Top to Bottom) or BT (Bottom to Top) will lay nodes vertically.
@@ -16,11 +23,11 @@ function computeNodePositions({
   nodeWidth,
   nodeHeight,
   horizontalSpacing,
-  verticalSpacing
+  verticalSpacing,
 }) {
   // We'll store x/y in an array of { nodeId, x, y }
   let positions = [];
-  
+
   // For a simple layout, place each node in a single line.
   // You could compute a more complex layout in a real scenario.
   nodeCollection.forEach((node, idx) => {
@@ -48,7 +55,7 @@ function computeNodePositions({
     positions.push({
       nodeId: node.nodeId,
       x,
-      y
+      y,
     });
   });
 
@@ -76,16 +83,19 @@ function buildEdgePath(x1, y1, x2, y2, curved) {
 /**
  * The main Diagram component
  */
-const Diagram = (props) => {
+const Diagram = props => {
   const {
     diagramOrientation,
     nodeWidth,
     nodeHeight,
     horizontalSpacing,
     verticalSpacing,
+    backgroundColor,
     nodeCollection = [],
-    edgeCollection = []
+    edgeCollection = [],
   } = props;
+
+  const [edgeLabelPositions, setEdgeLabelPositions] = useState([]);
 
   // 1) Compute node positions
   const positions = useMemo(() => {
@@ -95,9 +105,16 @@ const Diagram = (props) => {
       nodeWidth,
       nodeHeight,
       horizontalSpacing,
-      verticalSpacing
+      verticalSpacing,
     });
-  }, [nodeCollection, diagramOrientation, nodeWidth, nodeHeight, horizontalSpacing, verticalSpacing]);
+  }, [
+    nodeCollection,
+    diagramOrientation,
+    nodeWidth,
+    nodeHeight,
+    horizontalSpacing,
+    verticalSpacing,
+  ]);
 
   // Convert node positions to a map for easy retrieval
   const positionMap = useMemo(() => {
@@ -110,16 +127,16 @@ const Diagram = (props) => {
 
   // 2) Determine total needed width/height to wrap all nodes
   //    so the SVG or container can adapt
-  const { maxX, maxY } = useMemo(() => {
+  const {maxX, maxY} = useMemo(() => {
     let maxXVal = 0;
     let maxYVal = 0;
-    positions.forEach((pos) => {
+    positions.forEach(pos => {
       const right = pos.x + nodeWidth;
       const bottom = pos.y + nodeHeight;
       if (right > maxXVal) maxXVal = right;
       if (bottom > maxYVal) maxYVal = bottom;
     });
-    return { maxX: maxXVal + horizontalSpacing, maxY: maxYVal + verticalSpacing };
+    return {maxX: maxXVal + horizontalSpacing, maxY: maxYVal + verticalSpacing};
   }, [positions, nodeWidth, nodeHeight, horizontalSpacing, verticalSpacing]);
 
   // 3) Prepare rendering
@@ -128,7 +145,16 @@ const Diagram = (props) => {
 
   // 3a) Render edges
   const edgeElements = edgeCollection.map((edge, idx) => {
-    const { fromNodeId, toNodeId, thickness, color, dotted, arrow, curved, edgeText } = edge;
+    const {
+      fromNodeId,
+      toNodeId,
+      thickness,
+      color,
+      dotted,
+      arrow,
+      curved,
+      edgeText,
+    } = edge;
     // If either node is missing in the position map, skip
     if (!positionMap[fromNodeId] || !positionMap[toNodeId]) {
       return null;
@@ -160,16 +186,42 @@ const Diagram = (props) => {
           strokeWidth={thickness}
           fill="none"
           strokeDasharray={dashArray}
-          markerEnd={arrow ? "url(#arrowMarker)" : undefined}
+          markerEnd={arrow ? 'url(#arrowMarker)' : undefined}
         />
+        {edgeText &&
+          edgeLabelPositions
+            .filter(edgeLabel => edgeLabel.key === `edge-${idx}`)
+            .map(edgeLabel => (
+              <Rect
+                x={edgeLabel.x - edgeLabel.width / 2}
+                y={edgeLabel.y - edgeLabel.height / 2}
+                width={edgeLabel.width}
+                height={edgeLabel.height - 5}
+                fill={backgroundColor}></Rect>
+            ))[0]}
         {edgeText ? (
           <SvgText
             x={midX}
-            y={midY - 5} // shift up a bit for better visibility
+            y={midY}
             fill={color}
             fontSize="12"
             textAnchor="middle"
-          >
+            onLayout={e => {
+              const {width, height} = e.nativeEvent.layout;
+              setEdgeLabelPositions(prev => {
+                const filtered = prev.filter(p => p.key !== `edge-${idx}`);
+                return [
+                  ...filtered,
+                  {
+                    key: `edge-${idx}`,
+                    x: midX,
+                    y: midY,
+                    width,
+                    height,
+                  },
+                ];
+              });
+            }}>
             {edgeText}
           </SvgText>
         ) : null}
@@ -196,12 +248,12 @@ const Diagram = (props) => {
       legendBorderColor,
       legendBorderThickness,
       legendBorderRadius,
-      legendFillColor
+      legendFillColor,
     } = node;
     const pos = positionMap[nodeId];
     if (!pos) return null; // if we can't find a position, skip
 
-    const { x, y } = pos;
+    const {x, y} = pos;
 
     // We'll define a group transform for rotation around the node center
     const cx = x + nodeWidth / 2;
@@ -225,8 +277,7 @@ const Diagram = (props) => {
             y={cy + 4} // small shift for vertical alignment
             fill={legendColor}
             fontSize="12"
-            textAnchor="middle"
-          >
+            textAnchor="middle">
             {legendText}
           </SvgText>
         );
@@ -238,8 +289,7 @@ const Diagram = (props) => {
             y={y + nodeHeight + 14}
             fill={legendColor}
             fontSize="12"
-            textAnchor="middle"
-          >
+            textAnchor="middle">
             {legendText}
           </SvgText>
         );
@@ -268,8 +318,7 @@ const Diagram = (props) => {
               y={legendBoxY + legendBoxHeight / 2 + 4}
               fill={legendColor}
               fontSize="12"
-              textAnchor="middle"
-            >
+              textAnchor="middle">
               {legendText}
             </SvgText>
           </React.Fragment>
@@ -310,16 +359,15 @@ const Diagram = (props) => {
   });
 
   return (
-    <View style={styles.wrapper}>
+    <View style={[styles.wrapper, {backgroundColor}]}>
       {/* 
         We use an SVG with a Defs for the arrow marker (if used),
         then we place nodeElements and edgeElements inside
       */}
       <Svg
-        width="100%"
-        height="100%"
-        viewBox={`0 0 ${Math.max(1, maxX)} ${Math.max(1, maxY)}`}
-      >
+        height={500}
+        width={500}
+        viewBox={`0 0 ${Math.max(1, maxX)} ${Math.max(1, maxY)}`}>
         <Defs>
           <Marker
             id="arrowMarker"
@@ -328,8 +376,7 @@ const Diagram = (props) => {
             refY="5"
             markerWidth="6"
             markerHeight="6"
-            orient="auto"
-          >
+            orient="auto">
             <Polygon points="0,0 10,5 0,10" fill="#000000" />
           </Marker>
         </Defs>
@@ -345,8 +392,9 @@ const Diagram = (props) => {
 const styles = StyleSheet.create({
   wrapper: {
     width: '100%',
-    height: '100%'
-  }
+    height: '100%',
+    flex: 1,
+  },
 });
 
 export default Diagram;
