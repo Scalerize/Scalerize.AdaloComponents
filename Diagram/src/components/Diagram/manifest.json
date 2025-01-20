@@ -1,240 +1,191 @@
 {
-  "displayName": "Diagram Component",
-  "defaultWidth": 400,
-  "defaultHeight": 300,
+  "displayName": "Oriented Diagram",
+  "defaultWidth": 800,
+  "defaultHeight": 600,
   "resizeX": true,
   "resizeY": true,
   "components": "./index.js",
   "icon": "./thumbnail.png",
   "props": [
     {
-      "name": "diagramOrientation",
+      "name": "nodes",
+      "displayName": "Nodes Collection",
+      "type": "list"
+    },
+    {
+      "name": "edges",
+      "displayName": "Edges Collection",
+      "type": "list"
+    },
+    {
+      "name": "globalOrientation",
       "displayName": "Diagram Orientation",
       "type": "text",
-      "default": "LR",
-      "options": ["LR", "RL", "TB", "BT"]
+      "default": "TB",
+      "control": {
+        "type": "dropdown",
+        "options": [
+          {"label": "Top to Bottom", "value": "TB"},
+          {"label": "Left to Right", "value": "LR"},
+          {"label": "Bottom to Top", "value": "BT"},
+          {"label": "Right to Left", "value": "RL"}
+        ]
+      }
     },
     {
-      "name": "nodeWidth",
-      "displayName": "Node Width",
-      "type": "number",
-      "default": 100
-    },
-    {
-      "name": "nodeHeight",
-      "displayName": "Node Height",
-      "type": "number",
-      "default": 60
-    },
-    {
-      "name": "horizontalSpacing",
-      "displayName": "Horizontal Spacing",
-      "type": "number",
-      "default": 60
-    },
-    {
-      "name": "verticalSpacing",
-      "displayName": "Vertical Spacing",
-      "type": "number",
-      "default": 60
-    },
-    {
-      "name": "nodeCollection",
-      "displayName": "Nodes Collection",
-      "type": "list"
-    },
-    {
-      "name": "edgeCollection",
-      "displayName": "Edges Collection",
-      "type": "list"
-    }
-  ],
-  "childComponents":[
-    {
-      "name": "nodeCollection",
-      "displayName": "Nodes Collection",
+      "name": "nodeId",
+      "displayName": "Node ID",
+      "type": "text",
       "role": "listItem",
-      "reference": "nodeCollection",
-      "props": [
-        {
-          "name": "nodeId",
-          "displayName": "Node ID",
-          "type": "text",
-          "default": ""
-        },
-        {
-          "name": "borderRadius",
-          "displayName": "Node Border Radius",
-          "type": "number",
-          "style": true,
-          "default": 10
-        },
-        {
-          "name": "color",
-          "displayName": "Node Fill Color",
-          "type": "color",
-          "style": true,
-          "default": "#FFFFFF"
-        },
-        {
-          "name": "borderColor",
-          "displayName": "Node Border Color",
-          "type": "color",
-          "style": true,
-          "default": "#000000"
-        },
-        {
-          "name": "borderThickness",
-          "displayName": "Node Border Thickness",
-          "type": "number",
-          "style": true,
-          "default": 2
-        },
-        {
-          "name": "innerFormBorderColor",
-          "displayName": "Inner Form Border Color",
-          "type": "color",
-          "style": true,
-          "default": "#CCCCCC"
-        },
-        {
-          "name": "innerFormColor",
-          "displayName": "Inner Form Fill Color",
-          "type": "color",
-          "style": true,
-          "default": "#FFFFFF"
-        },
-        {
-          "name": "innerFormBorderRadius",
-          "displayName": "Inner Form Border Radius",
-          "type": "number",
-          "style": true,
-          "default": 5
-        },
-        {
-          "name": "innerFormBorderThickness",
-          "displayName": "Inner Form Border Thickness",
-          "type": "number",
-          "style": true,
-          "default": 1
-        },
-        {
-          "name": "rotation",
-          "displayName": "Rotation (degrees)",
-          "type": "number",
-          "style": true,
-          "default": 0
-        },
-        {
-          "name": "legendType",
-          "displayName": "Legend Type",
-          "type": "text",
-          "style": true,
-          "default": "inside",
-          "options": ["inside", "outside-simple", "outside-block"]
-        },
-        {
-          "name": "legendText",
-          "displayName": "Legend Text",
-          "type": "text",
-          "default": ""
-        },
-        {
-          "name": "legendColor",
-          "displayName": "Legend Text Color",
-          "type": "color",
-          "style": true,
-          "default": "#000000"
-        },
-        {
-          "name": "legendBorderColor",
-          "displayName": "Legend Border Color",
-          "type": "color",
-          "style": true,
-          "default": "#000000"
-        },
-        {
-          "name": "legendBorderThickness",
-          "displayName": "Legend Border Thickness",
-          "type": "number",
-          "style": true,
-          "default": 1
-        },
-        {
-          "name": "legendBorderRadius",
-          "displayName": "Legend Border Radius",
-          "type": "number",
-          "style": true,
-          "default": 3
-        },
-        {
-          "name": "legendFillColor",
-          "displayName": "Legend Fill Color",
-          "type": "color",
-          "style": true,
-          "default": "#FFFFFF"
-        }
-      ]
+      "reference": "nodes"
     },
     {
-      "name": "edgeCollection",
-      "displayName": "Edges Collection",
+      "name": "nodeSize",
+      "displayName": "Size",
+      "type": "number",
+      "default": 60,
       "role": "listItem",
-      "reference": "edgeCollection",
-      "props": [
-        {
-          "name": "fromNodeId",
-          "displayName": "From Node ID",
-          "type": "text",
-          "default": ""
-        },
-        {
-          "name": "toNodeId",
-          "displayName": "To Node ID",
-          "type": "text",
-          "default": ""
-        },
-        {
-          "name": "thickness",
-          "displayName": "Edge Thickness",
-          "type": "number",
-          "style": true,
-          "default": 2
-        },
-        {
-          "name": "color",
-          "displayName": "Edge Color",
-          "type": "color",
-          "style": true,
-          "default": "#000000"
-        },
-        {
-          "name": "dotted",
-          "displayName": "Dotted Edge",
-          "type": "boolean",
-          "style": true,
-          "default": false
-        },
-        {
-          "name": "arrow",
-          "displayName": "Arrow at End",
-          "type": "boolean",
-          "style": true,
-          "default": true
-        },
-        {
-          "name": "curved",
-          "displayName": "Use 90° Angles",
-          "type": "boolean",
-          "default": false
-        },
-        {
-          "name": "edgeText",
-          "displayName": "Edge Label Text",
-          "type": "text",
-          "default": ""
-        }
-      ]
+      "reference": "nodes"
+    },
+    {
+      "name": "nodeColor",
+      "displayName": "Background Color",
+      "type": "color",
+      "default": "#ffffff",
+      "role": "listItem",
+      "reference": "nodes"
+    },
+    {
+      "name": "nodeBorderColor",
+      "displayName": "Border Color",
+      "type": "color",
+      "default": "#000000",
+      "role": "listItem",
+      "reference": "nodes"
+    },
+    {
+      "name": "nodeBorderThickness",
+      "displayName": "Border Thickness",
+      "type": "number",
+      "default": 2,
+      "role": "listItem",
+      "reference": "nodes"
+    },
+    {
+      "name": "nodeBorderRadius",
+      "displayName": "Border Radius",
+      "type": "number",
+      "default": 4,
+      "role": "listItem",
+      "reference": "nodes"
+    },
+    {
+      "name": "nodeRotation",
+      "displayName": "Rotation (degrees)",
+      "type": "number",
+      "default": 0,
+      "role": "listItem",
+      "reference": "nodes"
+    },
+    {
+      "name": "legendType",
+      "displayName": "Legend Position",
+      "type": "text",
+      "default": "none",
+      "control": {
+        "type": "dropdown",
+        "options": [
+          {"label": "None", "value": "none"},
+          {"label": "Inside", "value": "inside"},
+          {"label": "Text Outside", "value": "textOutside"},
+          {"label": "Block Outside", "value": "blockOutside"}
+        ]
+      },
+      "role": "listItem",
+      "reference": "nodes"
+    },
+    {
+      "name": "edgeId",
+      "displayName": "Edge ID",
+      "type": "text",
+      "role": "listItem",
+      "reference": "edges"
+    },
+    {
+      "name": "edgeSource",
+      "displayName": "Source Node",
+      "type": "text",
+      "role": "listItem",
+      "reference": "edges"
+    },
+    {
+      "name": "edgeTarget",
+      "displayName": "Target Node",
+      "type": "text",
+      "role": "listItem",
+      "reference": "edges"
+    },
+    {
+      "name": "edgeColor",
+      "displayName": "Color",
+      "type": "color",
+      "default": "#000000",
+      "role": "listItem",
+      "reference": "edges"
+    },
+    {
+      "name": "edgeThickness",
+      "displayName": "Thickness",
+      "type": "number",
+      "default": 2,
+      "role": "listItem",
+      "reference": "edges"
+    },
+    {
+      "name": "edgeStyle",
+      "displayName": "Line Style",
+      "type": "text",
+      "default": "solid",
+      "control": {
+        "type": "dropdown",
+        "options": [
+          {"label": "Solid", "value": "solid"},
+          {"label": "Dotted", "value": "dotted"},
+          {"label": "Dashed", "value": "dashed"}
+        ]
+      },
+      "role": "listItem",
+      "reference": "edges"
+    },
+    {
+      "name": "edgeArrows",
+      "displayName": "Show Arrows",
+      "type": "boolean",
+      "default": true,
+      "role": "listItem",
+      "reference": "edges"
+    },
+    {
+      "name": "edgeRouting",
+      "displayName": "Edge Type",
+      "type": "text",
+      "default": "straight",
+      "control": {
+        "type": "dropdown",
+        "options": [
+          {"label": "Straight", "value": "straight"},
+          {"label": "Right Angle", "value": "orthogonal"}
+        ]
+      },
+      "role": "listItem",
+      "reference": "edges"
+    },
+    {
+      "name": "edgeLabel",
+      "displayName": "Label Text",
+      "type": "text",
+      "role": "listItem",
+      "reference": "edges"
     }
   ]
 }
