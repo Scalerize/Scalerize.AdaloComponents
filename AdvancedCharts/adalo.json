@@ -1,0 +1,12 @@
+{
+  "displayName": "AdvancedCharts",
+  "components": [
+    {
+      "name": "RadialStackedBarChart",
+      "manifest": "./src/components/RadialStackedBarChart/manifest.json"
+    }
+  ],
+  "author": "",
+  "description": "",
+  "logo": "./example-logo.png"
+}
