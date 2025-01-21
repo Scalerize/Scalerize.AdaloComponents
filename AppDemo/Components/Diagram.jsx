@@ -1,216 +1,228 @@
-import React, { useState, useEffect } from 'react';
-import { View } from 'react-native';
-import { Svg, Rect, Path, Text, G } from 'react-native-svg';
-import ELK from 'elkjs/lib/elk.bundled.js';
+import React, { useMemo, useCallback } from 'react';
+import ReactFlow, {
+  Background,
+  useReactFlow,
+  MarkerType,
+  BezierEdge,
+  StepEdge
+} from 'reactflow';
+import dagre from 'dagre';
+import 'reactflow/dist/style.css';
 
-const elk = new ELK();
+const dagreGraph = new dagre.graphlib.Graph();
+dagreGraph.setDefaultEdgeLabel(() => ({}));
 
-const DiagramComponent = (props) => {
-  const [layout, setLayout] = useState({ children: [], edges: [] });
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+const nodeWidth = 200;
+const nodeHeight = 100;
 
-  useEffect(() => {
-    const computeLayout = async () => {
-      const nodes = props.nodes?.map(node => ({
-        id: node.nodeId,
-        width: node.nodeSize,
-        height: node.nodeSize,
-        labels: node.legendType !== 'none' ? [{
-          text: node.legendText || '',
-          width: 80,
-          height: 20
-        }] : []
-      })) || [];
+const getLayoutedElements = (nodes, edges, direction = 'TB') => {
+  const isHorizontal = direction === 'LR' || direction === 'RL';
+  dagreGraph.setGraph({ rankdir: direction, align: 'UL', nodesep: 50, edgesep: 50, ranksep: 100 });
 
-      const edges = props.edges?.map(edge => ({
-        id: edge.edgeId,
-        sources: [edge.edgeSource],
-        targets: [edge.edgeTarget],
-        labels: edge.edgeLabel ? [{
-          text: edge.edgeLabel,
-          width: 60,
-          height: 20
-        }] : [],
-        layoutOptions: {
-          'elk.edgeRouting': edge.edgeRouting === 'orthogonal' ? 'ORTHOGONAL' : 'SPLINES'
-        }
-      })) || [];
+  nodes.forEach((node) => {
+    dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
+  });
 
-      const elkGraph = {
-        id: 'root',
-        layoutOptions: {
-          'elk.algorithm': 'layered',
-          'elk.direction': props.globalOrientation,
-          'elk.spacing.nodeNode': '40',
-          'elk.layered.spacing.nodeNodeBetweenLayers': '50'
-        },
-        children: nodes,
-        edges: edges
-      };
+  edges.forEach((edge) => {
+    dagreGraph.setEdge(edge.source, edge.target);
+  });
 
-      try {
-        const elkLayout = await elk.layout(elkGraph);
-        setLayout(elkLayout);
-      } catch (error) {
-        console.error('Layout computation failed:', error);
-      }
+  dagre.layout(dagreGraph);
+
+  return nodes.map((node) => {
+    const nodeWithPosition = dagreGraph.node(node.id);
+    return {
+      ...node,
+      position: {
+        x: nodeWithPosition.x - nodeWidth / 2,
+        y: nodeWithPosition.y - nodeHeight / 2,
+      },
     };
+  });
+};
 
-    computeLayout();
-  }, [props.nodes, props.edges, props.globalOrientation]);
-
-  const renderNode = (nodeElk) => {
-    const nodeConfig = props.nodes.find(n => n.nodeId === nodeElk.id);
-    if (!nodeConfig) return null;
-
-    const centerX = nodeElk.x + nodeElk.width / 2;
-    const centerY = nodeElk.y + nodeElk.height / 2;
-
-    return (
-      <G key={nodeElk.id}>
-        {/* Main Node */}
-        <Rect
-          x={nodeElk.x}
-          y={nodeElk.y}
-          width={nodeElk.width}
-          height={nodeElk.height}
-          fill={nodeConfig.nodeColor}
-          stroke={nodeConfig.nodeBorderColor}
-          strokeWidth={nodeConfig.nodeBorderThickness}
-          rx={nodeConfig.nodeBorderRadius}
-          transform={`rotate(${nodeConfig.nodeRotation}, ${centerX}, ${centerY})`}
-        />
-
-        {/* Inner Form */}
-        {nodeConfig.innerForm && (
-          <Rect
-            x={nodeElk.x + 5}
-            y={nodeElk.y + 5}
-            width={nodeElk.width - 10}
-            height={nodeElk.height - 10}
-            fill={nodeConfig.innerFormColor}
-            stroke={nodeConfig.innerFormBorderColor}
-            strokeWidth={nodeConfig.innerFormBorderThickness}
-            rx={nodeConfig.innerFormBorderRadius}
-          />
-        )}
-
-        {/* Labels */}
-        {nodeConfig.legendType === 'inside' && (
-          <Text
-            x={centerX}
-            y={centerY}
-            textAnchor="middle"
-            dy=".3em"
-            fill={nodeConfig.legendTextColor || '#000000'}
-          >
-            {nodeConfig.legendText}
-          </Text>
-        )}
-
-        {nodeElk.labels?.map((label, idx) => (
-          <G key={idx} transform={`translate(${label.x}, ${label.y})`}>
-            {nodeConfig.legendType === 'blockOutside' && (
-              <Rect
-                width={label.width}
-                height={label.height}
-                fill={nodeConfig.legendBackground || '#ffffff'}
-                rx="3"
-                stroke={nodeConfig.legendBorderColor || '#000000'}
-                strokeWidth={nodeConfig.legendBorderThickness || 1}
-              />
-            )}
-            <Text
-              x={label.width / 2}
-              y={label.height / 2}
-              textAnchor="middle"
-              dy=".3em"
-              fill={nodeConfig.legendTextColor || '#000000'}
-            >
-              {label.text}
-            </Text>
-          </G>
-        ))}
-      </G>
-    );
-  };
-
-  const renderEdge = (edgeElk) => {
-    const edgeConfig = props.edges.find(e => e.edgeId === edgeElk.id);
-    if (!edgeConfig || !edgeElk.sections?.[0]) return null;
-
-    const section = edgeElk.sections[0];
-    const pathCommands = [
-      `M ${section.startPoint.x} ${section.startPoint.y}`,
-      ...(section.bendPoints?.map(p => `L ${p.x} ${p.y}`) || []),
-      `L ${section.endPoint.x} ${section.endPoint.y}`
-    ].join(' ');
-
-    // Arrowhead calculation
-    const endPoint = section.endPoint;
-    const lastBend = section.bendPoints?.[section.bendPoints.length - 1] || section.startPoint;
-    const angle = Math.atan2(endPoint.y - lastBend.y, endPoint.x - lastBend.x);
-
-    return (
-      <G key={edgeElk.id}>
-        {/* Edge Path */}
-        <Path
-          d={pathCommands}
-          stroke={edgeConfig.edgeColor}
-          strokeWidth={edgeConfig.edgeThickness}
-          strokeDasharray={edgeConfig.edgeStyle === 'solid' ? null : '5,5'}
-          fill="none"
-        />
-
-        {/* Arrowhead */}
-        {edgeConfig.edgeArrows && (
-          <G transform={`translate(${endPoint.x}, ${endPoint.y}) rotate(${angle * 180 / Math.PI})`}>
-            <Path
-              d="M0,0 L-10,-5 L-10,5 Z"
-              fill={edgeConfig.edgeColor}
-            />
-          </G>
-        )}
-
-        {/* Edge Label */}
-        {edgeElk.labels?.map((label, idx) => (
-          <G key={idx} transform={`translate(${label.x}, ${label.y})`}>
-            <Rect
-              width={label.width}
-              height={label.height}
-              fill="#ffffff"
-              rx="3"
-              stroke="#cccccc"
-              strokeWidth="1"
-            />
-            <Text
-              x={label.width / 2}
-              y={label.height / 2}
-              textAnchor="middle"
-              dy=".3em"
-            >
-              {label.text}
-            </Text>
-          </G>
-        ))}
-      </G>
-    );
-  };
+const CustomNode = ({ data, selected }) => {
+  const rotation = data.rotation || 0;
+  const size = data.size || 100;
+  const legendPosition = data.legendPosition || 'inside';
 
   return (
-    <View 
-      style={{ flex: 1 }}
-      onLayout={(event) => {
-        const { width, height } = event.nativeEvent.layout;
-        setDimensions({ width, height });
-      }}
-    >
-      <Svg width={dimensions.width} height={dimensions.height}>
-        {layout.edges?.map(renderEdge)}
-        {layout.children?.map(renderNode)}
-      </Svg>
-    </View>
+    <div style={{
+      transform: `rotate(${rotation}deg)`,
+      width: size,
+      height: size,
+      backgroundColor: data.backgroundColor,
+      border: `${data.borderThickness}px solid ${data.borderColor}`,
+      borderRadius: data.borderRadius,
+      position: 'relative'
+    }}>
+      {/* Inner form */}
+      {data.innerForm && (
+        <div style={{
+          position: 'absolute',
+          inset: 8,
+          border: `${data.innerBorderThickness}px solid ${data.innerBorderColor}`,
+          borderRadius: data.innerBorderRadius,
+        }} />
+      )}
+      
+      {/* Legend */}
+      {data.legend && (
+        <div style={{
+          position: legendPosition === 'inside' ? 'absolute' : 'absolute',
+          top: legendPosition === 'inside' ? '50%' : '100%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          backgroundColor: legendPosition.includes('outside') ? data.legendBackground : 'transparent',
+          padding: legendPosition === 'outside-block' ? '4px 8px' : 0,
+          borderRadius: 4,
+          whiteSpace: 'nowrap',
+          pointerEvents: 'none',
+          ...(legendPosition.includes('outside') && {
+            top: 'calc(100% + 8px)',
+            transform: 'translateX(-50%)'
+          })
+        }}>
+          <span style={{ 
+            color: data.legendTextColor,
+            fontSize: 12,
+            transform: `rotate(${-rotation}deg)`,
+            display: 'inline-block'
+          }}>
+            {data.legend}
+          </span>
+        </div>
+      )}
+    </div>
   );
 };
 
-export default DiagramComponent;
+const CustomEdge = (props) => {
+  const { data, markerEnd, style } = props;
+  const edgeType = data.straight ? 'straight' : data.angled ? 'step' : 'default';
+
+  const EdgeComponent = edgeType === 'step' ? StepEdge : BezierEdge;
+
+  return (
+    <>
+      <EdgeComponent 
+        {...props}
+        style={{
+          ...style,
+          stroke: data.color,
+          strokeWidth: data.thickness,
+          strokeDasharray: data.dotted ? '5,5' : 'none'
+        }}
+        markerEnd={data.arrow ? markerEnd : undefined}
+      />
+      {data.label && (
+        <foreignObject
+          width={100}
+          height={40}
+          requiredExtensions="http://www.w3.org/1999/xhtml"
+          style={{
+            overflow: 'visible',
+            pointerEvents: 'none'
+          }}
+        >
+          <div style={{
+            position: 'relative',
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
+            backgroundColor: data.labelBackground || '#ffffff',
+            padding: '2px 6px',
+            borderRadius: 4,
+            fontSize: 12,
+            textAlign: 'center',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+          }}>
+            {data.label}
+          </div>
+        </foreignObject>
+      )}
+    </>
+  );
+};
+
+const edgeTypes = {
+  custom: CustomEdge,
+};
+
+const nodeTypes = {
+  custom: CustomNode,
+};
+
+const GraphComponent = (props) => {
+  const { fitView } = useReactFlow();
+  const nodes = useMemo(() => props.nodesCollection?.map(node => ({
+    id: node.id,
+    type: 'custom',
+    data: {
+      ...node,
+      size: node.size,
+      rotation: node.rotation,
+      legend: node.legend,
+      legendPosition: node.legendType,
+      legendBackground: node.legendBackgroundColor,
+      legendTextColor: node.legendTextColor
+    },
+    position: { x: 0, y: 0 }
+  })) || [], [props.nodesCollection]);
+
+  const edges = useMemo(() => props.edgesCollection?.map(edge => ({
+    id: `${edge.source}-${edge.target}`,
+    source: edge.source,
+    target: edge.target,
+    type: 'custom',
+    data: {
+      ...edge,
+      angled: edge.angled,
+      label: edge.label,
+      labelBackground: edge.labelBackgroundColor,
+      arrow: edge.arrowEnd
+    },
+    markerEnd: edge.arrowEnd ? {
+      type: MarkerType.ArrowClosed,
+      color: edge.color,
+      width: props.EdgeStyle.arrowSize,
+      height: props.EdgeStyle.arrowSize
+    } : undefined
+  })) || [], [props.edgesCollection, props.EdgeStyle]);
+
+  const layoutedNodes = useMemo(() => 
+    getLayoutedElements(nodes, edges, props.globalOrientation),
+    [nodes, edges, props.globalOrientation]
+  );
+
+  const onLayout = useCallback(() => {
+    fitView({ padding: 0.1 });
+  }, [fitView]);
+
+  return (
+    <div style={{ width: '100%', height: '100%' }}>
+      <ReactFlow
+        nodes={layoutedNodes}
+        edges={edges}
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        fitView
+        onInit={onLayout}
+        nodesDraggable={false}
+        nodesConnectable={false}
+        elementsSelectable={false}
+        defaultEdgeOptions={{
+          type: 'custom',
+          style: {
+            strokeWidth: props.EdgeStyle.thickness,
+            stroke: props.EdgeStyle.color
+          }
+        }}
+      >
+        <Background color="#aaa" gap={16} />
+      </ReactFlow>
+    </div>
+  );
+};
+
+export default GraphComponent;

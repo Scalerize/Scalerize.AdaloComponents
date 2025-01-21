@@ -1,262 +1,230 @@
-import React from 'react';
-import { View } from 'react-native';
-import Svg, {
-  Rect,
-  Line,
-  Path,
-  Text as SvgText,
-  G
-} from 'react-native-svg';
+import React, { useMemo, useCallback } from 'react';
+import ReactFlow, {
+  Background,
+  useNodes,
+  useEdges,
+  useReactFlow,
+  MarkerType,
+  BezierEdge,
+  StepEdge
+} from 'reactflow';
+import dagre from 'dagre';
+import 'reactflow/dist/style.css';
 
-const Diagram = (props) => {
-  const {
-    nodeCollection = [],
-    edgeCollection = [],
-    diagramOrientation = 'horizontal',
-    _width = 800,
-    _height = 600
-  } = props;
+const dagreGraph = new dagre.graphlib.Graph();
+dagreGraph.setDefaultEdgeLabel(() => ({}));
 
-  // Create a map of node IDs to their data for easy lookup
-  const nodeMap = {};
-  nodeCollection.forEach((node) => {
-    nodeMap[node.id] = node;
+const nodeWidth = 200;
+const nodeHeight = 100;
+
+const getLayoutedElements = (nodes, edges, direction = 'TB') => {
+  const isHorizontal = direction === 'LR' || direction === 'RL';
+  dagreGraph.setGraph({ rankdir: direction, align: 'UL', nodesep: 50, edgesep: 50, ranksep: 100 });
+
+  nodes.forEach((node) => {
+    dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
   });
 
-  // Render Nodes
-  const renderNodes = nodeCollection.map((node) => (
-    <NodeComponent key={`node-${node.id}`} node={node} />
-  ));
-
-  // Render Edges
-  const renderEdges = edgeCollection.map((edge, index) => {
-    const fromNode = nodeMap[edge.fromNodeId];
-    const toNode = nodeMap[edge.toNodeId];
-
-    if (!fromNode || !toNode) {
-      // If nodes are missing, skip rendering this edge
-      return null;
-    }
-
-    return (
-      <EdgeComponent
-        key={`edge-${index}`}
-        edge={edge}
-        fromNode={fromNode}
-        toNode={toNode}
-      />
-    );
+  edges.forEach((edge) => {
+    dagreGraph.setEdge(edge.source, edge.target);
   });
 
-  return (
-    <View style={{ width: _width, height: _height }}>
-      <Svg width="100%" height="100%">
-        {/* Edges are drawn before nodes to ensure they are behind nodes */}
-        {renderEdges}
-        {renderNodes}
-      </Svg>
-    </View>
-  );
+  dagre.layout(dagreGraph);
+
+  return nodes.map((node) => {
+    const nodeWithPosition = dagreGraph.node(node.id);
+    return {
+      ...node,
+      position: {
+        x: nodeWithPosition.x - nodeWidth / 2,
+        y: nodeWithPosition.y - nodeHeight / 2,
+      },
+    };
+  });
 };
 
-const NodeComponent = ({ node }) => {
-  const {
-    positionX,
-    positionY,
-    color,
-    borderColor,
-    borderThickness,
-    borderRadius,
-    innerBorderColor,
-    innerBorderThickness,
-    innerBorderRadius,
-    rotation,
-    id
-  } = node;
-
-  const legend = node.legend || {};
-
-  const nodeWidth = 100;
-  const nodeHeight = 50;
+const CustomNode = ({ data, selected }) => {
+  const rotation = data.rotation || 0;
+  const size = data.size || 100;
+  const legendPosition = data.legendPosition || 'inside';
 
   return (
-    <G
-      transform={`translate(${positionX}, ${positionY}) rotate(${rotation}, ${
-        nodeWidth / 2
-      }, ${nodeHeight / 2})`}
-    >
-      {/* Outer Rectangle */}
-      <Rect
-        x={0}
-        y={0}
-        width={nodeWidth}
-        height={nodeHeight}
-        fill={color}
-        stroke={borderColor}
-        strokeWidth={borderThickness}
-        rx={borderRadius}
-        ry={borderRadius}
-      />
-      {/* Inner Rectangle */}
-      {innerBorderThickness > 0 && (
-        <Rect
-          x={borderThickness}
-          y={borderThickness}
-          width={nodeWidth - 2 * borderThickness}
-          height={nodeHeight - 2 * borderThickness}
-          fill="transparent"
-          stroke={innerBorderColor}
-          strokeWidth={innerBorderThickness}
-          rx={innerBorderRadius}
-          ry={innerBorderRadius}
-        />
+    <div style={{
+      transform: `rotate(${rotation}deg)`,
+      width: size,
+      height: size,
+      backgroundColor: data.backgroundColor,
+      border: `${data.borderThickness}px solid ${data.borderColor}`,
+      borderRadius: data.borderRadius,
+      position: 'relative'
+    }}>
+      {/* Inner form */}
+      {data.innerForm && (
+        <div style={{
+          position: 'absolute',
+          inset: 8,
+          border: `${data.innerBorderThickness}px solid ${data.innerBorderColor}`,
+          borderRadius: data.innerBorderRadius,
+        }} />
       )}
+      
       {/* Legend */}
-      {legend.type && (
-        <LegendComponent
-          legend={legend}
-          nodeWidth={nodeWidth}
-          nodeHeight={nodeHeight}
-        />
+      {data.legend && (
+        <div style={{
+          position: legendPosition === 'inside' ? 'absolute' : 'absolute',
+          top: legendPosition === 'inside' ? '50%' : '100%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          backgroundColor: legendPosition.includes('outside') ? data.legendBackground : 'transparent',
+          padding: legendPosition === 'outside-block' ? '4px 8px' : 0,
+          borderRadius: 4,
+          whiteSpace: 'nowrap',
+          pointerEvents: 'none',
+          ...(legendPosition.includes('outside') && {
+            top: 'calc(100% + 8px)',
+            transform: 'translateX(-50%)'
+          })
+        }}>
+          <span style={{ 
+            color: data.legendTextColor,
+            fontSize: 12,
+            transform: `rotate(${-rotation}deg)`,
+            display: 'inline-block'
+          }}>
+            {data.legend}
+          </span>
+        </div>
       )}
-    </G>
+    </div>
   );
 };
 
-const LegendComponent = ({ legend, nodeWidth, nodeHeight }) => {
-  const {
-    type,
-    text,
-    textColor,
-    backgroundColor,
-    borderColor,
-    borderThickness
-  } = legend;
+const CustomEdge = (props) => {
+  const { data, markerEnd, style } = props;
+  const edgeType = data.straight ? 'straight' : data.angled ? 'step' : 'default';
 
-  let x = nodeWidth / 2;
-  let y = nodeHeight / 2;
-  let textAnchor = 'middle';
-
-  if (type === 'simpleTextOutside') {
-    y = nodeHeight + 20;
-  } else if (type === 'textBlockOutside') {
-    y = nodeHeight + 5;
-  }
+  const EdgeComponent = edgeType === 'step' ? StepEdge : BezierEdge;
 
   return (
-    <SvgText
-      x={x}
-      y={y}
-      fill={textColor}
-      fontSize="14"
-      stroke={borderColor}
-      strokeWidth={borderThickness}
-      textAnchor={textAnchor}
-    >
-      {text}
-    </SvgText>
-  );
-};
-
-const EdgeComponent = ({ edge, fromNode, toNode }) => {
-  const {
-    thickness,
-    color,
-    dotted,
-    arrow,
-    straight,
-    text,
-    labelBackgroundColor
-  } = edge;
-
-  const fromX = fromNode.positionX + 50; // Assuming nodeWidth / 2
-  const fromY = fromNode.positionY + 25; // Assuming nodeHeight / 2
-  const toX = toNode.positionX + 50;
-  const toY = toNode.positionY + 25;
-
-  // Determine the path
-  let pathData = '';
-  if (straight) {
-    pathData = `M ${fromX},${fromY} L ${toX},${toY}`;
-  } else {
-    // Right-angled path with rounded corners
-    const midX = fromX;
-    const midY = toY;
-    const radius = 10; // Corner radius
-
-    pathData = `M ${fromX},${fromY}`;
-
-    if (fromX !== toX && fromY !== toY) {
-      pathData += ` L ${fromX},${(fromY + toY) / 2 - radius}`;
-      pathData += ` Q ${fromX},${(fromY + toY) / 2} ${fromX + radius},${
-        (fromY + toY) / 2
-      }`;
-      pathData += ` L ${toX - radius},${(fromY + toY) / 2}`;
-      pathData += ` Q ${toX},${(fromY + toY) / 2} ${toX},${
-        (fromY + toY) / 2 + radius
-      }`;
-    }
-
-    pathData += ` L ${toX},${toY}`;
-  }
-
-  // Arrowhead
-  let arrowHead = null;
-  if (arrow) {
-    const arrowSize = 10;
-    const angle = Math.atan2(toY - fromY, toX - fromX);
-    const arrowX = toX - arrowSize * Math.cos(angle - Math.PI / 6);
-    const arrowY = toY - arrowSize * Math.sin(angle - Math.PI / 6);
-    const arrowX2 = toX - arrowSize * Math.cos(angle + Math.PI / 6);
-    const arrowY2 = toY - arrowSize * Math.sin(angle + Math.PI / 6);
-
-    arrowHead = (
-      <Path
-        d={`M ${toX},${toY} L ${arrowX},${arrowY} M ${toX},${toY} L ${arrowX2},${arrowY2}`}
-        stroke={color}
-        strokeWidth={thickness}
-        fill="none"
+    <>
+      <EdgeComponent 
+        {...props}
+        style={{
+          ...style,
+          stroke: data.color,
+          strokeWidth: data.thickness,
+          strokeDasharray: data.dotted ? '5,5' : 'none'
+        }}
+        markerEnd={data.arrow ? markerEnd : undefined}
       />
-    );
-  }
-
-  // Edge label
-  const edgeLabel = text
-    ? [
-        <Rect
-          key="label-bg"
-          x={(fromX + toX) / 2 - 30}
-          y={(fromY + toY) / 2 - 10}
-          width={60}
-          height={20}
-          fill={labelBackgroundColor}
-        />,
-        <SvgText
-          key="label-text"
-          x={(fromX + toX) / 2}
-          y={(fromY + toY) / 2 + 5}
-          fill="#000"
-          fontSize="12"
-          textAnchor="middle"
+      {data.label && (
+        <foreignObject
+          width={100}
+          height={40}
+          requiredExtensions="http://www.w3.org/1999/xhtml"
+          style={{
+            overflow: 'visible',
+            pointerEvents: 'none'
+          }}
         >
-          {text}
-        </SvgText>
-      ]
-    : null;
-
-  return (
-    <G>
-      <Path
-        d={pathData}
-        stroke={color}
-        strokeWidth={thickness}
-        strokeDasharray={dotted ? '5,5' : '0'}
-        fill="none"
-      />
-      {arrowHead}
-      {edgeLabel}
-    </G>
+          <div style={{
+            position: 'relative',
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
+            backgroundColor: data.labelBackground || '#ffffff',
+            padding: '2px 6px',
+            borderRadius: 4,
+            fontSize: 12,
+            textAlign: 'center',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+          }}>
+            {data.label}
+          </div>
+        </foreignObject>
+      )}
+    </>
   );
 };
 
-export default Diagram;
+const edgeTypes = {
+  custom: CustomEdge,
+};
+
+const nodeTypes = {
+  custom: CustomNode,
+};
+
+const GraphComponent = (props) => {
+  const { fitView } = useReactFlow();
+  const nodes = useMemo(() => props.nodesCollection?.map(node => ({
+    id: node.id,
+    type: 'custom',
+    data: {
+      ...node,
+      size: node.size,
+      rotation: node.rotation,
+      legend: node.legend,
+      legendPosition: node.legendType,
+      legendBackground: node.legendBackgroundColor,
+      legendTextColor: node.legendTextColor
+    },
+    position: { x: 0, y: 0 }
+  })) || [], [props.nodesCollection]);
+
+  const edges = useMemo(() => props.edgesCollection?.map(edge => ({
+    id: `${edge.source}-${edge.target}`,
+    source: edge.source,
+    target: edge.target,
+    type: 'custom',
+    data: {
+      ...edge,
+      angled: edge.angled,
+      label: edge.label,
+      labelBackground: edge.labelBackgroundColor,
+      arrow: edge.arrowEnd
+    },
+    markerEnd: edge.arrowEnd ? {
+      type: MarkerType.ArrowClosed,
+      color: edge.color,
+      width: props.EdgeStyle.arrowSize,
+      height: props.EdgeStyle.arrowSize
+    } : undefined
+  })) || [], [props.edgesCollection, props.EdgeStyle]);
+
+  const layoutedNodes = useMemo(() => 
+    getLayoutedElements(nodes, edges, props.globalOrientation),
+    [nodes, edges, props.globalOrientation]
+  );
+
+  const onLayout = useCallback(() => {
+    fitView({ padding: 0.1 });
+  }, [fitView]);
+
+  return (
+    <div style={{ width: '100%', height: '100%' }}>
+      <ReactFlow
+        nodes={layoutedNodes}
+        edges={edges}
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        fitView
+        onInit={onLayout}
+        nodesDraggable={false}
+        nodesConnectable={false}
+        elementsSelectable={false}
+        defaultEdgeOptions={{
+          type: 'custom',
+          style: {
+            strokeWidth: props.EdgeStyle.thickness,
+            stroke: props.EdgeStyle.color
+          }
+        }}
+      >
+        <Background color="#aaa" gap={16} />
+      </ReactFlow>
+    </div>
+  );
+};
+
+export default GraphComponent;
