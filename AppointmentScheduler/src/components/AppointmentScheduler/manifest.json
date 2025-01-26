@@ -49,7 +49,14 @@
       "type": "list"
     },
     {
-      "name": "dateTime",
+      "name": "start",
+      "type": "date",
+      "displayName": "Reserved Appointment DateTime",
+      "role": "listItem",
+      "reference": "reservedAppointments"
+    },
+    {
+      "name": "end",
       "type": "date",
       "displayName": "Reserved Appointment DateTime",
       "role": "listItem",
