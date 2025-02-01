@@ -1,12 +1,7 @@
 import React, { useMemo, useState } from "react";
-import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
-
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from "@react-native-vector-icons/material-icons";
 
-/**
- * Recursive component that renders one tree node.
- * If the node has a non-empty “children” array, a chevron is displayed to allow toggling.
- */
 const TreeNode = (props) => {
   const {
     node,
@@ -66,7 +61,7 @@ const TreeNode = (props) => {
         <Text
           style={[styles.nodeLabel, { fontSize: fontSize, color: textColor }]}
         >
-          {node[treeItemLabel]}
+          {treeItemLabel}
         </Text>
       </View>
       {hasChildren && expanded && (
@@ -85,12 +80,7 @@ const TreeNode = (props) => {
   );
 };
 
-/**
- * Main TreeView component.
- * In editor mode, if no treeData is bound, a default tree structure is used.
- */
 const TreeView = (props) => {
-  // Destructure customization and binding props.
   const {
     treeData,
     nodeIndentation,
@@ -116,22 +106,25 @@ const TreeView = (props) => {
     return dataTree;
   };
 
-  // Default tree structure for preview (editor mode)
   const defaultTreeData = [
     {
+      id: 1,
       treeItemLabel: "Root Node 1",
       treeItemIcon: "",
       children: [
         {
+          id: 2,
           treeItemLabel: "Child Node 1",
           treeItemIcon: "",
           children: [],
         },
         {
+          id: 3,
           treeItemLabel: "Child Node 2",
           treeItemIcon: "",
           children: [
             {
+              id: 4,
               treeItemLabel: "Grandchild Node 1",
               treeItemIcon: "",
               children: [],
@@ -147,13 +140,11 @@ const TreeView = (props) => {
     },
   ];
 
-  // Use the default tree data if in editor mode.
   const effectiveTreeData = useMemo(
     () => (editor ? defaultTreeData : createDataTree(treeData)),
     [treeData, editor]
   );
   
-  // Calculate effective customization properties.
   const effectiveNodeIndentation = nodeIndentation || 20;
   const effectiveNodeHeight = nodeHeight || 40;
   const effectiveFontSize = fontSize || 14;
@@ -161,14 +152,8 @@ const TreeView = (props) => {
   const effectiveBackgroundColor = backgroundColor || "#ffffff";
   
   const effectiveChevronProps = {
-    openChevronIcon:
-      chevron && chevron.openChevronIcon
-        ? chevron.openChevronIcon
-        : "chevron-down",
-    closedChevronIcon:
-      chevron && chevron.closedChevronIcon
-        ? chevron.closedChevronIcon
-        : "chevron-right",
+    openChevronIcon: chevron?.openChevronIcon || "chevron-down",
+    closedChevronIcon: chevron?.closedChevronIcon || "chevron-right",
   };
 
   return (
