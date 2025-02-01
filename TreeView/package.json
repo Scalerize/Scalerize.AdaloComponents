@@ -11,6 +11,7 @@
     "publish": "adalo publish"
   },
   "dependencies": {
+    "@react-native-vector-icons/common": "^11.0.0",
     "@react-native-vector-icons/material-icons": "^0.0.1"
   },
   "devDependencies": {

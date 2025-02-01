@@ -37,7 +37,7 @@
     {
       "name": "treeItemIcon",
       "displayName": "Tree Item Icon Selector",
-      "type": "image",
+      "type": "icon",
       "role": "listItem",
       "reference": "treeData",
       "default": "folder"
@@ -85,15 +85,15 @@
       "props": [
         {
           "name": "openChevronIcon",
-          "displayName": "Open Chevron Icon",
-          "type": "image",
-          "default": "./chevron-down.png"
+          "displayName": "Open Icon",
+          "type": "icon",
+          "default": "chevron-down"
         },
         {
           "name": "closedChevronIcon",
-          "displayName": "Closed Chevron Icon",
-          "type": "image",
-          "default": "./chevron-right.png"
+          "displayName": "Closed Icon",
+          "type": "icon",
+          "default": "chevron-right"
         }
       ]
     }

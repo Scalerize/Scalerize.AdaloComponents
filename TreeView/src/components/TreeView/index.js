@@ -60,7 +60,7 @@ const TreeNode = (props) => {
           // Insert an empty placeholder for alignment if no chevron is needed.
           <View style={[styles.chevronContainer, { width: 24 }]} />
         )}
-        {treeItemIcon && node[treeItemIcon] ? (
+        {treeItemIcon  ? (
           <Icon name={treeItemIcon} size={24} color={textColor} />
         ) : null}
         <Text
@@ -76,14 +76,7 @@ const TreeNode = (props) => {
               key={index}
               node={child}
               level={level + 1}
-              treeItemLabel={treeItemLabel}
-              treeItemIcon={treeItemIcon}
-              nodeIndentation={nodeIndentation}
-              nodeHeight={nodeHeight}
-              fontSize={fontSize}
-              textColor={textColor}
-              backgroundColor={backgroundColor}
-              chevronProps={chevronProps}
+              {...props}
             />
           ))}
         </View>
@@ -126,21 +119,21 @@ const TreeView = (props) => {
   // Default tree structure for preview (editor mode)
   const defaultTreeData = [
     {
-      label: "Root Node 1",
-      icon: "",
+      treeItemLabel: "Root Node 1",
+      treeItemIcon: "",
       children: [
         {
-          label: "Child Node 1",
-          icon: "",
+          treeItemLabel: "Child Node 1",
+          treeItemIcon: "",
           children: [],
         },
         {
-          label: "Child Node 2",
-          icon: "",
+          treeItemLabel: "Child Node 2",
+          treeItemIcon: "",
           children: [
             {
-              label: "Grandchild Node 1",
-              icon: "",
+              treeItemLabel: "Grandchild Node 1",
+              treeItemIcon: "",
               children: [],
             },
           ],
@@ -148,7 +141,7 @@ const TreeView = (props) => {
       ],
     },
     {
-      label: "Root Node 2",
+      treeItemLabel: "Root Node 2",
       icon: "",
       children: [],
     },
@@ -159,10 +152,7 @@ const TreeView = (props) => {
     () => (editor ? defaultTreeData : createDataTree(treeData)),
     [treeData, editor]
   );
-  // Use provided selectors or fallback defaults.
-  const effectiveTreeItemLabel = treeItemLabel || "label";
-  const effectiveTreeItemIcon = treeItemIcon || "";
-
+  
   // Calculate effective customization properties.
   const effectiveNodeIndentation = nodeIndentation || 20;
   const effectiveNodeHeight = nodeHeight || 40;
@@ -189,8 +179,8 @@ const TreeView = (props) => {
             key={index}
             node={node}
             level={0}
-            treeItemLabel={effectiveTreeItemLabel}
-            treeItemIcon={effectiveTreeItemIcon}
+            treeItemLabel={node.treeItemLabel || "label"}
+            treeItemIcon={node.treeItemIcon || ""}
             nodeIndentation={effectiveNodeIndentation}
             nodeHeight={effectiveNodeHeight}
             fontSize={effectiveFontSize}
