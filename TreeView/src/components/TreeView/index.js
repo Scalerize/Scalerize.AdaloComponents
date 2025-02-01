@@ -1,11 +1,7 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  StyleSheet
-} from 'react-native';
+import React, { useMemo, useState } from "react";
+import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
+
+import Icon from "@react-native-vector-icons/material-icons";
 
 /**
  * Recursive component that renders one tree node.
@@ -22,11 +18,12 @@ const TreeNode = (props) => {
     fontSize,
     textColor,
     backgroundColor,
-    chevronProps
+    chevronProps,
   } = props;
 
   const [expanded, setExpanded] = useState(false);
-  const hasChildren = node.children && Array.isArray(node.children) && node.children.length > 0;
+  const hasChildren =
+    node.children && Array.isArray(node.children) && node.children.length > 0;
 
   const toggleExpand = () => {
     setExpanded(!expanded);
@@ -40,16 +37,23 @@ const TreeNode = (props) => {
           {
             height: nodeHeight,
             backgroundColor: backgroundColor,
-            marginLeft: level * nodeIndentation
-          }
+            marginLeft: level * nodeIndentation,
+          },
         ]}
       >
         {hasChildren ? (
-          <TouchableOpacity onPress={toggleExpand} style={styles.chevronContainer}>
-            <Image
-              source={{ uri: expanded ? chevronProps.openChevronIcon : chevronProps.closedChevronIcon }}
-              style={styles.chevronIcon}
-              resizeMode="contain"
+          <TouchableOpacity
+            onPress={toggleExpand}
+            style={styles.chevronContainer}
+          >
+            <Icon
+              name={
+                expanded
+                  ? chevronProps.openChevronIcon
+                  : chevronProps.closedChevronIcon
+              }
+              size={16}
+              color={textColor}
             />
           </TouchableOpacity>
         ) : (
@@ -57,13 +61,11 @@ const TreeNode = (props) => {
           <View style={[styles.chevronContainer, { width: 24 }]} />
         )}
         {treeItemIcon && node[treeItemIcon] ? (
-          <Image
-            source={{ uri: node[treeItemIcon] }}
-            style={styles.nodeIcon}
-            resizeMode="contain"
-          />
+          <Icon name={treeItemIcon} size={24} color={textColor} />
         ) : null}
-        <Text style={[styles.nodeLabel, { fontSize: fontSize, color: textColor }]}>
+        <Text
+          style={[styles.nodeLabel, { fontSize: fontSize, color: textColor }]}
+        >
           {node[treeItemLabel]}
         </Text>
       </View>
@@ -98,16 +100,28 @@ const TreeView = (props) => {
   // Destructure customization and binding props.
   const {
     treeData,
-    treeItemLabel,
-    treeItemIcon,
     nodeIndentation,
     nodeHeight,
     fontSize,
     textColor,
     backgroundColor,
-    Chevron,
-    editor
+    chevron,
+    editor,
   } = props;
+
+  const createDataTree = (dataset) => {
+    const hashTable = Object.create(null);
+    dataset.forEach(
+      (aData) => (hashTable[aData.id] = { ...aData, children: [] })
+    );
+    const dataTree = [];
+    dataset.forEach((aData) => {
+      if (aData.parentId)
+        hashTable[aData.parentId].children.push(hashTable[aData.id]);
+      else dataTree.push(hashTable[aData.id]);
+    });
+    return dataTree;
+  };
 
   // Default tree structure for preview (editor mode)
   const defaultTreeData = [
@@ -118,7 +132,7 @@ const TreeView = (props) => {
         {
           label: "Child Node 1",
           icon: "",
-          children: []
+          children: [],
         },
         {
           label: "Child Node 2",
@@ -127,21 +141,24 @@ const TreeView = (props) => {
             {
               label: "Grandchild Node 1",
               icon: "",
-              children: []
-            }
-          ]
-        }
-      ]
+              children: [],
+            },
+          ],
+        },
+      ],
     },
     {
       label: "Root Node 2",
       icon: "",
-      children: []
-    }
+      children: [],
+    },
   ];
 
   // Use the default tree data if in editor mode.
-  const effectiveTreeData = editor ? defaultTreeData : treeData;
+  const effectiveTreeData = useMemo(
+    () => (editor ? defaultTreeData : createDataTree(treeData)),
+    [treeData, editor]
+  );
   // Use provided selectors or fallback defaults.
   const effectiveTreeItemLabel = treeItemLabel || "label";
   const effectiveTreeItemIcon = treeItemIcon || "";
@@ -152,15 +169,16 @@ const TreeView = (props) => {
   const effectiveFontSize = fontSize || 14;
   const effectiveTextColor = textColor || "#000000";
   const effectiveBackgroundColor = backgroundColor || "#ffffff";
+  
   const effectiveChevronProps = {
     openChevronIcon:
-      Chevron && Chevron.openChevronIcon
-        ? Chevron.openChevronIcon
-        : "./chevron-down.png",
+      chevron && chevron.openChevronIcon
+        ? chevron.openChevronIcon
+        : "chevron-down",
     closedChevronIcon:
-      Chevron && Chevron.closedChevronIcon
-        ? Chevron.closedChevronIcon
-        : "./chevron-right.png"
+      chevron && chevron.closedChevronIcon
+        ? chevron.closedChevronIcon
+        : "chevron-right",
   };
 
   return (
@@ -188,31 +206,31 @@ const TreeView = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10
+    padding: 10,
   },
   nodeContainer: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 4
+    paddingVertical: 4,
   },
   chevronContainer: {
     width: 24,
     height: 24,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   chevronIcon: {
     width: 16,
-    height: 16
+    height: 16,
   },
   nodeIcon: {
     width: 24,
     height: 24,
-    marginRight: 8
+    marginRight: 8,
   },
   nodeLabel: {
-    marginLeft: 8
-  }
+    marginLeft: 8,
+  },
 });
 
 export default TreeView;

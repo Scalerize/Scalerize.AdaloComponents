@@ -13,12 +13,26 @@
       "type": "list"
     },
     {
+      "name": "id",
+      "displayName": "ID Selector",
+      "type": "string",
+      "role": "listItem",
+      "reference": "treeData"
+    },
+    {
+      "name": "parentId",
+      "displayName": "Parent ID Selector",
+      "type": "string",
+      "role": "listItem",
+      "reference": "treeData"
+    },
+    {
       "name": "treeItemLabel",
       "displayName": "Tree Item Label Selector",
       "type": "string",
       "role": "listItem",
       "reference": "treeData",
-      "default": "label"
+      "default": "Tree View Item"
     },
     {
       "name": "treeItemIcon",
@@ -26,42 +40,48 @@
       "type": "image",
       "role": "listItem",
       "reference": "treeData",
-      "default": ""
+      "default": "folder"
     },
     {
       "name": "nodeIndentation",
       "displayName": "Node Indentation",
       "type": "number",
+      "style": true,
       "default": 20
     },
     {
       "name": "nodeHeight",
       "displayName": "Node Height",
       "type": "number",
+      "style": true,
       "default": 40
     },
     {
       "name": "fontSize",
       "displayName": "Font Size",
       "type": "number",
+      "style": true,
       "default": 14
     },
     {
       "name": "textColor",
       "displayName": "Text Color",
       "type": "color",
+      "style": true,
       "default": "#000000"
     },
     {
       "name": "backgroundColor",
       "displayName": "Background Color",
       "type": "color",
-      "default": "#ffffff"
+      "style": true,
+      "default": "#ffffff00"
     }
   ],
   "childComponents": [
     {
-      "name": "Chevron",
+      "name": "chevron",
+      "displayName": "Chevron",
       "props": [
         {
           "name": "openChevronIcon",

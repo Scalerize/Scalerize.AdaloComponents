@@ -10,11 +10,14 @@
     "login": "adalo login",
     "publish": "adalo publish"
   },
+  "dependencies": {
+    "@react-native-vector-icons/material-icons": "^0.0.1"
+  },
   "devDependencies": {
     "@adalo/cli": "^1.0.2",
-    "react": "^16.14.0",
-    "react-art": "^16.13.1",
-    "react-dom": "^16.14.0",
-    "react-native-web": "^0.9.13"
+    "react": "^19.0.0",
+    "react-art": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-native-web": "^0.19.13"
   }
 }
