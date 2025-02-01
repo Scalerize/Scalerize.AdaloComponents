@@ -1,0 +1,12 @@
+{
+  "displayName": "TwoFactorAuthentification",
+  "components": [
+    {
+      "name": "TwoFactorAuthentification",
+      "manifest": "./src/components/TwoFactorAuthentification/manifest.json"
+    }
+  ],
+  "author": "",
+  "description": "",
+  "logo": "./example-logo.png"
+}

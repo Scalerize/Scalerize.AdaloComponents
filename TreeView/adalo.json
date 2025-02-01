@@ -1,0 +1,12 @@
+{
+  "displayName": "TreeView",
+  "components": [
+    {
+      "name": "TreeView",
+      "manifest": "./src/components/TreeView/manifest.json"
+    }
+  ],
+  "author": "",
+  "description": "",
+  "logo": "./example-logo.png"
+}

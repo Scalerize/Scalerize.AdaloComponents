@@ -1,0 +1,81 @@
+{
+  "displayName": "Tree View",
+  "defaultWidth": 400,
+  "defaultHeight": 600,
+  "resizeX": true,
+  "resizeY": true,
+  "components": "./index.js",
+  "icon": "./thumbnail.png",
+  "props": [
+    {
+      "name": "treeData",
+      "displayName": "Tree Data Collection",
+      "type": "list"
+    },
+    {
+      "name": "treeItemLabel",
+      "displayName": "Tree Item Label Selector",
+      "type": "string",
+      "role": "listItem",
+      "reference": "treeData",
+      "default": "label"
+    },
+    {
+      "name": "treeItemIcon",
+      "displayName": "Tree Item Icon Selector",
+      "type": "image",
+      "role": "listItem",
+      "reference": "treeData",
+      "default": ""
+    },
+    {
+      "name": "nodeIndentation",
+      "displayName": "Node Indentation",
+      "type": "number",
+      "default": 20
+    },
+    {
+      "name": "nodeHeight",
+      "displayName": "Node Height",
+      "type": "number",
+      "default": 40
+    },
+    {
+      "name": "fontSize",
+      "displayName": "Font Size",
+      "type": "number",
+      "default": 14
+    },
+    {
+      "name": "textColor",
+      "displayName": "Text Color",
+      "type": "color",
+      "default": "#000000"
+    },
+    {
+      "name": "backgroundColor",
+      "displayName": "Background Color",
+      "type": "color",
+      "default": "#ffffff"
+    }
+  ],
+  "childComponents": [
+    {
+      "name": "Chevron",
+      "props": [
+        {
+          "name": "openChevronIcon",
+          "displayName": "Open Chevron Icon",
+          "type": "image",
+          "default": "./chevron-down.png"
+        },
+        {
+          "name": "closedChevronIcon",
+          "displayName": "Closed Chevron Icon",
+          "type": "image",
+          "default": "./chevron-right.png"
+        }
+      ]
+    }
+  ]
+}
