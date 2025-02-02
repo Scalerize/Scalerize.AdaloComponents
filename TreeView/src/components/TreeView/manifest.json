@@ -14,21 +14,21 @@
     },
     {
       "name": "id",
-      "displayName": "ID Selector",
+      "displayName": "Item Id",
       "type": "text",
       "role": "listItem",
       "reference": "treeData"
     },
     {
       "name": "parentId",
-      "displayName": "Parent ID Selector",
+      "displayName": "Item Parent Id",
       "type": "text",
       "role": "listItem",
       "reference": "treeData"
     },
     {
       "name": "treeItemLabel",
-      "displayName": "Tree Item Label Selector",
+      "displayName": "Tree Item Label",
       "type": "text",
       "role": "listItem",
       "reference": "treeData",
@@ -36,11 +36,9 @@
     },
     {
       "name": "treeItemIcon",
-      "displayName": "Tree Item Icon Selector",
+      "displayName": "Tree Item Icon",
       "type": "icon",
-      "role": "listItem",
-      "reference": "treeData",
-      "default": "folder"
+      "default": ""
     },
     {
       "name": "nodeIndentation",
@@ -85,6 +83,10 @@
         {
           "type": "text",
           "displayName": "Item ID"
+        },
+        {
+          "type": "boolean",
+          "displayName": "Is Leaf Node"
         }
       ]
     }
@@ -92,13 +94,13 @@
   "childComponents": [
     {
       "name": "chevron",
-      "displayName": "Chevron",
+      "displayName": "Open & Close icons",
       "props": [
         {
           "name": "openChevronIcon",
           "displayName": "Open Icon",
           "type": "icon",
-          "default": "chevron-down"
+          "default": "keyboard-arrow-down"
         },
         {
           "name": "closedChevronIcon",

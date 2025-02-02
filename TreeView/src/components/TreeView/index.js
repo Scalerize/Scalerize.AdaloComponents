@@ -14,13 +14,13 @@ const TreeNode = memo((props) => {
     textColor,
     backgroundColor,
     chevronProps,
-    editor,
     onPress,
   } = props;
 
   const [expanded, setExpanded] = useState(false);
   const hasChildren =
     node.children && Array.isArray(node.children) && node.children.length > 0;
+    const finalExpanded = props.editor ? true : expanded;
 
   const toggleExpand = () => {
     setExpanded(!expanded);
@@ -45,7 +45,7 @@ const TreeNode = memo((props) => {
           >
             <Icon
               name={
-                expanded
+                finalExpanded
                   ? chevronProps.openChevronIcon
                   : chevronProps.closedChevronIcon
               }
@@ -61,18 +61,25 @@ const TreeNode = memo((props) => {
         ) : null}
         <TouchableOpacity
           style={styles.nodeLabel}
-          onPress={() => onPress(node?.id)}
+          onPress={() => onPress(node?.id, !node?.children?.length)}
         >
           <Text style={{ fontSize: fontSize, color: textColor }}>
             {treeItemLabel}
           </Text>
         </TouchableOpacity>
       </View>
-      {hasChildren && expanded && (
+      {hasChildren && finalExpanded && (
         <View>
-          {node.children.map((child, index) => (
-            <TreeNode key={index} node={child} level={level + 1} {...props} />
-          ))}
+          {node.children.map((child, index) => {
+            const childProps = {
+              ...props,
+              treeItemIcon: child.treeItemIcon,
+              treeItemLabel: child.treeItemLabel,
+              node: child,
+              level: level + 1,
+            };
+            return <TreeNode key={index} {...childProps} />;
+          })}
         </View>
       )}
     </View>
@@ -89,22 +96,26 @@ const TreeView = (props) => {
     backgroundColor,
     chevron,
     editor,
+    treeItemIcon,
     onItemPress,
   } = props;
-  
-  console.log(props);
 
   const createDataTree = (dataset) => {
+    if (!dataset) return [];
     const hashTable = Object.create(null);
+
     dataset.forEach(
       (aData) => (hashTable[aData.id] = { ...aData, children: [] })
     );
     const dataTree = [];
     dataset.forEach((aData) => {
-      if (aData.parentId)
-        hashTable[aData.parentId].children.push(hashTable[aData.id]);
-      else dataTree.push(hashTable[aData.id]);
+      if (aData.parentId && dataset.some((item) => item.id == aData.parentId))
+        hashTable[String(aData.parentId)].children.push(
+          hashTable[String(aData.id)]
+        );
+      else dataTree.push(hashTable[String(aData.id)]);
     });
+    console.log(dataTree);
     return dataTree;
   };
 
@@ -112,23 +123,23 @@ const TreeView = (props) => {
     {
       id: 1,
       treeItemLabel: "Root Node 1",
-      treeItemIcon: "folder",
+      treeItemIcon,
       children: [
         {
           id: 2,
           treeItemLabel: "Child Node 1",
-          treeItemIcon: "draft",
+          treeItemIcon,
           children: [],
         },
         {
           id: 3,
           treeItemLabel: "Child Node 2",
-          treeItemIcon: "folder",
+          treeItemIcon,
           children: [
             {
               id: 4,
               treeItemLabel: "Grandchild Node 1",
-              treeItemIcon: "draft",
+              treeItemIcon,
               children: [],
             },
           ],
@@ -144,7 +155,7 @@ const TreeView = (props) => {
 
   const effectiveTreeData = useMemo(
     () => (editor ? defaultTreeData : createDataTree(treeData)),
-    [treeData, editor]
+    [treeData, editor, treeItemIcon]
   );
 
   const effectiveNodeIndentation = nodeIndentation || 20;
@@ -154,7 +165,7 @@ const TreeView = (props) => {
   const effectiveBackgroundColor = backgroundColor || "#ffffff";
 
   const effectiveChevronProps = {
-    openChevronIcon: chevron?.openChevronIcon || "chevron-down",
+    openChevronIcon: chevron?.openChevronIcon || "keyboard-arrow-down",
     closedChevronIcon: chevron?.closedChevronIcon || "chevron-right",
   };
 
@@ -167,7 +178,7 @@ const TreeView = (props) => {
             node={node}
             level={0}
             treeItemLabel={node.treeItemLabel || "label"}
-            treeItemIcon={node.treeItemIcon || ""}
+            treeItemIcon={treeItemIcon || ""}
             nodeIndentation={effectiveNodeIndentation}
             nodeHeight={effectiveNodeHeight}
             fontSize={effectiveFontSize}
