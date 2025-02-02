@@ -15,21 +15,21 @@
     {
       "name": "id",
       "displayName": "ID Selector",
-      "type": "string",
+      "type": "text",
       "role": "listItem",
       "reference": "treeData"
     },
     {
       "name": "parentId",
       "displayName": "Parent ID Selector",
-      "type": "string",
+      "type": "text",
       "role": "listItem",
       "reference": "treeData"
     },
     {
       "name": "treeItemLabel",
       "displayName": "Tree Item Label Selector",
-      "type": "string",
+      "type": "text",
       "role": "listItem",
       "reference": "treeData",
       "default": "Tree View Item"
@@ -76,6 +76,17 @@
       "type": "color",
       "style": true,
       "default": "#ffffff00"
+    },
+    {
+      "name": "onItemPress",
+      "displayName": "On Item Press",
+      "type": "action",
+      "arguments": [
+        {
+          "type": "text",
+          "displayName": "Item ID"
+        }
+      ]
     }
   ],
   "childComponents": [

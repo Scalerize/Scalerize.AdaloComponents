@@ -1,8 +1,8 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, memo } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from "@react-native-vector-icons/material-icons";
 
-const TreeNode = (props) => {
+const TreeNode = memo((props) => {
   const {
     node,
     level,
@@ -14,6 +14,8 @@ const TreeNode = (props) => {
     textColor,
     backgroundColor,
     chevronProps,
+    editor,
+    onPress,
   } = props;
 
   const [expanded, setExpanded] = useState(false);
@@ -52,33 +54,30 @@ const TreeNode = (props) => {
             />
           </TouchableOpacity>
         ) : (
-          // Insert an empty placeholder for alignment if no chevron is needed.
           <View style={[styles.chevronContainer, { width: 24 }]} />
         )}
-        {treeItemIcon  ? (
+        {treeItemIcon ? (
           <Icon name={treeItemIcon} size={24} color={textColor} />
         ) : null}
-        <Text
-          style={[styles.nodeLabel, { fontSize: fontSize, color: textColor }]}
+        <TouchableOpacity
+          style={styles.nodeLabel}
+          onPress={() => onPress(node?.id)}
         >
-          {treeItemLabel}
-        </Text>
+          <Text style={{ fontSize: fontSize, color: textColor }}>
+            {treeItemLabel}
+          </Text>
+        </TouchableOpacity>
       </View>
       {hasChildren && expanded && (
         <View>
           {node.children.map((child, index) => (
-            <TreeNode
-              key={index}
-              node={child}
-              level={level + 1}
-              {...props}
-            />
+            <TreeNode key={index} node={child} level={level + 1} {...props} />
           ))}
         </View>
       )}
     </View>
   );
-};
+});
 
 const TreeView = (props) => {
   const {
@@ -90,7 +89,10 @@ const TreeView = (props) => {
     backgroundColor,
     chevron,
     editor,
+    onItemPress,
   } = props;
+  
+  console.log(props);
 
   const createDataTree = (dataset) => {
     const hashTable = Object.create(null);
@@ -110,23 +112,23 @@ const TreeView = (props) => {
     {
       id: 1,
       treeItemLabel: "Root Node 1",
-      treeItemIcon: "",
+      treeItemIcon: "folder",
       children: [
         {
           id: 2,
           treeItemLabel: "Child Node 1",
-          treeItemIcon: "",
+          treeItemIcon: "draft",
           children: [],
         },
         {
           id: 3,
           treeItemLabel: "Child Node 2",
-          treeItemIcon: "",
+          treeItemIcon: "folder",
           children: [
             {
               id: 4,
               treeItemLabel: "Grandchild Node 1",
-              treeItemIcon: "",
+              treeItemIcon: "draft",
               children: [],
             },
           ],
@@ -135,7 +137,7 @@ const TreeView = (props) => {
     },
     {
       treeItemLabel: "Root Node 2",
-      icon: "",
+      icon: "folder",
       children: [],
     },
   ];
@@ -144,13 +146,13 @@ const TreeView = (props) => {
     () => (editor ? defaultTreeData : createDataTree(treeData)),
     [treeData, editor]
   );
-  
+
   const effectiveNodeIndentation = nodeIndentation || 20;
   const effectiveNodeHeight = nodeHeight || 40;
   const effectiveFontSize = fontSize || 14;
   const effectiveTextColor = textColor || "#000000";
   const effectiveBackgroundColor = backgroundColor || "#ffffff";
-  
+
   const effectiveChevronProps = {
     openChevronIcon: chevron?.openChevronIcon || "chevron-down",
     closedChevronIcon: chevron?.closedChevronIcon || "chevron-right",
@@ -172,6 +174,8 @@ const TreeView = (props) => {
             textColor={effectiveTextColor}
             backgroundColor={effectiveBackgroundColor}
             chevronProps={effectiveChevronProps}
+            editor={editor}
+            onPress={onItemPress}
           />
         ))}
     </View>
