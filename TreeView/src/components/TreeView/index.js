@@ -20,7 +20,7 @@ const TreeNode = memo((props) => {
   const [expanded, setExpanded] = useState(false);
   const hasChildren =
     node.children && Array.isArray(node.children) && node.children.length > 0;
-    const finalExpanded = props.editor ? true : expanded;
+  const finalExpanded = props.editor ? true : expanded;
 
   const toggleExpand = () => {
     setExpanded(!expanded);
@@ -61,7 +61,7 @@ const TreeNode = memo((props) => {
         ) : null}
         <TouchableOpacity
           style={styles.nodeLabel}
-          onPress={() => onPress(node?.id, !node?.children?.length)}
+          onPress={() => onPress?.(node?.id, !node?.children?.length)}
         >
           <Text style={{ fontSize: fontSize, color: textColor }}>
             {treeItemLabel}
@@ -115,7 +115,7 @@ const TreeView = (props) => {
         );
       else dataTree.push(hashTable[String(aData.id)]);
     });
-    console.log(dataTree);
+
     return dataTree;
   };
 
