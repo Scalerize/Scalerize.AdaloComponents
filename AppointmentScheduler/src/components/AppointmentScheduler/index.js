@@ -137,8 +137,7 @@ const AppointmentScheduler = (props) => {
     padding: 8,
     marginTop: 8,
     flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 8,
+    flexWrap: "wrap"
   };
 
   return (
@@ -307,7 +306,7 @@ const cellStyles = StyleSheet.create({
     width: "25%",
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 4
+    paddingVertical: 8
   },
   timeSlotText: {
     fontSize: 12,

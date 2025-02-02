@@ -15,7 +15,7 @@
       "control": {
         "type": "slider",
         "min": 0,
-        "max": 23,
+        "max": 24,
         "step": 1
       }
     },
@@ -27,7 +27,7 @@
       "control": {
         "type": "slider",
         "min": 0,
-        "max": 23,
+        "max": 24,
         "step": 1
       }
     },
@@ -51,14 +51,14 @@
     {
       "name": "start",
       "type": "date",
-      "displayName": "Reserved Appointment DateTime",
+      "displayName": "Start date time",
       "role": "listItem",
       "reference": "reservedAppointments"
     },
     {
       "name": "end",
       "type": "date",
-      "displayName": "Reserved Appointment DateTime",
+      "displayName": "End date time",
       "role": "listItem",
       "reference": "reservedAppointments"
     },
