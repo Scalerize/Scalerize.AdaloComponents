@@ -7,9 +7,9 @@
     }
   ],
   "author": "Scalerize",
-  "description": "A highly configurable TreeView component.",
+  "description": "A highly configurable TreeView component allowing users to display hierarchical data in a tree-like structure.",
   "price": 29,
-  "demoAppURL": "https://previewer.adalo.com/d51df6a9-57ae-41b7-ad5d-502e0035a7c2",
+  "demoAppURL": "https://previewer.adalo.com/d51df6a9-57ae-41b7-ad5d-502e0035a7c2?target=72r3prup4uekl42tu7c4kagq0&params=%7B%7D",
   "supportURL": "https://www.scalerize.fr/solutions/composants-adalo",
   "logo": "./logo.png"
 }
