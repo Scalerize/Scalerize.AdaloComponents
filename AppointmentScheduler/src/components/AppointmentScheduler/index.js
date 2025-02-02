@@ -20,9 +20,11 @@ const AppointmentScheduler = (props) => {
   const [selectedTime, setSelectedTime] = useState(null);
 
   // Calendar computations
-  const getDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
+  const getDaysInMonth = (year, month) =>
+    new Date(year, month + 1, 0).getDate();
   const daysInMonth = getDaysInMonth(currentYear, currentMonth);
-  const firstDayOfMonth = (new Date(currentYear, currentMonth, 1).getDay() + 7 - 1) % 7;
+  const firstDayOfMonth =
+    (new Date(currentYear, currentMonth, 1).getDay() + 7 - 1) % 7;
 
   const calendarArray = useMemo(() => {
     const arr = [];
@@ -46,14 +48,15 @@ const AppointmentScheduler = (props) => {
 
     // Get reserved slots for selected day
     const reservedSlots = reservedAppointments
-      .map(appt => {
+      .map((appt) => {
         const apptDate = new Date(appt.dateTime);
         if (
           apptDate.getFullYear() !== currentYear ||
           apptDate.getMonth() !== currentMonth ||
           apptDate.getDate() !== selectedDay
-        ) return null;
-        
+        )
+          return null;
+
         const start = apptDate.getHours() * 60 + apptDate.getMinutes();
         const duration = appt.duration || appointmentDuration;
         return { start, end: start + duration };
@@ -63,7 +66,7 @@ const AppointmentScheduler = (props) => {
 
     // Generate available intervals
     let availableIntervals = [[hourRangeStart * 60, hourRangeEnd * 60]];
-    
+
     for (const { start: rs, end: re } of reservedSlots) {
       const newIntervals = [];
       for (const [start, end] of availableIntervals) {
@@ -91,22 +94,30 @@ const AppointmentScheduler = (props) => {
     }
 
     return slots;
-  }, [hourRangeStart, hourRangeEnd, appointmentDuration, selectedDay, reservedAppointments, currentYear, currentMonth]);
+  }, [
+    hourRangeStart,
+    hourRangeEnd,
+    appointmentDuration,
+    selectedDay,
+    reservedAppointments,
+    currentYear,
+    currentMonth,
+  ]);
 
   // Time formatting
   const formatTime = (minutes) => {
     const hrs = Math.floor(minutes / 60);
     const mins = minutes % 60;
-    const period = hrs < 12 ? 'AM' : 'PM';
+    const period = hrs < 12 ? "AM" : "PM";
     const displayHrs = hrs % 12 || 12;
-    return `${displayHrs}:${mins.toString().padStart(2, '0')} ${period}`;
+    return `${displayHrs}:${mins.toString().padStart(2, "0")} ${period}`;
   };
 
   // Handle time slot selection
   const handleTimeSelect = (minutes) => {
     const date = new Date(currentYear, currentMonth, selectedDay);
     date.setHours(Math.floor(minutes / 60), minutes % 60);
-    
+
     setSelectedTime(minutes);
     props.selectedSlot?.onChange(date.toISOString());
     props.onSchedule?.(date.toISOString());
@@ -114,31 +125,34 @@ const AppointmentScheduler = (props) => {
 
   // Styles
   const calendarSectionStyles = {
-    backgroundColor: props.calendarSection?.calendarBackgroundColor || '#fff',
+    backgroundColor: props.calendarSection?.calendarBackgroundColor || "#fff",
     borderRadius: 6,
     padding: 8,
   };
 
   const timeSectionStyles = {
-    backgroundColor: props.timeSelectorSection?.timeSlotBackgroundColor || '#fff',
+    backgroundColor:
+      props.timeSelectorSection?.timeSlotBackgroundColor || "#fff",
     borderRadius: 6,
     padding: 8,
     marginTop: 8,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: 8,
   };
 
   return (
     <View style={styles.container}>
-      {/* Calendar Section */}
       <View style={calendarSectionStyles}>
         <View style={styles.monthHeader}>
           <TouchableOpacity onPress={() => adjustMonth(-1)}>
             <Icon name="chevron-left" size={24} color="#000" />
           </TouchableOpacity>
           <Text style={styles.monthHeaderText}>
-            {new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long' })} {currentYear}
+            {new Date(currentYear, currentMonth).toLocaleString("default", {
+              month: "long",
+            })}{" "}
+            {currentYear}
           </Text>
           <TouchableOpacity onPress={() => adjustMonth(1)}>
             <Icon name="chevron-right" size={24} color="#000" />
@@ -162,11 +176,11 @@ const AppointmentScheduler = (props) => {
 
       {/* Time Slots Section */}
       <View style={timeSectionStyles}>
-        {timeSlots.map(slot => (
+        {timeSlots.map((slot, i) => (
           <TimeSlot
             key={slot}
             minutes={slot}
-            isSelected={slot === selectedTime}
+            isSelected={slot === selectedTime || (editor && i === 0)}
             onPress={handleTimeSelect}
             styles={props.timeSelectorSection}
             formatTime={formatTime}
@@ -183,30 +197,47 @@ const AppointmentScheduler = (props) => {
 };
 
 // Sub-components for better readability
-const DayCell = ({ day, currentYear, currentMonth, selectedDay, onSelect, styles }) => {
+const DayCell = ({
+  day,
+  currentYear,
+  currentMonth,
+  selectedDay,
+  onSelect,
+  styles,
+}) => {
   if (!day) return <View style={cellStyles.dayCell} />;
 
-  const isToday = new Date().getDate() === day && 
-                  new Date().getMonth() === currentMonth && 
-                  new Date().getFullYear() === currentYear;
-  
-  const isSelected = day === selectedDay;
+  const isToday =
+    new Date().getDate() === day &&
+    new Date().getMonth() === currentMonth &&
+    new Date().getFullYear() === currentYear;
 
+  const isSelected = day === selectedDay;
+  const foregroundColor = isSelected
+    ? styles?.daySelectedTextColor || "#fff"
+    : styles?.dayTextColor || "#000";
   return (
     <TouchableOpacity
       style={[
         cellStyles.dayCell,
         {
-          backgroundColor: isSelected ? (styles?.daySelectedBackgroundColor || '#2196F3') : undefined,
+          backgroundColor: isSelected
+            ? styles?.daySelectedBackgroundColor || "#2196F3"
+            : undefined,
           borderRadius: styles?.dayBorderRadius || 4,
         },
       ]}
       onPress={() => onSelect(day)}
     >
-      <Text style={{ color: isSelected ? (styles?.daySelectedTextColor || '#fff') : (styles?.dayTextColor || '#000') }}>
-        {day}
-      </Text>
-      {isToday && <View style={cellStyles.todayIndicator} />}
+      <View style={cellStyles.innerDayCellWrapper}>
+        <View style={{ color: foregroundColor }}>{day}</View>
+        <View
+          style={[
+            { backgroundColor: isToday ? foregroundColor : "transparent" },
+            cellStyles.todayIndicator,
+          ]}
+        />
+      </View>
     </TouchableOpacity>
   );
 };
@@ -216,15 +247,21 @@ const TimeSlot = ({ minutes, isSelected, onPress, styles, formatTime }) => (
     style={[
       cellStyles.timeSlot,
       {
-        backgroundColor: isSelected 
-          ? (styles?.timeSlotSelectedBackgroundColor || '#2196F3')
-          : (styles?.timeSlotBackgroundColor || '#fff'),
+        backgroundColor: isSelected
+          ? styles?.timeSlotSelectedBackgroundColor || "#2196F3"
+          : styles?.timeSlotBackgroundColor || "#fff",
         borderRadius: styles?.timeSlotBorderRadius || 4,
       },
     ]}
     onPress={() => onPress(minutes)}
   >
-    <Text style={{ color: isSelected ? (styles?.timeSlotSelectedTextColor || '#fff') : (styles?.timeSlotTextColor || '#000') }}>
+    <Text
+      style={[cellStyles.timeSlotText, {
+        color: isSelected
+          ? styles?.timeSlotSelectedTextColor || "#fff"
+          : styles?.timeSlotTextColor || "#000",
+      }]}
+    >
       {formatTime(minutes)}
     </Text>
   </TouchableOpacity>
@@ -233,34 +270,50 @@ const TimeSlot = ({ minutes, isSelected, onPress, styles, formatTime }) => (
 // Styles
 const styles = StyleSheet.create({
   container: { padding: 16 },
-  monthHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
-  monthHeaderText: { fontWeight: 'bold', fontSize: 18 },
-  daysRow: { flexDirection: 'row', flexWrap: 'wrap' },
-  noSlotsText: { width: '100%', textAlign: 'center', marginTop: 8 },
+  monthHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  monthHeaderText: { fontWeight: "bold", fontSize: 18 },
+  daysRow: { flexDirection: "row", flexWrap: "wrap" },
+  noSlotsText: { width: "100%", textAlign: "center", marginTop: 8 },
 });
 
 const cellStyles = StyleSheet.create({
   dayCell: {
-    width: '14.28%',
+    width: "14.28%",
     aspectRatio: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginVertical: 4,
+    paddingVertical: 4
+  },
+  innerDayCellWrapper: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 2,
+    justifyContent: "center",
+    alignItems: "center",
   },
   todayIndicator: {
-    position: 'absolute',
-    bottom: 4,
     width: 4,
     height: 4,
     borderRadius: 2,
-    backgroundColor: '#ff5722',
   },
   timeSlot: {
-    padding: 12,
-    minWidth: '23%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    margin: 4,
+    flexDirection: "row",
+    width: "25%",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 4
+  },
+  timeSlotText: {
+    fontSize: 12,
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
   },
 });
 
