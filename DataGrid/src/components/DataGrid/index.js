@@ -195,7 +195,11 @@ const DataGrid = (props) => {
     >
       {!!columns?.length ? (
         <DataTable.Header
-          style={{ backgroundColor: props.headerBackgroundColor }}
+          style={{
+            backgroundColor: props.headerBackgroundColor,
+            borderWidth: 0,
+            paddingHorizontal: 0,
+          }}
         >
           {columns.map((x, i, arr) => (
             <DataTable.Title
@@ -206,14 +210,15 @@ const DataGrid = (props) => {
                 props.borderType === "rows" ||
                 props.borderType === "rows-and-cols"
                   ? {
-                      borderBottomWidth: props.borderThickness,
+                      borderTopWidth: props.borderThickness / 2,
+                      borderBottomWidth: props.borderThickness / 2,
                     }
                   : {},
-                (props.borderType === "cols" ||
-                  props.borderType === "rows-and-cols") &&
-                i !== arr.length - 1
+                props.borderType === "cols" ||
+                props.borderType === "rows-and-cols"
                   ? {
-                      borderRightWidth: props.borderThickness,
+                      borderLeftWidth: props.borderThickness / 2,
+                      borderRightWidth: props.borderThickness / 2,
                     }
                   : {},
               ]}
@@ -227,34 +232,34 @@ const DataGrid = (props) => {
       )}
 
       {rows?.length && !!columns?.length ? (
-        rows.map((row, i, arr) => (
+        rows.map((row, i) => (
           <DataTable.Row
             key={i}
             style={[
+              { paddingHorizontal: 0 },
               props.striped && i % 2 === 1
                 ? { backgroundColor: darkenColor(props.backgroundColor) }
                 : {},
             ]}
           >
-            {columns.map((column, j, arr2) => (
+            {columns.map((column, j) => (
               <DataTable.Cell
                 key={j}
                 textStyle={{ color: props.foregroundColor }}
                 style={[
                   { borderColor: props.borderColor },
-                  (
-                    props.borderType === "rows" ||
-                      props.borderType === "rows-and-cols"
-                  ) && i !== arr.length - 1
+                  props.borderType === "rows" ||
+                  props.borderType === "rows-and-cols"
                     ? {
-                        borderBottomWidth: props.borderThickness,
+                        borderBottomWidth: props.borderThickness / 2,
+                        borderTopWidth: props.borderThickness / 2,
                       }
                     : {},
-                  (props.borderType === "cols" ||
-                    props.borderType === "rows-and-cols") &&
-                  j !== arr2.length - 1
+                  props.borderType === "cols" ||
+                  props.borderType === "rows-and-cols"
                     ? {
-                        borderRightWidth: props.borderThickness,
+                        borderRightWidth: props.borderThickness / 2,
+                        borderLeftWidth: props.borderThickness / 2,
                       }
                     : {},
                 ]}

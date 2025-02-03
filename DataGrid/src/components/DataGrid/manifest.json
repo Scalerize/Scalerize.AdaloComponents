@@ -88,26 +88,6 @@
       "type": "boolean",
       "default": false,
       "style": true
-    },
-    {
-      "name": "tableHeight",
-      "displayName": "Table Height",
-      "type": "text",
-      "default": "auto",
-      "style": true,
-      "control": {
-        "type": "menu",
-        "options": [
-          {
-            "value": "auto",
-            "label": "Auto"
-          },
-          {
-            "value": "manual",
-            "label": "Component Height"
-          }
-        ]
-      }
     }
   ],
   "childComponents": [
