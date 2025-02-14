@@ -1,7 +1,7 @@
 {
   "name": "range-slider-component",
   "description": "",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "index.js",
   "license": "MIT",
   "author": "",
@@ -14,7 +14,7 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@adalo/cli": "1.0.0",
+    "@adalo/cli": "^1.0.2",
     "react": "18.2.0",
     "react-art": "18.2.0",
     "react-dom": "18.2.0",

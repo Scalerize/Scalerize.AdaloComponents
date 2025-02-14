@@ -4,8 +4,6 @@ import max from 'lodash/max';
 import zip from 'lodash/zip';
 import {StyleSheet, View} from 'react-native';
 import {Thumb} from "./thumb";
-import {report} from "../../../../Shared/utils";
-import {componentsIds} from "../../../../Shared/constants";
 
 const defaultRandomBarChartCollection = [...Array(100).keys()].map(() => Math.round(Math.random() * 100)); 
 
@@ -63,10 +61,6 @@ const SparklineSlider = (props) => {
 
             return [colorArray, heightArray];
         } catch (e) {
-            report({
-                componentId: componentsIds.slider,
-                message: e.message
-            })
             return [[], []]
         }
     }
