@@ -1,7 +1,7 @@
 ﻿
 export const baseUrlDomain = 'https://www.scalerize.fr/';
 export const urls = {
-    beacon: `${baseUrlDomain}automation/webhook/4c7eb7a3-89ae-4bdb-9afd-199e36b177c8`,
+    beacon: `${baseUrlDomain}automation/webhook/a20f186e-38cc-4ce9-896f-22eaf7da5157`,
     basePdfUrl: `${baseUrlDomain}client-endpoints/scalerize/pdf/`
 };
 export const environments = {
