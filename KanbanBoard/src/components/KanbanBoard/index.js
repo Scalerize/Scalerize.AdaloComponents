@@ -1,7 +1,9 @@
+// Polyfill for __DEV__ when running in Adalo Editor
+import './devPolyfill';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import DraggableFlatList from 'react-native-draggable-flatlist';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '@react-native-vector-icons/material-icons';
 
 const KanbanBoard = ({ columns, cards }) => {
   const [cardsState, setCardsState] = useState(cards);

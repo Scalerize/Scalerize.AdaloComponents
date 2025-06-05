@@ -10,11 +10,16 @@
     "login": "adalo login",
     "publish": "adalo publish"
   },
-  "devDependencies": {
-    "@adalo/cli": "^1.0.2",
-    "react": "^16.14.0",
-    "react-art": "^16.13.1",
-    "react-dom": "^16.14.0",
-    "react-native-web": "^0.19.13"
+  "dependencies": {
+    "react-native-draggable-flatlist": "4.0.3",
+    "@react-native-vector-icons/material-icons": "^0.0.1",
+    "@react-native-vector-icons/common": "11.0.0"
+  },
+  "devDependencies": { 
+    "@adalo/cli": "^1.0.6",
+    "react": "19.1.0",
+    "react-art": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-native-web": "0.20.0"
   }
 }

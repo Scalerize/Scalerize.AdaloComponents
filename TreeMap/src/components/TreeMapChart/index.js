@@ -1,22 +1,73 @@
-import React from 'react'
-import { Text, View, StyleSheet } from 'react-native'
+import React from 'react';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import squarifyModule from 'squarify';
 
-const TreeMapChart = (props) => {
-	const { color, text } = props
+/**
+ * Ensure we always reference:
+ *   1. the main squarify function
+ *   2. its optional `normalizeSizes` helper
+ * Different bundler interop behaviours (CJS ↔ ESM) can otherwise break this.
+ */
+const squarify =
+  typeof squarifyModule === 'function'
+    ? squarifyModule
+    : squarifyModule?.default ?? squarifyModule;
 
-	return(
-		<View style={styles.wrapper}>
-			<Text style={{ color }}>{text}</Text>
-		</View>
-	)
-}
+const normalizeSizes =
+  typeof squarify?.normalizeSizes === 'function'
+    ? squarify.normalizeSizes
+    : (vals, w, h) => {
+        const total = vals.reduce((sum, v) => sum + (v || 0), 0) || 1;
+        const area = w * h;
+        return vals.map(v => ((v || 0) * area) / total);
+      };
+
+const Treemap = (props) => {
+  console.log(props);
+  const items = props.items || [];
+
+  const width = props._width;
+  const height = props._height;
+
+  const values = items.map(item => item.item.value || 0);
+  const normed = normalizeSizes(values, width, height);
+  const rects = squarify(normed, 0, 0, width, height);
+
+  return (
+    <View style={[styles.container, { width, height }]}>
+      {rects.map((rect, index) => (
+        <View
+          key={index}
+          style={{
+            position: 'absolute',
+            left: rect.x,
+            top: rect.y,
+            width: rect.dx,
+            height: rect.dy,
+            backgroundColor: `hsl(${(index * 47) % 360}, 60%, 70%)`,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderWidth: 1,
+            borderColor: '#fff'
+          }}
+        >
+          <Text style={styles.text}>{items[index].item.title}</Text>
+        </View>
+      ))}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-	wrapper: {
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'center',
-	}
-})
+  container: {
+    position: 'relative'
+  },
+  text: {
+    color: '#000',
+    fontWeight: 'bold',
+    textAlign: 'center'
+  }
+});
 
-export default TreeMapChart
+export default Treemap;
+
