@@ -1,17 +1,26 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const KanbanBoard = ({ columns, cards }) => {
   const [cardsState, setCardsState] = useState(cards);
 
-  const renderCard = (card, drag) => (
-    <View style={styles.card} onLongPress={drag}>
-      <Icon name={card.icon} size={24} />
-      <Text style={styles.title}>{card.title}</Text>
-      <Text style={styles.subtitle}>{card.subtitle}</Text>
-    </View>
+  // Render a draggable card (Pressable supports onLongPress, unlike View)
+  const renderCard = ({ item, drag, isActive }) => (
+    <Pressable
+      onLongPress={drag}
+      disabled={isActive}
+      style={({ pressed }) => [
+        styles.card,
+        isActive && styles.activeCard,
+        pressed && styles.pressedCard
+      ]}
+    >
+      <Icon name={item.icon} size={24} />
+      <Text style={styles.title}>{item.title}</Text>
+      <Text style={styles.subtitle}>{item.subtitle}</Text>
+    </Pressable>
   );
 
   return (
@@ -21,8 +30,8 @@ const KanbanBoard = ({ columns, cards }) => {
           <Text style={styles.columnTitle}>{column.title}</Text>
           <DraggableFlatList
             data={cardsState.filter(card => card.columnId === column.id)}
-            renderItem={({ item, drag }) => renderCard(item, drag)}
-            keyExtractor={item => item.id}
+            renderItem={renderCard}
+            keyExtractor={item => item.id.toString()}
             onDragEnd={({ data }) => {
               // Reassign cards to this column
               const updated = data.map(card => ({ ...card, columnId: column.id }));
@@ -64,6 +73,13 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     marginBottom: 8,
     elevation: 2
+  },
+  // Interaction feedback styles
+  pressedCard: {
+    opacity: 0.7
+  },
+  activeCard: {
+    backgroundColor: '#e8e8e8'
   },
   title: {
     fontSize: 16,
