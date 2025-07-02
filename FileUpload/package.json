@@ -1,8 +1,8 @@
 {
-  "name": "file-upload",
+  "name": "fileupload",
   "description": "",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.js", 
   "license": "ISC",
   "author": "",
   "scripts": {
@@ -10,11 +10,15 @@
     "login": "adalo login",
     "publish": "adalo publish"
   },
+  "dependencies": { 
+    "react-native-document-picker": "9.3.1",
+    "react-native-mime-types": "2.5.0"
+  },
   "devDependencies": {
     "@adalo/cli": "^1.0.6",
-    "react": "^16.14.0",
-    "react-art": "^16.13.1",
-    "react-dom": "^16.14.0",
-    "react-native-web": "^0.9.13"
+    "react": "18.2.0",
+    "react-art": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-native-web": "0.19.12"
   }
 }
