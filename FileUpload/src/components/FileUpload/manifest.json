@@ -1,0 +1,63 @@
+{
+  "displayName": "File Upload",
+  "defaultWidth": 340,
+  "defaultHeight": 120,
+  "resizeX": true,
+  "resizeY": false,
+  "components": "./index.js",
+  "icon": "./thumbnail.png",
+
+  "props": [
+    {
+      "name": "allowMultiple",
+      "displayName": "Allow Multiple Files",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "acceptedExtensions",
+      "displayName": "Accepted Extensions (separated by commas)",
+      "type": "text",
+      "default": ".jpg,.png,.pdf"
+    },
+    {
+      "name": "maxFileSizeMB",
+      "displayName": "Max File Size (MB)",
+      "type": "number",
+      "default": 20,
+      "control": { "type": "slider", "min": 1, "max": 100 }
+    },
+    {
+      "name": "borderColor",
+      "displayName": "Border Color",
+      "type": "color",
+      "default": "#d0d0d0"
+    },
+    {
+      "name": "progressColor",
+      "displayName": "Progress Color",
+      "type": "color",
+      "default": "#007aff"
+    },
+    {
+      "name": "onFileUploaded",
+      "displayName": "On File Uploaded",
+      "type": "action",
+      "arguments": [
+        { "displayName": "fileUrl", "type": "text" },
+        { "displayName": "fileName", "type": "text" },
+        { "displayName": "fileSize", "type": "number" },
+        { "displayName": "fileType", "type": "text" }
+      ]
+    },
+    {
+      "name": "onFileRemoved",
+      "displayName": "On File Removed",
+      "type": "action",
+      "arguments": [
+        { "displayName": "fileUrl", "type": "text" },
+        { "displayName": "fileName", "type": "text" }
+      ]
+    }
+  ]
+}

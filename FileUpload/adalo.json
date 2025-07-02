@@ -1,0 +1,12 @@
+{
+  "displayName": "File Upload",
+  "components": [
+    {
+      "name": "FileUpload",
+      "manifest": "./src/components/FileUpload/manifest.json"
+    }
+  ],
+  "author": "",
+  "description": "",
+  "logo": "./example-logo.png"
+}
